@@ -8,7 +8,7 @@ DEBUG = ENVIRONMENT == "development"
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
-    if os.getenv("ENVIRONMENT") == "development":
+    if ENVIRONMENT == "development":
         SECRET_KEY = "dev_secret_key_change_in_production"
     else:
         raise ValueError("SECRET_KEY environment variable is not set")
