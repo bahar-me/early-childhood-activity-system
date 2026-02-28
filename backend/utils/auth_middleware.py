@@ -14,49 +14,35 @@ def token_required(f):
             return jsonify({"error": "Token is missing"}), 401
         
         try:
-            parts = auth_header.split()
+            token = auth_header.split(" ")[1]
+            data = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALGORITHM])
 
-            if len(parts) != 2 or parts[0] != "Bearer":
-                return jsonify({"error": "Invalid token format"}), 401
-
-            token = parts[1]
-
-            data = jwt.decode(
-                token,
-                SECRET_KEY,
-                algorithms=[JWT_ALGORITHM]
-            )
-
-            request.user = data
-
-        except jwt.ExpiredSignatureError:
-            return jsonify({"error": "Token has expired"}), 401
-
-        except jwt.InvalidTokenError:
-            return jsonify({"error": "Token is invalid"}), 401
-
-        except Exception as e:
-            print(f"Auth Middleware Exception: {e}")
-            return jsonify({"error": "Authentication error"}), 401
-
+        except Exception:
+            return jsonify({"error": "Invalid or expired token"}), 401
+        
+        request.user = data
         return f(*args, **kwargs)
 
     return decorated
 
-def role_required(required_role):
-    def wrapper(f):
+def roles_required(*allowed_roles):
+    def decorator(f):
         @wraps(f)
         def decorated(*args, **kwargs):
-            user = getattr(request, "user", None)
-
-            if not user:
-                return jsonify({"error": "Authentication required"}), 401
+           
+            if not hasattr(request, "user"):
+                return jsonify({"error": "User not authenticated."}), 401
             
-            if user.get("role") != required_role:
+            user_role = request.user.get("role")
+
+            #system_admin her zaman erişime sahip olur
+            if user_role == "system_admin":
+                return f(*args, **kwargs)
+            
+            if user_role not in allowed_roles:
                 return jsonify({"error": "Access forbidden"}), 403
             
             return f(*args, **kwargs)
         
         return decorated
-    
-    return wrapper
+    return decorator
