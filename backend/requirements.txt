@@ -1,2 +1,7 @@
 Flask
 pytest
+python-dotenv
+SQLAlchemy
+Flask-Migrate
+Flask-SQLAlchemy
+psycopg2-binary

@@ -7,7 +7,7 @@ from backend.config import SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRATION, R
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 
-ALLOWED_ROLES = {"teacher", "admin"}
+ALLOWED_ROLES = {"teacher", "school_admin", "system_admin"}
 
  # Access token oluştur
 def generate_access_token(user):
@@ -99,7 +99,7 @@ def _is_valid_email(email: str) -> bool:
     return re.match(pattern, email) is not None
 
 
-def register(email: str, password: str, role: str = "teacher") -> Dict[str, Any]:
+def register(email: str, password: str, role: str = "teacher", school_id: int = None) -> Dict[str, Any]:
     """
     Registers a new user in the database.
     """
@@ -116,18 +116,47 @@ def register(email: str, password: str, role: str = "teacher") -> Dict[str, Any]
             "error": "Invalid email format"
         }
 
+    # Role geçerliliği kontrolü
     if role not in ALLOWED_ROLES:
-        role = "teacher"  # Default role
+        return {
+            "success": False,
+            "error": "Invalid role."
+        }
+    
+    #School zorunluluğu kontrolü
+    if role in {"teacher", "school_admin"} and not school_id:
+        return {
+            "success": False,
+            "error": "School ID is required for this role."
+        }   
+    
+    #system_admin rolü için school_id null olmalı
+    if role == "system_admin":
+        school_id = None
 
     # Şifre hashleme
     hashed_password = generate_password_hash(password)
 
     try:
         with get_db_connection() as connection:
-        # hashed_password kaydetme
+            # school_id varsa gerçekten var mı kontrolü yapılabilir, şimdilik basit tutuyoruz
+            if school_id:
+                cursor = connection.execute(
+                    "SELECT * FROM schools WHERE id = ?",
+                    (school_id,)
+                )
+                school = cursor.fetchone()
+
+                if school is None:
+                    return {
+                        "success": False,
+                        "error": "School not found."
+                    }
+            
+            # hashed_password kaydetme
             connection.execute(
-                "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-                (email, hashed_password, role)
+                "INSERT INTO users (email, password, role, school_id) VALUES (?, ?, ?, ?)",
+                (email, hashed_password, role, school_id)
             )
             connection.commit()
 

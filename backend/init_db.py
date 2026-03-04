@@ -1,8 +1,20 @@
+from multiprocessing.dummy import connection
+
 from backend.database import get_db_connection
 
 
 def init_db():
     with get_db_connection() as connection:
+
+        # Schools tablosu
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS schools (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                address TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
 
         # Users tablosunu oluştur
         connection.execute("""
@@ -11,7 +23,9 @@ def init_db():
                 email TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL,
                 role TEXT DEFAULT 'teacher'
-                    CHECK(role IN ('teacher', 'admin'))
+                    CHECK(role IN ('teacher', 'school_admin', system_admin')),
+                school_id INTEGER,
+                FOREIGN KEY (school_id) REFERENCES schools (id)
             )
         """)
 
@@ -29,6 +43,13 @@ def init_db():
         connection.commit()
     
     print("Database initialized successfully!")
+
+# Test için örnek bir okul ekleyelim
+connection.execute("""
+    INSERT INTO schools (name, address)
+    VALUES ('Test School', 'Istanbul')
+""")
+connection.commit()
 
 if __name__ == "__main__":
     init_db()

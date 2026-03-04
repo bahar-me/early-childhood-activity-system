@@ -12,7 +12,7 @@ def login_route():
     
     email = data.get("email")
     password = data.get("password")
-
+    
     result = login(email, password)
 
     if result["success"]:
@@ -31,8 +31,10 @@ def register_route():
     
     email = data.get("email")
     password = data.get("password")
+    role = data.get("role")
+    school_id = data.get("school_id")
 
-    result = register(email, password)
+    result = register(email, password, role, school_id)
 
     if result["success"]:
         return jsonify({"message": "User registered successfully"}), 201
