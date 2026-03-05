@@ -1,52 +1,40 @@
 from dotenv import load_dotenv
-
-from backend.models import user
 load_dotenv()
 
-from flask import Flask, jsonify, request
+from flask import Flask, app
+from backend.extensions import db
 from backend.api.auth.routes import auth_bp # Import the auth blueprint
-from backend.utils.auth_middleware import token_required, roles_required
 from backend.config import DEBUG
+import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    
 
-# Register blueprints
-app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    # Configure the app (e.g., database URI, secret key)
+    app.config["SQLALCHEMY_DATABASE_URI"] = \
+        "sqlite:///" + os.path.join(basedir, "app.db")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-@app.route("/")
-def home():
-    return {"message": "API is running"}
+    # Initialize extensions
+    db.init_app(app)
 
-@app.route("/api/protected", methods=["GET"])
-@token_required
-def protected_route():
-    return jsonify({
-        "message": "You are authenticated.", 
-        "user": request.user
-        })
+    # Import models to ensure they are registered with SQLAlchemy
+    from backend.models.school import School
 
-@app.route("/api/teacher-only", methods=["GET"])
-@token_required
-@roles_required("teacher")
-def teacher_only():
-    return jsonify({"message": "Welcome teacher."})
+    # Register blueprints
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
 
-@app.route("/api/school-admin-only", methods=["GET"])
-@token_required
-@roles_required("school_admin")
-def school_admin_only():
-    return jsonify({"message": "Welcome school admin."})
+    return app
 
-@app.route("/api/system-admin-only", methods=["GET"])
-@token_required 
-@roles_required("system_admin")
-def system_admin_only():
-    return jsonify({"message": "Welcome system admin."})
-
+app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=DEBUG)
+
+    
 
 
 
