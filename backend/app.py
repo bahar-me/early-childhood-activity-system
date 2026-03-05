@@ -18,15 +18,18 @@ def create_app():
         "sqlite:///" + os.path.join(basedir, "app.db")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+    print("DB PATH:", app.config["SQLALCHEMY_DATABASE_URI"])
+    
     # Initialize extensions
     db.init_app(app)
 
     # Import models to ensure they are registered with SQLAlchemy
     from backend.models.school import School
-
+    from backend.api.school.routes import school_bp
+    
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
-
+    app.register_blueprint(school_bp, url_prefix="/api/schools")
     return app
 
 app = create_app()
