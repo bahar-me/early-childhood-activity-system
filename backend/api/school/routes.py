@@ -1,12 +1,15 @@
 from flask import Blueprint, request, jsonify
 from backend.extensions import db
 from backend.models.school import School
+from backend.utils.auth_middleware import roles_required
 
 school_bp = Blueprint("school", __name__)
 
 # CREATE SCHOOL
 @school_bp.route("/", methods=["POST"])
+@roles_required("system_admin", "school_admin")
 def create_school():
+
     data = request.get_json()
 
     if not data or not data.get("name"):
@@ -29,6 +32,7 @@ def create_school():
 
 # GET ALL SCHOOLS
 @school_bp.route("/", methods=["GET"])
+@roles_required("system_admin", "school_admin", "teacher")
 def get_schools():
     schools = School.query.all()
 

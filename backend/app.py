@@ -25,6 +25,7 @@ def create_app():
 
     # Import models to ensure they are registered with SQLAlchemy
     from backend.models.school import School
+    from backend.models.user import User
     from backend.api.school.routes import school_bp
     
     # Register blueprints
