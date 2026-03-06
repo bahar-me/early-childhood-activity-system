@@ -1,187 +1,133 @@
 import re
-import sqlite3
 from typing import Dict, Any
-from datetime import datetime, timezone 
-from backend.database import get_db_connection
-from backend.config import SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION
-from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timezone
+
 import jwt
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from backend.extensions import db
+from backend.models.user import User
+from backend.models.refresh_token import RefreshToken
+from backend.config import (
+    SECRET_KEY,
+    JWT_ALGORITHM,
+    ACCESS_TOKEN_EXPIRATION,
+    REFRESH_TOKEN_EXPIRATION
+)
 
 ALLOWED_ROLES = {"teacher", "school_admin", "system_admin"}
 
- # Access token oluştur
-def generate_access_token(user):
+
+def generate_access_token(user: User) -> str:
     payload = {
-        "user_id": user["id"],
-        "email": user["email"],
-        "role": user["role"],
+        "user_id": user.id,
+        "email": user.email,
+        "role": user.role,
         "exp": datetime.now(timezone.utc) + ACCESS_TOKEN_EXPIRATION
     }
 
     return jwt.encode(payload, SECRET_KEY, algorithm=JWT_ALGORITHM)
-            
-# Refresh token oluştur
-def generate_refresh_token(user):
+
+
+def generate_refresh_token(user: User) -> str:
     payload = {
-        "user_id": user["id"],
+        "user_id": user.id,
         "exp": datetime.now(timezone.utc) + REFRESH_TOKEN_EXPIRATION
     }
 
     return jwt.encode(payload, SECRET_KEY, algorithm=JWT_ALGORITHM)
 
-def login(email: str, password: str) -> Dict[str, Any]:
-    """
-    Authenticate user with email and password.
-    """
-    # Input validation
-    if not email or not password:
-        return {
-            "success": False,
-            "error": "Email and password are required"
-        }
 
-    # Email format kontrolü
+def login(email: str, password: str) -> Dict[str, Any]:
+
+    if not email or not password:
+        return {"success": False, "error": "Email and password are required"}
+
     if not _is_valid_email(email):
-        return {
-            "success": False,
-            "error": "Invalid email format"
-        }
+        return {"success": False, "error": "Invalid email format"}
 
     try:
-        with get_db_connection() as connection:
-        # Email'e göre kullanıcıyı bul
-            cursor = connection.execute(
-                "SELECT * FROM users WHERE email = ?",
-                (email,)
-            )
+        user = User.query.filter_by(email=email).first()
 
-            user = cursor.fetchone()
+        if not user:
+            return {"success": False, "error": "Invalid credentials"}
 
-            # Kullanıcı yoksa
-            if user is None:
-                return {
-                    "success": False,
-                    "error": "Invalid credentials"
-                }
+        if not check_password_hash(user.password, password):
+            return {"success": False, "error": "Invalid credentials"}
 
-            # Hash kontrolü
-            if not check_password_hash(user["password"], password):
-                return {
-                    "success": False,
-                    "error": "Invalid credentials"
-                }
-        token = generate_access_token(user)
-
+        access_token = generate_access_token(user)
         refresh_token = generate_refresh_token(user)
 
-        # Refresh token'ı veritabanına kaydet
-        connection.execute(
-            "INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)",
-            (user["id"], refresh_token, datetime.now(timezone.utc) + REFRESH_TOKEN_EXPIRATION)
+        token_record = RefreshToken(
+            user_id=user.id,
+            token=refresh_token,
+            expires_at=datetime.now(timezone.utc) + REFRESH_TOKEN_EXPIRATION
         )
-        connection.commit()
+
+        db.session.add(token_record)
+        db.session.commit()
+
+        return {
+            "success": True,
+            "access_token": access_token,
+            "refresh_token": refresh_token
+        }
 
     except Exception as e:
         print(f"Login Exception: {e}")
-        return {
-            "success": False,
-            "error": "Something went wrong"
-        }
-
-    return {"success": True,
-            "access_token": token,
-            "refresh_token": refresh_token
-            }
-
-def _is_valid_email(email: str) -> bool:
-    """Validate email format."""
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return re.match(pattern, email) is not None
+        return {"success": False, "error": "Something went wrong"}
 
 
 def register(email: str, password: str, role: str = "teacher", school_id: int = None) -> Dict[str, Any]:
-    """
-    Registers a new user in the database.
-    """
 
-    # Input validation
     if not email or not password:
-        return {
-            "success": False,
-            "error": "Email and password are required"
-        }
-    if not _is_valid_email(email):
-        return {
-            "success": False,
-            "error": "Invalid email format"
-        }
+        return {"success": False, "error": "Email and password are required"}
 
-    # Role geçerliliği kontrolü
+    if not _is_valid_email(email):
+        return {"success": False, "error": "Invalid email format"}
+
     if role not in ALLOWED_ROLES:
-        return {
-            "success": False,
-            "error": "Invalid role."
-        }
-    
-    #School zorunluluğu kontrolü
+        return {"success": False, "error": "Invalid role"}
+
     if role in {"teacher", "school_admin"} and not school_id:
-        return {
-            "success": False,
-            "error": "School ID is required for this role."
-        }   
-    
-    #system_admin rolü için school_id null olmalı
+        return {"success": False, "error": "School ID is required"}
+
     if role == "system_admin":
         school_id = None
 
-    # Şifre hashleme
-    hashed_password = generate_password_hash(password)
-
     try:
-        with get_db_connection() as connection:
-            # school_id varsa gerçekten var mı kontrolü yapılabilir, şimdilik basit tutuyoruz
-            if school_id:
-                cursor = connection.execute(
-                    "SELECT * FROM schools WHERE id = ?",
-                    (school_id,)
-                )
-                school = cursor.fetchone()
 
-                if school is None:
-                    return {
-                        "success": False,
-                        "error": "School not found."
-                    }
-            
-            # hashed_password kaydetme
-            connection.execute(
-                "INSERT INTO users (email, password, role, school_id) VALUES (?, ?, ?, ?)",
-                (email, hashed_password, role, school_id)
-            )
-            connection.commit()
+        existing_user = User.query.filter_by(email=email).first()
 
-    except sqlite3.IntegrityError as e:
-        print(f"IntegrityError: {e}")
-        return {
-            "success": False,
-            "error": "User already exists"
-        }
+        if existing_user:
+            return {"success": False, "error": "User already exists"}
+
+        hashed_password = generate_password_hash(password)
+
+        user = User(
+            email=email,
+            password=hashed_password,
+            role=role,
+            school_id=school_id
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+        return {"success": True}
 
     except Exception as e:
         print(f"Register Exception: {e}")
-        return {
-            "success": False,
-            "error": "Something went wrong"
-        }
+        return {"success": False, "error": "Something went wrong"}
 
-    return {"success": True}
 
 def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
+
     if not refresh_token:
         return {"success": False, "error": "Refresh token is required"}
 
     try:
-        # Token decode et
+
         payload = jwt.decode(
             refresh_token,
             SECRET_KEY,
@@ -190,40 +136,25 @@ def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
 
         user_id = payload["user_id"]
 
-        with get_db_connection() as connection:
-            cursor = connection.execute(
-                "SELECT * FROM refresh_tokens WHERE token = ?",
-                (refresh_token,)
-            )
-            token_record = cursor.fetchone()
+        token_record = RefreshToken.query.filter_by(token=refresh_token).first()
 
-            # Token DB'de yoksa
-            if token_record is None:
-                return {"success": False, "error": "Invalid refresh token"}
+        if not token_record:
+            return {"success": False, "error": "Invalid refresh token"}
 
-            # Süresi dolmuş mu kontrol
-            expires_at = token_record["expires_at"]
+        if datetime.now(timezone.utc) > token_record.expires_at:
+            return {"success": False, "error": "Refresh token expired"}
 
-            if datetime.now(timezone.utc) > datetime.fromisoformat(expires_at):
-                return {"success": False, "error": "Refresh token expired"}
+        user = User.query.get(user_id)
 
-            # Kullanıcıyı bul
-            cursor = connection.execute(
-                "SELECT * FROM users WHERE id = ?",
-                (user_id,)
-            )
-            user = cursor.fetchone()
+        if not user:
+            return {"success": False, "error": "User not found"}
 
-            if user is None:
-                return {"success": False, "error": "User not found"}
+        new_access_token = generate_access_token(user)
 
-            # Yeni access token üret
-            new_access_token = generate_access_token(user)
-
-            return {
-                "success": True,
-                "access_token": new_access_token
-            }
+        return {
+            "success": True,
+            "access_token": new_access_token
+        }
 
     except jwt.ExpiredSignatureError:
         return {"success": False, "error": "Refresh token expired"}
@@ -234,25 +165,31 @@ def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
     except Exception as e:
         print(f"Refresh Exception: {e}")
         return {"success": False, "error": "Something went wrong"}
-    
+
+
 def logout(refresh_token: str) -> Dict[str, Any]:
+
     if not refresh_token:
         return {"success": False, "error": "Refresh token is required"}
 
     try:
-        with get_db_connection() as connection:
-            cursor = connection.execute(
-                "DELETE FROM refresh_tokens WHERE token = ?",
-                (refresh_token,)
-            )
 
-            if cursor.rowcount == 0:
-                return {"success": False, "error": "Invalid refresh token"}
+        token_record = RefreshToken.query.filter_by(token=refresh_token).first()
 
-            connection.commit()
+        if not token_record:
+            return {"success": False, "error": "Invalid refresh token"}
+
+        db.session.delete(token_record)
+        db.session.commit()
 
         return {"success": True}
 
     except Exception as e:
         print(f"Logout Exception: {e}")
-        return {"success": False, "error": "Something went wrong"}    
+        return {"success": False, "error": "Something went wrong"}
+
+
+def _is_valid_email(email: str) -> bool:
+
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None

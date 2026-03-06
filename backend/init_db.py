@@ -1,55 +1,35 @@
-from multiprocessing.dummy import connection
+from backend.extensions import db
+from backend.app import create_app
+from backend.models.user import User
 
-from backend.database import get_db_connection
-
+app = create_app()
 
 def init_db():
-    with get_db_connection() as connection:
+    with app.app_context():
 
-        # Schools tablosu
-        connection.execute("""
-            CREATE TABLE IF NOT EXISTS schools (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                address TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        # tüm modelleri oluştur
+        db.create_all()
+
+        print("✅ Database tables created")
+
+        # örnek admin oluştur
+        if not User.query.filter_by(email="admin@example.com").first():
+
+            admin = User(
+                username="admin",
+                email="admin@example.com",
+                password="admin123",
+                role="system_admin"
             )
-        """)
 
-        # Users tablosunu oluştur
-        connection.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL,
-                role TEXT DEFAULT 'teacher'
-                    CHECK(role IN ('teacher', 'school_admin', system_admin')),
-                school_id INTEGER,
-                FOREIGN KEY (school_id) REFERENCES schools (id)
-            )
-        """)
+            db.session.add(admin)
+            db.session.commit()
 
-        # Refresh token tablosunu oluştur
-        connection.execute("""
-            CREATE TABLE IF NOT EXISTS refresh_tokens (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                token TEXT NOT NULL,
-                expires_at DATETIME NOT NULL,
-                is_revoked BOOLEAN DEFAULT 0,
-                FOREIGN KEY (user_id) REFERENCES users (id) 
-            )
-        """)
-        connection.commit()
-    
-    print("Database initialized successfully!")
+            print("✅ Admin user created")
 
-# Test için örnek bir okul ekleyelim
-connection.execute("""
-    INSERT INTO schools (name, address)
-    VALUES ('Test School', 'Istanbul')
-""")
-connection.commit()
+        else:
+            print("Admin already exists")
+
 
 if __name__ == "__main__":
     init_db()

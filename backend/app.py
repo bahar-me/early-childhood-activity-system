@@ -1,13 +1,16 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from flask import Flask, app
+from flask import Flask
+from flask_migrate import Migrate
 from backend.extensions import db
 from backend.api.auth.routes import auth_bp # Import the auth blueprint
 from backend.config import DEBUG
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -22,10 +25,13 @@ def create_app():
     
     # Initialize extensions
     db.init_app(app)
+    migrate.init_app(app, db)
 
     # Import models to ensure they are registered with SQLAlchemy
     from backend.models.school import School
     from backend.models.user import User
+
+    # Import blueprints
     from backend.api.school.routes import school_bp
     
     # Register blueprints
