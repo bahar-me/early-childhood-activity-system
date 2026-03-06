@@ -23,6 +23,7 @@ def generate_access_token(user: User) -> str:
         "user_id": user.id,
         "email": user.email,
         "role": user.role,
+        "school_id": user["school_id"],
         "exp": datetime.now(timezone.utc) + ACCESS_TOKEN_EXPIRATION
     }
 

@@ -1,48 +1,64 @@
-import jwt
 from functools import wraps
 from flask import request, jsonify
+import jwt
+
 from backend.config import SECRET_KEY, JWT_ALGORITHM
 
 
-def token_required(f):
+def jwt_required(f):
+    """
+    Access token doğrulama middleware
+    """
+
     @wraps(f)
     def decorated(*args, **kwargs):
-        
+
         auth_header = request.headers.get("Authorization")
 
         if not auth_header:
-            return jsonify({"error": "Token is missing"}), 401
-        
+            return jsonify({"error": "Authorization header missing"}), 401
+
         try:
             token = auth_header.split(" ")[1]
-            data = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALGORITHM])
 
-        except Exception:
-            return jsonify({"error": "Invalid or expired token"}), 401
-        
-        request.user = data
+            payload = jwt.decode(
+                token,
+                SECRET_KEY,
+                algorithms=[JWT_ALGORITHM]
+            )
+
+            request.user = payload
+
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token expired"}), 401
+
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token"}), 401
+
         return f(*args, **kwargs)
 
     return decorated
 
-def roles_required(*allowed_roles):
-    def decorator(f):
+def roles_required(*roles):
+    """
+    Role authorization middleware
+    """
+
+    def wrapper(f):
+
         @wraps(f)
         def decorated(*args, **kwargs):
-           
-            if not hasattr(request, "user"):
-                return jsonify({"error": "User not authenticated."}), 401
-            
-            user_role = request.user.get("role")
 
-            #system_admin her zaman erişime sahip olur
-            if user_role == "system_admin":
-                return f(*args, **kwargs)
-            
-            if user_role not in allowed_roles:
-                return jsonify({"error": "Access forbidden"}), 403
-            
+            user = getattr(request, "user", None)
+
+            if user is None:
+                return jsonify({"error": "Unauthorized"}), 401
+
+            if user["role"] not in roles:
+                return jsonify({"error": "Forbidden"}), 403
+
             return f(*args, **kwargs)
-        
+
         return decorated
-    return decorator
+
+    return wrapper
