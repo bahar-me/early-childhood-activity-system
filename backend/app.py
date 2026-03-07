@@ -1,48 +1,48 @@
-from dotenv import load_dotenv
-load_dotenv()
-
-from flask import Flask
-from flask_migrate import Migrate
-from backend.extensions import db
-from backend.api.auth.routes import auth_bp # Import the auth blueprint
-from backend.config import DEBUG
 import os
+from flask import Flask, jsonify
+from backend.config import config_by_name
+from backend.extensions import db, migrate, jwt
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+from backend.api.auth.routes import auth_bp # Import the auth blueprint
+from backend.api.school.routes import school_bp # Import the school blueprint
 
-migrate = Migrate()
 
-def create_app():
+def create_app(config_name=None):
+    if config_name is None:
+        config_name = os.getenv("FLASK_ENV", "development")
+
     app = Flask(__name__)
-    
+    app.config.from_object(config_by_name[config_name])
 
-    # Configure the app (e.g., database URI, secret key)
-    app.config["SQLALCHEMY_DATABASE_URI"] = \
-        "sqlite:///" + os.path.join(basedir, "app.db")
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    print("DB PATH:", app.config["SQLALCHEMY_DATABASE_URI"])
-    
-    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    jwt.init_app(app)
 
     # Import models to ensure they are registered with SQLAlchemy
-    from backend.models.school import School
-    from backend.models.user import User
+    from backend.models import School, User, RefreshToken # noqa: F401
 
-    # Import blueprints
-    from backend.api.school.routes import school_bp
-    
-    # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(school_bp, url_prefix="/api/schools")
+    
+    @app.route("/health", methods=["GET"])
+    def health():
+        return jsonify({"status": "ok", "message": "Backend is running"}), 200
+
+    @app.errorhandler(404)
+    def not_found(_e):
+        return jsonify({"error": "Not found"}), 404
+    
+    @app.errorhandler(500)
+    def internal_error(_e):
+        return jsonify({"error": "Internal server error"}), 500
+    
     return app
 
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=DEBUG)
+    app.run()
+
 
     
 

@@ -1,35 +1,55 @@
-from backend.extensions import db
+from werkzeug.security import generate_password_hash
+
 from backend.app import create_app
-from backend.models.user import User
+from backend.extensions import db
+from backend.models import School, User
 
-app = create_app()
 
-def init_db():
+def seed_data():
+    app = create_app()
+
     with app.app_context():
-
-        # tüm modelleri oluştur
         db.create_all()
 
-        print("✅ Database tables created")
-
-        # örnek admin oluştur
-        if not User.query.filter_by(email="admin@example.com").first():
-
-            admin = User(
-                username="admin",
-                email="admin@example.com",
-                password="admin123",
-                role="system_admin"
-            )
-
-            db.session.add(admin)
+        school = School.query.filter_by(name="Test School").first()
+        if not school:
+            school = School(name="Test School", address="Istanbul")
+            db.session.add(school)
             db.session.commit()
 
-            print("✅ Admin user created")
+        admin = User.query.filter_by(email="admin@test.com").first()
+        if not admin:
+            admin = User(
+                email="admin@test.com",
+                password_hash=generate_password_hash("123456"),
+                role="system_admin",
+                school_id=None
+            )
+            db.session.add(admin)
 
-        else:
-            print("Admin already exists")
+        teacher = User.query.filter_by(email="teacher@test.com").first()
+        if not teacher:
+            teacher = User(
+                email="teacher@test.com",
+                password_hash=generate_password_hash("123456"),
+                role="teacher",
+                school_id=school.id
+            )
+            db.session.add(teacher)
+
+        school_admin = User.query.filter_by(email="schooladmin@test.com").first()
+        if not school_admin:
+            school_admin = User(
+                email="schooladmin@test.com",
+                password_hash=generate_password_hash("123456"),
+                role="school_admin",
+                school_id=school.id
+            )
+            db.session.add(school_admin)
+
+        db.session.commit()
+        print("Database seeded successfully.")
 
 
 if __name__ == "__main__":
-    init_db()
+    seed_data()

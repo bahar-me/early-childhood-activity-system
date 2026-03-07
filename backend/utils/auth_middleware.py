@@ -1,64 +1,23 @@
 from functools import wraps
-from flask import request, jsonify
-import jwt
+from flask import jsonify
+from flask_jwt_extended import verify_jwt_in_request, get_jwt
 
-from backend.config import SECRET_KEY, JWT_ALGORITHM
+def roles_required(*allowed_roles):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            verify_jwt_in_request()
 
+            claims = get_jwt()
+            user_role = claims.get("role")
 
-def jwt_required(f):
-    """
-    Access token doğrulama middleware
-    """
+            if user_role == "system_admin":
+                return func(*args, **kwargs)
+            
+            if user_role not in allowed_roles:
+                return jsonify({"error": "Access forbidden"}), 403
 
-    @wraps(f)
-    def decorated(*args, **kwargs):
-
-        auth_header = request.headers.get("Authorization")
-
-        if not auth_header:
-            return jsonify({"error": "Authorization header missing"}), 401
-
-        try:
-            token = auth_header.split(" ")[1]
-
-            payload = jwt.decode(
-                token,
-                SECRET_KEY,
-                algorithms=[JWT_ALGORITHM]
-            )
-
-            request.user = payload
-
-        except jwt.ExpiredSignatureError:
-            return jsonify({"error": "Token expired"}), 401
-
-        except jwt.InvalidTokenError:
-            return jsonify({"error": "Invalid token"}), 401
-
-        return f(*args, **kwargs)
-
-    return decorated
-
-def roles_required(*roles):
-    """
-    Role authorization middleware
-    """
-
-    def wrapper(f):
-
-        @wraps(f)
-        def decorated(*args, **kwargs):
-
-            user = getattr(request, "user", None)
-
-            if user is None:
-                return jsonify({"error": "Unauthorized"}), 401
-
-            if user["role"] not in roles:
-                return jsonify({"error": "Forbidden"}), 403
-
-            return f(*args, **kwargs)
-
-        return decorated
-
-    return wrapper
+            return func(*args, **kwargs)
+        
+        return wrapper
+    return decorator

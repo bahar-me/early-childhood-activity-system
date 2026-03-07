@@ -1,23 +1,35 @@
 import os
 from datetime import timedelta
+from dotenv import load_dotenv
 
-# Environment
-ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
-DEBUG = ENVIRONMENT == "development"
+load_dotenv()
 
-# Security
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    if ENVIRONMENT == "development":
-        SECRET_KEY = "dev_secret_key_change_in_production"
-    else:
-        raise ValueError("SECRET_KEY environment variable is not set")
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-# JWT Configuration
-JWT_ALGORITHM = "HS256"
+class Config:
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key")
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "DATABASE_URL", 
+        f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}"
+    )
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-ACCESS_TOKEN_EXPIRATION = timedelta(minutes=15)
-REFRESH_TOKEN_EXPIRATION = timedelta(days=7)
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt_secret_key")
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # 15 dakika
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)    # 7 gün
 
-# Database (if needed)
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./database.db")
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+config_by_name = {
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "production": ProductionConfig
+}

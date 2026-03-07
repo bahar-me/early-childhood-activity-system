@@ -1,47 +1,76 @@
-from flask import Blueprint, request, jsonify
-from backend.extensions import db
-from backend.models.school import School
+from flask import Blueprint, jsonify, request
+
+from backend.services.auth.school_service import (
+    create_school,
+    delete_school,
+    get_all_schools,
+    get_school_by_id,
+    update_school
+)
 from backend.utils.auth_middleware import roles_required
 
 school_bp = Blueprint("school", __name__)
 
 # CREATE SCHOOL
 @school_bp.route("/", methods=["POST"])
-@roles_required("system_admin", "school_admin")
-def create_school():
+@roles_required("system_admin")
+def create_school_route():
+    data = request.get_json() or {}
 
-    data = request.get_json()
-
-    if not data or not data.get("name"):
-        return jsonify({"error": "School name is required"}), 400
-
-    new_school = School(
-        name=data["name"],
+    result = create_school(
+        name=data.get("name"),  
         address=data.get("address")
     )
 
-    db.session.add(new_school)
-    db.session.commit()
+    if result["success"]:
+        return jsonify({
+            "message": "School created successfully",
+            "school": result["school"]
+        }), 201
+    
+    return jsonify({"error": result["error"]}), 400
 
-    return jsonify({
-        "id": new_school.id,
-        "name": new_school.name,
-        "address": new_school.address
-    }), 201
-
-
-# GET ALL SCHOOLS
 @school_bp.route("/", methods=["GET"])
 @roles_required("system_admin", "school_admin", "teacher")
-def get_schools():
-    schools = School.query.all()
-
-    result = []
-    for school in schools:
-        result.append({
-            "id": school.id,
-            "name": school.name,
-            "address": school.address
-        })
-
+def list_schools_route():
+    result = get_all_schools()
     return jsonify(result), 200
+
+@school_bp.route("/<int:school_id>", methods=["GET"])
+@roles_required("system_admin", "school_admin", "teacher")
+def get_school_route(school_id):
+    result = get_school_by_id(school_id)
+
+    if result["success"]:
+        return jsonify(result), 200
+    
+    return jsonify({"error": result["error"]}), 404
+
+@school_bp.route("/<int:school_id>", methods=["PUT"])
+@roles_required("system_admin", "school_admin") 
+def update_school_route(school_id):
+    data = request.get_json() or {}
+
+    result = update_school(
+        school_id=school_id,
+        name=data.get("name"),
+        address=data.get("address")
+    )
+
+    if result["success"]:
+        return jsonify({
+            "message": "School updated successfully",
+            "school": result["school"]
+        }), 200
+    
+    return jsonify({"error": result["error"]}), 404
+
+@school_bp.route("/<int:school_id>", methods=["DELETE"])
+@roles_required("system_admin")
+def delete_school_route(school_id):
+    result = delete_school(school_id)
+
+    if result["success"]:
+        return jsonify({"message": "School deleted successfully"}), 200
+    
+    return jsonify({"error": result["error"]}), 404
