@@ -1,6 +1,8 @@
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 .pytest_cache/
 
 # Database
@@ -11,3 +13,8 @@ __pycache__/
 
 # Virtual env
 venv/
+
+instance/
+
+.mypy_cache/
+.vscode/

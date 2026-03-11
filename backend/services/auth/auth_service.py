@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
