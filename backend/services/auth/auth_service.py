@@ -100,7 +100,7 @@ def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
     except Exception:
         return {"success": False, "error": "Invalid or expired refresh token"}
 
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)    
     if not user:
         return {"success": False, "error": "User not found"}
 

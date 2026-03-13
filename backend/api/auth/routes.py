@@ -55,7 +55,7 @@ def refresh_route():
     
     if result["success"]:
         return jsonify({
-            "message": "Access token refreshed successfully",
+            "message": "Access token refreshed",
             "access_token": result["access_token"]
         }), 200
 
@@ -68,6 +68,6 @@ def logout_route():
     result = logout(data.get("refresh_token"))
 
     if result["success"]:
-        return jsonify({"message": "Logout successful"}), 200
+        return jsonify({"message": "Logged out successfully"}), 200
 
     return jsonify({"error": result["error"]}), 400
