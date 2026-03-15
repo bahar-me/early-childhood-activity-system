@@ -1,5 +1,6 @@
 import os
 from flask import Flask, jsonify
+from flask_cors import CORS
 from backend.config import config_by_name
 from backend.extensions import db, migrate, jwt
 
@@ -13,6 +14,8 @@ def create_app(config_name=None):
 
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
+
+    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})
 
     db.init_app(app)
     migrate.init_app(app, db)
