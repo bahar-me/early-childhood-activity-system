@@ -26,11 +26,14 @@ interface SchoolAdminDashboardProps {
 export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardProps) {
   const [selectedPlan, setSelectedPlan] = useState<ActivityPlan | null>(null);
   const [showReport, setShowReport] = useState(false);
-
+   
+  const displayName = user.name || user.email;
   // Filter data by school
-  const teachers = mockTeacherRecords.filter((t) => t.schoolId === user.schoolId);
-  const classes = mockClassRecords.filter((c) => c.schoolId === user.schoolId);
-  const plans = mockActivityPlans.filter((p) => p.schoolId === user.schoolId);
+  const currentSchoolId = user.schoolId ?? (user.school_id ? String(user.school_id) : '');
+
+  const teachers = mockTeacherRecords.filter((t) => t.schoolId === currentSchoolId);
+  const classes = mockClassRecords.filter((c) => c.schoolId === currentSchoolId);
+  const plans = mockActivityPlans.filter((p) => p.schoolId === currentSchoolId);
 
   const handleViewPlan = (plan: ActivityPlan) => {
     setSelectedPlan(plan);
@@ -56,7 +59,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 School Administrator Dashboard
               </h1>
               <p className="text-gray-600 mt-1">
-                Welcome, {user.name} • {teachers[0]?.schoolName || 'School Admin'}
+                Welcome, {displayName} • {teachers[0]?.schoolName || 'School Admin'}
               </p>
             </div>
             <Button onClick={onLogout} variant="outline">
@@ -276,7 +279,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
       </main>
 
       {/* Report Modal */}
-      {selectedPlan && showReport && (
+      {selectedPlan && showReport && getTeacherById(selectedPlan.teacherId) && getClassById(selectedPlan.classId) && (
         <ActivityReport
           activities={activities.filter((a) => selectedPlan.activityIds.includes(a.id))}
           teacherProfile={getTeacherById(selectedPlan.teacherId)!}

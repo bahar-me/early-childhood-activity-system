@@ -1,12 +1,5 @@
 import { Activity } from '../types/activity';
 import { TeacherProfile, ClassProfile } from '../types/profile';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from './ui/dialog';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
@@ -27,8 +20,6 @@ export function ActivityReport({
   open,
   onClose,
 }: ActivityReportProps) {
-  console.log('ActivityReport rendered', { open, activitiesCount: activities.length });
-
   const handlePrint = () => {
     window.print();
   };
@@ -51,33 +42,34 @@ export function ActivityReport({
     return acc + parseInt(duration);
   }, 0);
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen) onClose();
-  }}>
-      <DialogContent className="max-w-4xl max-h-[90vh]">
-        <DialogHeader className="print:hidden">
-          <DialogTitle>Activity Plan Report</DialogTitle>
-          <DialogDescription>
-            Review and print your customized activity plan
-          </DialogDescription>
-          <Button onClick={handlePrint} className="absolute top-4 right-12">
-            <Printer className="h-4 w-4 mr-2" />
-            Print Report
-          </Button>
-        </DialogHeader>
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-xl overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b">
+          <div>
+            <h2 className="text-xl font-semibold">Activity Plan Report</h2>
+            <p className="text-sm text-gray-500">
+              Review and print your customized activity plan
+            </p>
+          </div>
 
-        <ScrollArea className="max-h-[calc(90vh-120px)] pr-4">
-          <div className="space-y-6 print:space-y-4" id="report-content">
-            {/* Header - Print Only */}
-            <div className="hidden print:block text-center border-b pb-4 mb-6">
-              <h1 className="text-2xl font-bold text-purple-600">KinderActivity AI</h1>
-              <p className="text-gray-600">Activity Plan Report</p>
-            </div>
+          <div className="flex gap-2">
+            <Button onClick={handlePrint}>
+              <Printer className="h-4 w-4 mr-2" />
+              Print
+            </Button>
+            <Button variant="outline" onClick={onClose}>
+              Close
+            </Button>
+          </div>
+        </div>
 
-            {/* Teacher & Class Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 print:gap-2">
-              <div className="border rounded-lg p-4 print:p-3">
+        <ScrollArea className="max-h-[calc(90vh-80px)] p-4">
+          <div className="space-y-6" id="report-content">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="border rounded-lg p-4">
                 <h3 className="font-semibold mb-2">Teacher Information</h3>
                 <div className="space-y-1 text-sm">
                   <p><strong>Name:</strong> {teacherProfile.name}</p>
@@ -87,7 +79,7 @@ export function ActivityReport({
                 </div>
               </div>
 
-              <div className="border rounded-lg p-4 print:p-3">
+              <div className="border rounded-lg p-4">
                 <h3 className="font-semibold mb-2">Class Information</h3>
                 <div className="space-y-1 text-sm">
                   <p><strong>Class:</strong> {classProfile.className}</p>
@@ -99,26 +91,21 @@ export function ActivityReport({
               </div>
             </div>
 
-            {/* Summary */}
-            <div className="border rounded-lg p-4 print:p-3">
+            <div className="border rounded-lg p-4">
               <h3 className="font-semibold mb-2">Plan Summary</h3>
               <div className="flex flex-wrap gap-2">
-                {Array.from(new Set(activities.map(a => a.subject))).map(subject => (
+                {Array.from(new Set(activities.map((a) => a.subject))).map((subject) => (
                   <Badge key={subject} className={getSubjectColor(subject)}>
-                    {subject} ({activities.filter(a => a.subject === subject).length})
+                    {subject} ({activities.filter((a) => a.subject === subject).length})
                   </Badge>
                 ))}
               </div>
             </div>
 
-            {/* Activities */}
-            <div className="space-y-4 print:space-y-3">
+            <div className="space-y-4">
               <h3 className="font-semibold">Planned Activities</h3>
               {activities.map((activity, index) => (
-                <div
-                  key={activity.id}
-                  className="border rounded-lg p-4 print:p-3 print:break-inside-avoid"
-                >
+                <div key={activity.id} className="border rounded-lg p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
                       <h4 className="font-semibold">
@@ -173,15 +160,9 @@ export function ActivityReport({
                 </div>
               ))}
             </div>
-
-            {/* Footer */}
-            <div className="hidden print:block text-center text-sm text-gray-500 border-t pt-4 mt-6">
-              <p>Generated by KinderActivity AI on {new Date().toLocaleDateString()}</p>
-            </div>
           </div>
         </ScrollArea>
-      </DialogContent>
-
-    </Dialog>
+      </div>
+    </div>
   );
 }
