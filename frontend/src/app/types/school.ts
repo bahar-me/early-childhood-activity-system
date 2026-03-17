@@ -1,11 +1,12 @@
 import { TeacherProfile, ClassProfile } from './profile';
 
 export interface School {
-  id: string;
+  id: string | number;
   name: string;
-  address: string;
-  contactEmail: string;
-  createdAt: string;
+  address?: string | null;
+  contactEmail?: string;
+  createdAt?: string;
+  created_at?: string;
 }
 
 export interface TeacherRecord extends TeacherProfile {
