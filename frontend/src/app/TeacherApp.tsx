@@ -241,10 +241,15 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   };
 
   const handleGenerateReport = () => {
+    console.log('Report button clicked');
+    console.log('selectedForReport:', selectedForReport);
+  
     if (selectedForReport.length === 0) {
       toast.error('Please select at least one activity for the report');
       return;
     }
+
+    console.log('Opening report modal...');
     setShowReport(true);
   };
 
@@ -304,6 +309,9 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
               </h1>
               <p className="text-gray-600 mt-1">
                 Welcome back, {teacherProfile?.name} • {classProfile?.className}
+              </p>
+              <p className="text-red-500 font-bold">
+                Debug - Selected for report: {selectedForReport.length}
               </p>
             </div>
             <div className="flex flex-wrap gap-2">

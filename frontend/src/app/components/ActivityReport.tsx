@@ -27,6 +27,8 @@ export function ActivityReport({
   open,
   onClose,
 }: ActivityReportProps) {
+  console.log('ActivityReport rendered', { open, activitiesCount: activities.length });
+
   const handlePrint = () => {
     window.print();
   };
@@ -50,7 +52,9 @@ export function ActivityReport({
   }, 0);
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) onClose();
+  }}>
       <DialogContent className="max-w-4xl max-h-[90vh]">
         <DialogHeader className="print:hidden">
           <DialogTitle>Activity Plan Report</DialogTitle>
@@ -178,35 +182,6 @@ export function ActivityReport({
         </ScrollArea>
       </DialogContent>
 
-      <style jsx global>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          #report-content,
-          #report-content * {
-            visibility: visible;
-          }
-          .print\\:hidden {
-            display: none !important;
-          }
-          .print\\:block {
-            display: block !important;
-          }
-          .print\\:p-3 {
-            padding: 0.75rem !important;
-          }
-          .print\\:space-y-3 > * + * {
-            margin-top: 0.75rem !important;
-          }
-          .print\\:space-y-4 > * + * {
-            margin-top: 1rem !important;
-          }
-          .print\\:break-inside-avoid {
-            break-inside: avoid !important;
-          }
-        }
-      `}</style>
     </Dialog>
   );
 }

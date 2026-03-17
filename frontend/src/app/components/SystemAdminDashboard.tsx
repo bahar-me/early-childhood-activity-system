@@ -80,7 +80,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                 System Administrator Dashboard
               </h1>
               <p className="text-gray-600 mt-1">
-                Welcome, {user.name} • Full System Access
+                Welcome, {user.name || user.email} • Full System Access
               </p>
             </div>
             <Button onClick={onLogout} variant="outline">
@@ -116,7 +116,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
             <CardContent>
               <div className="text-2xl font-bold">{mockUsers.length}</div>
               <p className="text-xs text-muted-foreground">
-                {totalTeachers} teachers, {mockUsers.filter(u => u.role === 'school-admin').length} admins
+                {totalTeachers} teachers, {mockUsers.filter(u => u.role === 'school_admin').length} admins
               </p>
             </CardContent>
           </Card>
@@ -246,8 +246,8 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                           <TableCell>
                             <Badge className={getRoleColor(user.role)}>
                               {user.role === 'teacher' && 'Teacher'}
-                              {user.role === 'school-admin' && 'School Admin'}
-                              {user.role === 'system-admin' && 'System Admin'}
+                              {user.role === 'school_admin' && 'School Admin'}
+                              {user.role === 'system_admin' && 'System Admin'}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-sm">
