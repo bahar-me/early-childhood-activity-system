@@ -5,6 +5,8 @@ import { User } from './types/user';
 import { activities } from './data/activities';
 import { ActivityCard } from './components/ActivityCard';
 import { ActivityDetail } from './components/ActivityDetail';
+import { saveTeacherProfile, saveClassProfile, getTeacherProfile, getClassProfile } from './api/profile';
+import { createActivityPlan } from './api/activityPlans';
 import { FilterPanel } from './components/FilterPanel';
 import { TeacherProfileForm } from './components/TeacherProfileForm';
 import { ClassProfileForm } from './components/ClassProfileForm';
@@ -36,43 +38,91 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
 
   // Load profiles and favorites from localStorage
   useEffect(() => {
-    const savedTeacherProfile = localStorage.getItem(`teacher-profile-${user.id}`);
-    const savedClassProfile = localStorage.getItem(`class-profile-${user.id}`);
-    const savedFavorites = localStorage.getItem(`favorites-${user.id}`);
-    
-    if (savedTeacherProfile) {
-      setTeacherProfile(JSON.parse(savedTeacherProfile));
-      if (savedClassProfile) {
-        setClassProfile(JSON.parse(savedClassProfile));
+  const savedFavorites = localStorage.getItem(`favorites-${user.id}`);
+
+  const loadProfiles = async () => {
+    try {
+      const teacher = await getTeacherProfile();
+      setTeacherProfile({
+        name: teacher.name,
+        schoolName: '',
+        yearsExperience: String(teacher.years_experience),
+        specializations: teacher.specializations || [],
+        teachingStyle: teacher.teaching_style || '',
+      });
+
+      try {
+        const classData = await getClassProfile();
+        setClassProfile({
+          className: classData.class_name,
+          ageGroup: classData.age_group,
+          classSize: classData.class_size,
+          learningFocus: classData.learning_focus || [],
+          availableResources: classData.available_resources || [],
+          specialNeeds: classData.special_needs || [],
+          dailySchedule: {
+            morningActivities: 30,
+            afternoonActivities: 30,
+          },
+        });
         setSetupStep('complete');
-      } else {
+      } catch {
         setSetupStep('class');
       }
+    } catch {
+      setSetupStep('teacher');
     }
-    
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites));
-    }
-  }, [user.id]);
+  };
+
+  loadProfiles();
+
+  if (savedFavorites) {
+    setFavorites(JSON.parse(savedFavorites));
+  }
+}, [user.id]);
 
   // Save favorites to localStorage
   useEffect(() => {
     localStorage.setItem(`favorites-${user.id}`, JSON.stringify(favorites));
   }, [favorites, user.id]);
 
-  const handleTeacherProfileSubmit = (profile: TeacherProfile) => {
+  const handleTeacherProfileSubmit = async (profile: TeacherProfile) => {
+  try {
+    await saveTeacherProfile({
+      name: profile.name,
+      years_experience: Number(profile.yearsExperience),
+      specializations: profile.specializations,
+      teaching_style: profile.teachingStyle,
+    });
+
     setTeacherProfile(profile);
-    localStorage.setItem(`teacher-profile-${user.id}`, JSON.stringify(profile));
     setSetupStep('class');
     toast.success('Teacher profile saved!');
-  };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to save teacher profile';
+    toast.error(message);
+  }
+};
 
-  const handleClassProfileSubmit = (profile: ClassProfile) => {
+  const handleClassProfileSubmit = async (profile: ClassProfile) => {
+  try {
+    await saveClassProfile({
+      class_name: profile.className,
+      age_group: profile.ageGroup,
+      class_size: profile.classSize,
+      learning_focus: profile.learningFocus,
+      available_resources: profile.availableResources,
+      special_needs: profile.specialNeeds,
+    });
+
     setClassProfile(profile);
-    localStorage.setItem(`class-profile-${user.id}`, JSON.stringify(profile));
     setSetupStep('complete');
     toast.success('Class profile saved! Welcome to KinderActivity AI!');
-  };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to save class profile';
+    toast.error(message);
+  }
+};
 
   const handleEditProfiles = () => {
     setSetupStep('teacher');
@@ -240,18 +290,25 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     });
   };
 
-  const handleGenerateReport = () => {
-    console.log('Report button clicked');
-    console.log('selectedForReport:', selectedForReport);
-  
-    if (selectedForReport.length === 0) {
-      toast.error('Please select at least one activity for the report');
-      return;
-    }
+  const handleGenerateReport = async () => {
+  if (selectedForReport.length === 0) {
+    toast.error('Please select at least one activity for the report');
+    return;
+  }
 
-    console.log('Opening report modal...');
+  try {
+    await createActivityPlan({
+      activity_ids: selectedForReport,
+      notes: 'Generated from teacher activity flow',
+    });
+
     setShowReport(true);
-  };
+    toast.success('Activity plan saved successfully');
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to save activity plan';
+    toast.error(message);
+  }
+};
 
   const filteredActivities = getFilteredActivities();
   const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
