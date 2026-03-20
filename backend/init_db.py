@@ -36,6 +36,10 @@ def seed_data():
                 school_id=school.id
             )
             db.session.add(teacher)
+        else:
+            teacher.password_hash = generate_password_hash("123456")
+            teacher.role = "teacher"
+            teacher.school_id = school.id
 
         school_admin = User.query.filter_by(email="schooladmin@test.com").first()
         if not school_admin:
@@ -46,6 +50,10 @@ def seed_data():
                 school_id=school.id
             )
             db.session.add(school_admin)
+        else:
+            school_admin.password_hash = generate_password_hash("123456")
+            school_admin.role = "school_admin"
+            school_admin.school_id = school.id
 
         db.session.commit()
         print("Database seeded successfully.")

@@ -23,7 +23,7 @@ export const mockUsers: User[] = [
     id: '3',
     email: 'admin@school.com',
     name: 'Dr. Emily Martinez',
-    role: 'school-admin',
+    role: 'school_admin',
     schoolId: 'school-1',
     createdAt: '2024-01-10T08:00:00Z',
   },
@@ -31,7 +31,7 @@ export const mockUsers: User[] = [
     id: '4',
     email: 'sysadmin@kinderactivity.com',
     name: 'David Kim',
-    role: 'system-admin',
+    role: 'system_admin',
     createdAt: '2024-01-01T08:00:00Z',
   },
 ];
