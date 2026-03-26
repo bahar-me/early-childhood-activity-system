@@ -4,12 +4,16 @@ __pycache__/
 *.pyo
 *.pyd
 .pytest_cache/
+.python-version
 
 # Database
 *.db
+instance/
 
 # Environment
 .env
+.env.*
+!.env.example
 
 # Virtual env
 venv/
@@ -23,10 +27,17 @@ instance/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
+frontend/.npm/
+frontend/npm-debug.log*
+frontend/.yarn-debug.log*
+frontend/.yarn-error.log*
+frontend/pnpm-debug.log*
 
 # Logs / temp
 *.log
 *.zip
+*.tmp
+*.temp
 
 # Android / Capacitor build outputs
 frontend/android/.gradle/
@@ -34,3 +45,22 @@ frontend/android/build/
 frontend/android/app/build/
 frontend/android/local.properties
 frontend/android/captures/
+frontend/android/.idea/
+frontend/android/**/generated/
+
+# iOS / Capacitor build outputs
+frontend/ios/App/Pods/
+frontend/ios/App/build/
+frontend/ios/App/.build/
+frontend/ios/.idea/
+
+# Os / Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Optional test / coverage outputs
+coverage/
+.coverage
+htmlcov/
