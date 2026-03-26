@@ -12,8 +12,16 @@ export default function App() {
 
   useEffect(() => {
     const savedUser = localStorage.getItem('current-user');
-    if (savedUser) {
+    const accessToken = localStorage.getItem('access-token');
+    const refreshToken = localStorage.getItem('refresh-token');
+
+    if (savedUser && accessToken && refreshToken) {
       setCurrentUser(JSON.parse(savedUser));
+    } else {
+      localStorage.removeItem('current-user');
+      localStorage.removeItem('access-token');
+      localStorage.removeItem('refresh-token');
+      setCurrentUser(null);
     }
   }, []);
 

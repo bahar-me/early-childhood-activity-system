@@ -50,7 +50,7 @@ export function TeacherProfileForm({ onSubmit, initialData }: TeacherProfileForm
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto w-full mb-24">
       <CardHeader>
         <div className="flex items-center gap-2">
           <User className="h-6 w-6 text-purple-600" />
@@ -61,7 +61,7 @@ export function TeacherProfileForm({ onSubmit, initialData }: TeacherProfileForm
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 pb-16">
           <div className="space-y-2">
             <Label htmlFor="name">Full Name *</Label>
             <Input

@@ -10,14 +10,12 @@ from backend.api.profile.routes import profile_bp # Import the profile blueprint
 from backend.api.activity_plan.routes import activity_plan_bp # Import the activity plan blueprint
 from backend.api.school_admin.routes import school_admin_bp # Import the school admin blueprint
 
-def create_app(config_name=None):
+def create_app(config_name="development"):
     if config_name is None:
         config_name = os.getenv("FLASK_ENV", "development")
 
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
-
-    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -45,6 +43,20 @@ def create_app(config_name=None):
     def internal_error(_e):
         return jsonify({"error": "Internal server error"}), 500
     
+    CORS(app, 
+         resources={
+            r"/api/*": {
+                "origins": [
+                    "http://localhost", 
+                    "http://127.0.0.1:5173", 
+                    "http://localhost:5173",
+                ],
+                "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
+            }
+        },
+    )
+
     return app
 
 app = create_app()

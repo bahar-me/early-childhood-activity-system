@@ -311,12 +311,14 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
 };
 
   const filteredActivities = getFilteredActivities();
+  console.log('Total Activities:', activities.length);
+  console.log('Filtered Activities total:', filteredActivities.length);
   const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
 
   // Show setup steps if not complete
   if (setupStep === 'teacher') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+      <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-purple-600 mb-2">
             Welcome to KinderActivity AI
