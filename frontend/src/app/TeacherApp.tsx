@@ -35,6 +35,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [selectedGroupSizes, setSelectedGroupSizes] = useState<GroupSize[]>([]);
   const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'selected'>('all');
   const [showReport, setShowReport] = useState(false);
+  const [isSavingPlan, setIsSavingPlan] = useState(false);
 
   // Load profiles and favorites from localStorage
   useEffect(() => {
@@ -296,7 +297,14 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     return;
   }
 
+  if (!classProfile) {
+    toast.error('Class profile is missing. Please complete your class profile to generate a report.');
+    return;
+  }
+
   try {
+    setIsSavingPlan(true);
+
     await createActivityPlan({
       activity_ids: selectedForReport,
       notes: 'Generated from teacher activity flow',
@@ -308,11 +316,12 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     const message = error instanceof Error ? error.message : 'Failed to save activity plan';
     toast.error(message);
   }
+    finally {
+      setIsSavingPlan(false);
+    }
 };
 
   const filteredActivities = getFilteredActivities();
-  console.log('Total Activities:', activities.length);
-  console.log('Filtered Activities total:', filteredActivities.length);
   const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
 
   // Show setup steps if not complete
@@ -369,9 +378,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
               <p className="text-gray-600 mt-1">
                 Welcome back, {teacherProfile?.name} • {classProfile?.className}
               </p>
-              <p className="text-red-500 font-bold">
-                Debug - Selected for report: {selectedForReport.length}
-              </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button
@@ -386,10 +392,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
                 onClick={handleGenerateReport}
                 size="lg"
                 variant="outline"
-                disabled={selectedForReport.length === 0}
+                disabled={selectedForReport.length === 0 || isSavingPlan}
               >
                 <FileText className="h-5 w-5 mr-2" />
-                Report ({selectedForReport.length})
+                {isSavingPlan ? 'Generating Report...' : `Report (${selectedForReport.length})`}
               </Button>
               <Button
                 onClick={handleEditProfiles}

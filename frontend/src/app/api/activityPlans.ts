@@ -3,6 +3,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000
 function getAuthHeaders() {
   const token = localStorage.getItem('access-token');
 
+  if (!token) {
+    throw new Error('No access token found. Please log in.');
+  }
+  
   return {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,

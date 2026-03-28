@@ -4,6 +4,10 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { Printer, Clock, Users } from 'lucide-react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Capacitor } from '@capacitor/core';
 
 interface ActivityReportProps {
   activities: Activity[];
@@ -20,8 +24,69 @@ export function ActivityReport({
   open,
   onClose,
 }: ActivityReportProps) {
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    // Web'de normal print dialogunu aç
+    if (!Capacitor.isNativePlatform()) {
+      window.print();
+      return;
+    }
+
+    const element = document.getElementById('report-content');
+    if (!element) {
+      alert('Report content element not found');
+      return;
+    }
+
+    try {
+      element.classList.add('pdf-export-mode');
+
+      const canvas = await html2canvas(element, { 
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const base64PDF = pdf.output('datauristring').split(',')[1];
+      const fileName = `Activity_Report_${Date.now()}.pdf`;
+
+      const savedFile = await Filesystem.writeFile({
+        path: fileName,
+        data: base64PDF,
+        directory: Directory.Cache,
+        recursive: true,
+      });
+
+      alert(`PDF saved at: ${savedFile.uri}`);
+
+    } catch (error) {
+      console.error('PDF export error:', error);
+      alert(`Error occurred while generating PDF: ${String(error)}`);
+    }
+    finally {
+      element.classList.remove('pdf-export-mode');
+    }
   };
 
   const getSubjectColor = (subject: string) => {
@@ -58,7 +123,7 @@ export function ActivityReport({
           <div className="flex gap-2">
             <Button onClick={handlePrint}>
               <Printer className="h-4 w-4 mr-2" />
-              Print
+              {Capacitor.isNativePlatform() ? 'Export PDF' : 'Print'}
             </Button>
             <Button variant="outline" onClick={onClose}>
               Close
@@ -95,7 +160,7 @@ export function ActivityReport({
               <h3 className="font-semibold mb-2">Plan Summary</h3>
               <div className="flex flex-wrap gap-2">
                 {Array.from(new Set(activities.map((a) => a.subject))).map((subject) => (
-                  <Badge key={subject} className={getSubjectColor(subject)}>
+                  <Badge key={subject} className={`${getSubjectColor(subject)} badge-export`}>
                     {subject} ({activities.filter((a) => a.subject === subject).length})
                   </Badge>
                 ))}
@@ -112,14 +177,14 @@ export function ActivityReport({
                         {index + 1}. {activity.title}
                       </h4>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        <Badge className={getSubjectColor(activity.subject)}>
+                        <Badge className={`${getSubjectColor(activity.subject)} badge-export`}>
                           {activity.subject}
                         </Badge>
-                        <Badge variant="outline" className="flex items-center gap-1">
+                        <Badge variant="outline" className="flex items-center gap-1 badge-export">
                           <Clock className="h-3 w-3" />
                           {activity.duration}
                         </Badge>
-                        <Badge variant="outline" className="flex items-center gap-1">
+                        <Badge variant="outline" className="flex items-center gap-1 badge-export">
                           <Users className="h-3 w-3" />
                           {activity.groupSize}
                         </Badge>
@@ -163,6 +228,42 @@ export function ActivityReport({
           </div>
         </ScrollArea>
       </div>
+
+      <style>{`
+        .pdf-export-mode,
+        .pdf-export-mode * {
+          color: #111827 !important;
+          border-color: #d1d5db !important;
+          box-shadow: none !important;
+          text-shadow: none !important;
+        }
+
+        .pdf-export-mode {
+          background: #ffffff !important;
+        }
+
+        .pdf-export-mode .border,
+        .pdf-export-mode [class*="border"] {
+          border-color: #d1d5db !important;
+        }
+
+        .pdf-export-mode .bg-white,
+        .pdf-export-mode [class*="bg-"] {
+          background: #ffffff !important;
+        }
+
+        .pdf-export-mode .text-gray-500,
+        .pdf-export-mode .text-gray-600,
+        .pdf-export-mode .text-muted-foreground {
+          color: #4b5563 !important;
+        }
+
+        .pdf-export-mode .badge-export {
+          background: #e5e7eb !important;
+          color: #111827 !important;
+          border: 1px solid #d1d5db !important;
+        }
+      `}</style>
     </div>
   );
 }
