@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getSchoolAdminOverview } from '../api/schoolAdmin';
 import { User } from '../types/user';
-import { ActivityPlan } from '../types/school';
+import {
+  TeacherOverview,
+  ClassOverview,
+  PlanOverview,
+  SchoolOverviewResponse,
+} from '../types/schoolAdmin';
 import { activities } from '../data/activities';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -16,66 +21,13 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
-import { Users, GraduationCap, FileText, Eye, LogOut } from 'lucide-react';
+import { Users, GraduationCap, FileText, Eye, LogOut, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SchoolAdminDashboardProps {
   user: User;
   onLogout: () => void;
 }
-
-type TeacherOverview = {
-  id: string | number;
-  name: string;
-  years_experience?: number;
-  specializations?: string[];
-  teaching_style?: string;
-  created_at?: string;
-  school_id?: string | number;
-};
-
-type ClassOverview = {
-  id: string | number;
-  class_name: string;
-  age_group?: string;
-  class_size?: number;
-  learning_focus?: string[];
-  updated_at?: string;
-  school_id?: string | number;
-};
-
-type PlanOverview = {
-  id: string | number;
-  title: string;
-  description?: string;
-  teacher_id: string | number;
-  class_id: string | number;
-  activity_ids?: string[];
-  created_at?: string;
-  notes?: string;
-  school_id?: string | number;
-};
-
-type SchoolOverviewResponse = {
-  success: boolean;
-  school: {
-    id: string | number;
-    name: string;
-    address?: string | null;
-    contactEmail?: string;
-    createdAt?: string;
-    created_at?: string;
-  };
-  stats?: {
-    teachers: number;
-    classes: number;
-    students: number;
-    activity_plans: number;
-  };
-  teachers_list?: TeacherOverview[];
-  classes_list?: ClassOverview[];
-  plans_list?: PlanOverview[];
-};
 
 export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardProps) {
   const [overview, setOverview] = useState<SchoolOverviewResponse | null>(null);
@@ -87,22 +39,23 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
   const displayName = user.name || user.email;
 
-  useEffect(() => {
-    const loadOverview = async () => {
-      try {
-        setErrorMessage('');
-        const data = await getSchoolAdminOverview();
-        setOverview(data);
-      } catch (error) {
-        console.error('Failed to load school admin overview:', error);
-        setErrorMessage(
-          error instanceof Error ? error.message : 'Failed to load school admin overview'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadOverview = async () => {
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      const data = await getSchoolAdminOverview();
+      setOverview(data);
+    } catch (error) {
+      console.error('Failed to load school admin overview:', error);
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Failed to load school admin overview'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadOverview();
   }, [user.id]);
 
@@ -167,10 +120,16 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 Welcome, {displayName} • {school?.name || 'School Admin'}
               </p>
             </div>
-            <Button onClick={onLogout} variant="outline">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button onClick={loadOverview} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+              <Button onClick={onLogout} variant="outline">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -232,7 +191,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   View all teachers in your school
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-3">
                 {/* Mobile cards */}
                 <div className="md:hidden space-y-4">
                   {teachers.length === 0 ? (
@@ -345,7 +304,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   View all classes in your school
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-3">
                 {/* Mobile cards */}
                 <div className="md:hidden space-y-4">
                   {classes.length === 0 ? (
@@ -458,7 +417,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   View and review activity plans created by teachers
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-3">
                 {/* Mobile cards */}
                 <div className="md:hidden space-y-4">
                   {plans.length === 0 ? (
@@ -469,14 +428,14 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                     plans.map((plan) => (
                       <div key={plan.id} className="bg-white border rounded-lg p-4 space-y-3">
                         <div>
-                          <p className="text-xs text-gray-500">Teacher</p>
+                          <p className="text-xs uppercase tracking-wide text-gray-500">Teacher</p>
                           <p className="font-medium">
                             {getTeacherById(plan.teacher_id)?.name || `#${plan.teacher_id}`}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500">Class</p>
+                          <p className="text-xs uppercase tracking-wide text-gray-500">Class</p>
                           <p className="font-medium">
                             {getClassById(plan.class_id)?.class_name || `#${plan.class_id}`}
                           </p>
@@ -506,7 +465,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-full"
+                          className="w-full rounded-lg"
                           onClick={() => handleViewPlan(plan)}
                         >
                           <Eye className="h-4 w-4 mr-2" />
@@ -552,6 +511,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                             <Button
                               variant="outline"
                               size="sm"
+                              className="rounded-lg"
                               onClick={() => handleViewPlan(plan)}
                             >
                               <Eye className="h-4 w-4 mr-1" />

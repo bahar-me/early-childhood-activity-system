@@ -1,19 +1,6 @@
 import { School } from '../types/school';
 
-import { Capacitor } from '@capacitor/core';
-
-const API_BASE_URL = Capacitor.isNativePlatform()
-  ? 'http://10.0.2.2:5000'
-  : 'http://127.0.0.1:5000';
-  
-function getAuthHeaders() {
-  const token = localStorage.getItem('access-token');
-
-  return {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
-}
+import { API_BASE_URL, getAuthHeaders } from './base';
 
 export async function getSchools(): Promise<School[]> {
   const response = await fetch(`${API_BASE_URL}/api/schools/`, {
