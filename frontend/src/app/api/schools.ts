@@ -1,7 +1,11 @@
 import { School } from '../types/school';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000';
+import { Capacitor } from '@capacitor/core';
 
+const API_BASE_URL = Capacitor.isNativePlatform()
+  ? 'http://10.0.2.2:5000'
+  : 'http://127.0.0.1:5000';
+  
 function getAuthHeaders() {
   const token = localStorage.getItem('access-token');
 
