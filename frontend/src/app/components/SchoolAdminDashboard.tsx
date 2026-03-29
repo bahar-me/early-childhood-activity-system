@@ -17,17 +17,72 @@ import {
   TableRow,
 } from './ui/table';
 import { Users, GraduationCap, FileText, Eye, LogOut } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface SchoolAdminDashboardProps {
   user: User;
   onLogout: () => void;
 }
 
-export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardProps) {
-  const [overview, setOverview] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+type TeacherOverview = {
+  id: string | number;
+  name: string;
+  years_experience?: number;
+  specializations?: string[];
+  teaching_style?: string;
+  created_at?: string;
+  school_id?: string | number;
+};
 
-  const [selectedPlan, setSelectedPlan] = useState<ActivityPlan | null>(null);
+type ClassOverview = {
+  id: string | number;
+  class_name: string;
+  age_group?: string;
+  class_size?: number;
+  learning_focus?: string[];
+  updated_at?: string;
+  school_id?: string | number;
+};
+
+type PlanOverview = {
+  id: string | number;
+  title: string;
+  description?: string;
+  teacher_id: string | number;
+  class_id: string | number;
+  activity_ids?: string[];
+  created_at?: string;
+  notes?: string;
+  school_id?: string | number;
+};
+
+type SchoolOverviewResponse = {
+  success: boolean;
+  school: {
+    id: string | number;
+    name: string;
+    address?: string | null;
+    contactEmail?: string;
+    createdAt?: string;
+    created_at?: string;
+  };
+  stats?: {
+    teachers: number;
+    classes: number;
+    students: number;
+    activity_plans: number;
+  };
+  teachers_list?: TeacherOverview[];
+  classes_list?: ClassOverview[];
+  plans_list?: PlanOverview[];
+};
+
+export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardProps) {
+  const [overview, setOverview] = useState<SchoolOverviewResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [selectedPlan, setSelectedPlan] = useState<PlanOverview | null>(null);
   const [showReport, setShowReport] = useState(false);
 
   const displayName = user.name || user.email;
@@ -35,17 +90,21 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
   useEffect(() => {
     const loadOverview = async () => {
       try {
+        setErrorMessage('');
         const data = await getSchoolAdminOverview();
         setOverview(data);
       } catch (error) {
         console.error('Failed to load school admin overview:', error);
+        setErrorMessage(
+          error instanceof Error ? error.message : 'Failed to load school admin overview'
+        );
       } finally {
         setLoading(false);
       }
     };
 
     loadOverview();
-  }, []);
+  }, [user.id]);
 
   const teachers = overview?.teachers_list || [];
   const classes = overview?.classes_list || [];
@@ -53,17 +112,26 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
   const school = overview?.school;
   const stats = overview?.stats;
 
-  const handleViewPlan = (plan: ActivityPlan) => {
-    setSelectedPlan(plan);
-    setShowReport(true);
-  };
-
   const getTeacherById = (id: string | number) => {
-    return teachers.find((t: any) => String(t.id) === String(id));
+    return teachers.find((t) => String(t.id) === String(id));
   };
 
   const getClassById = (id: string | number) => {
-    return classes.find((c: any) => String(c.id) === String(id));
+    return classes.find((c) => String(c.id) === String(id));
+  };
+
+  const handleViewPlan = (plan: PlanOverview) => {
+    const teacher = getTeacherById(plan.teacher_id);
+    const classRecord = getClassById(plan.class_id);
+
+    if (!teacher || !classRecord) {
+      toast.error('Teacher or class information for this activity plan is missing. Cannot generate report.');
+      console.error('Missing teacher or class information for selected plan:', plan);
+      return;
+    }
+
+    setSelectedPlan(plan);
+    setShowReport(true);
   };
 
   if (loading) {
@@ -71,6 +139,16 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="bg-white border rounded-lg shadow-sm px-6 py-4 text-gray-600">
           Loading school admin dashboard...
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
+        <div className="bg-white border rounded-lg shadow-sm px-6 py-4 text-red-600">
+          {errorMessage}
         </div>
       </div>
     );
@@ -155,10 +233,67 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {teachers.length === 0 ? (
-                  <p className="text-sm text-gray-500">No teacher data available for this school yet.</p>
-                ) : (
-                  <Table>
+                {/* Mobile cards */}
+                <div className="md:hidden space-y-4">
+                  {teachers.length === 0 ? (
+                    <p className="text-sm text-gray-500">
+                      No teacher data available for this school yet.
+                    </p>
+                  ) : (
+                    teachers.map((teacher) => (
+                      <div key={teacher.id} className="bg-white border rounded-lg p-4 space-y-3">
+                        <div>
+                          <p className="text-xs text-gray-500">Name</p>
+                          <p className="font-medium">{teacher.name}</p>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4">
+                          <div>
+                            <p className="text-xs text-gray-500">Experience</p>
+                            <p className="text-sm text-gray-700">
+                              {teacher.years_experience ?? 0} years
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="text-xs text-gray-500">Created</p>
+                            <p className="text-sm text-gray-700">
+                              {teacher.created_at
+                                ? new Date(teacher.created_at).toLocaleDateString()
+                                : '—'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Teaching Style</p>
+                          <p className="text-sm text-gray-700">
+                            {teacher.teaching_style || '—'}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Specializations</p>
+                          <div className="flex flex-wrap gap-1">
+                            {(teacher.specializations || []).length > 0 ? (
+                              (teacher.specializations || []).map((spec) => (
+                                <Badge key={spec} variant="secondary" className="text-xs">
+                                  {spec}
+                                </Badge>
+                              ))
+                            ) : (
+                              <span className="text-sm text-gray-700">—</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Desktop table */}
+                <div className="hidden md:block w-full overflow-x-auto">
+                  <Table className="min-w-[900px]">
                     <TableHeader>
                       <TableRow>
                         <TableHead>Name</TableHead>
@@ -169,33 +304,35 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {teachers.map((teacher: any) => (
+                      {teachers.map((teacher) => (
                         <TableRow key={teacher.id}>
                           <TableCell>{teacher.name}</TableCell>
-                          <TableCell>{teacher.years_experience} years</TableCell>
+                          <TableCell>{teacher.years_experience ?? 0} years</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
-                              {(teacher.specializations || []).slice(0, 2).map((spec: string) => (
+                              {(teacher.specializations || []).slice(0, 2).map((spec) => (
                                 <Badge key={spec} variant="secondary" className="text-xs">
                                   {spec}
                                 </Badge>
                               ))}
                               {(teacher.specializations || []).length > 2 && (
                                 <Badge variant="secondary" className="text-xs">
-                                  +{teacher.specializations.length - 2}
+                                  +{(teacher.specializations || []).length - 2}
                                 </Badge>
                               )}
                             </div>
                           </TableCell>
                           <TableCell>{teacher.teaching_style || '—'}</TableCell>
                           <TableCell className="text-sm text-gray-500">
-                            {teacher.created_at ? new Date(teacher.created_at).toLocaleDateString() : '—'}
+                            {teacher.created_at
+                              ? new Date(teacher.created_at).toLocaleDateString()
+                              : '—'}
                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
-                )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -209,10 +346,67 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {classes.length === 0 ? (
-                  <p className="text-sm text-gray-500">No class data available for this school yet.</p>
-                ) : (
-                  <Table>
+                {/* Mobile cards */}
+                <div className="md:hidden space-y-4">
+                  {classes.length === 0 ? (
+                    <p className="text-sm text-gray-500">
+                      No class data available for this school yet.
+                    </p>
+                  ) : (
+                    classes.map((classRecord) => (
+                      <div key={classRecord.id} className="bg-white border rounded-lg p-4 space-y-3">
+                        <div>
+                          <p className="text-xs text-gray-500">Class Name</p>
+                          <p className="font-medium">{classRecord.class_name}</p>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4">
+                          <div>
+                            <p className="text-xs text-gray-500">Age Group</p>
+                            <p className="text-sm text-gray-700">
+                              {classRecord.age_group || '—'} years
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="text-xs text-gray-500">Class Size</p>
+                            <p className="text-sm text-gray-700">
+                              {classRecord.class_size ?? 0} students
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Updated</p>
+                          <p className="text-sm text-gray-700">
+                            {classRecord.updated_at
+                              ? new Date(classRecord.updated_at).toLocaleDateString()
+                              : '—'}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Learning Focus</p>
+                          <div className="flex flex-wrap gap-1">
+                            {(classRecord.learning_focus || []).length > 0 ? (
+                              (classRecord.learning_focus || []).map((focus) => (
+                                <Badge key={focus} variant="outline" className="text-xs">
+                                  {focus}
+                                </Badge>
+                              ))
+                            ) : (
+                              <span className="text-sm text-gray-700">—</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Desktop table */}
+                <div className="hidden md:block w-full overflow-x-auto">
+                  <Table className="min-w-[900px]">
                     <TableHeader>
                       <TableRow>
                         <TableHead>Class Name</TableHead>
@@ -223,33 +417,35 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {classes.map((classRecord: any) => (
+                      {classes.map((classRecord) => (
                         <TableRow key={classRecord.id}>
                           <TableCell>{classRecord.class_name}</TableCell>
-                          <TableCell>{classRecord.age_group} years</TableCell>
-                          <TableCell>{classRecord.class_size} students</TableCell>
+                          <TableCell>{classRecord.age_group || '—'} years</TableCell>
+                          <TableCell>{classRecord.class_size ?? 0} students</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
-                              {(classRecord.learning_focus || []).slice(0, 2).map((focus: string) => (
+                              {(classRecord.learning_focus || []).slice(0, 2).map((focus) => (
                                 <Badge key={focus} variant="outline" className="text-xs">
                                   {focus}
                                 </Badge>
                               ))}
                               {(classRecord.learning_focus || []).length > 2 && (
                                 <Badge variant="outline" className="text-xs">
-                                  +{classRecord.learning_focus.length - 2}
+                                  +{(classRecord.learning_focus || []).length - 2}
                                 </Badge>
                               )}
                             </div>
                           </TableCell>
                           <TableCell className="text-sm text-gray-500">
-                            {classRecord.updated_at ? new Date(classRecord.updated_at).toLocaleDateString() : '—'}
+                            {classRecord.updated_at
+                              ? new Date(classRecord.updated_at).toLocaleDateString()
+                              : '—'}
                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
-                )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -263,14 +459,71 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {plans.length === 0 ? (
-                  <p className="text-sm text-gray-500">No activity plans created for this school yet.</p>
-                ) : (
-                  <Table>
+                {/* Mobile cards */}
+                <div className="md:hidden space-y-4">
+                  {plans.length === 0 ? (
+                    <p className="text-sm text-gray-500">
+                      No activity plans created for this school yet.
+                    </p>
+                  ) : (
+                    plans.map((plan) => (
+                      <div key={plan.id} className="bg-white border rounded-lg p-4 space-y-3">
+                        <div>
+                          <p className="text-xs text-gray-500">Teacher</p>
+                          <p className="font-medium">
+                            {getTeacherById(plan.teacher_id)?.name || `#${plan.teacher_id}`}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Class</p>
+                          <p className="font-medium">
+                            {getClassById(plan.class_id)?.class_name || `#${plan.class_id}`}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs text-gray-500">Activities</p>
+                            <Badge>{(plan.activity_ids || []).length} activities</Badge>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="text-xs text-gray-500">Created</p>
+                            <p className="text-sm text-gray-700">
+                              {plan.created_at ? new Date(plan.created_at).toLocaleDateString() : '—'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Notes</p>
+                          <p className="text-sm text-gray-700 break-words">
+                            {plan.notes || '—'}
+                          </p>
+                        </div>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => handleViewPlan(plan)}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          View Report
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Desktop table */}
+                <div className="hidden md:block w-full overflow-x-auto">
+                  <Table className="min-w-[900px]">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Teacher ID</TableHead>
-                        <TableHead>Class ID</TableHead>
+                        <TableHead>Teacher</TableHead>
+                        <TableHead>Class</TableHead>
                         <TableHead>Activities</TableHead>
                         <TableHead>Created</TableHead>
                         <TableHead>Notes</TableHead>
@@ -278,10 +531,14 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {plans.map((plan: any) => (
+                      {plans.map((plan) => (
                         <TableRow key={plan.id}>
-                          <TableCell>{plan.teacher_id}</TableCell>
-                          <TableCell>{plan.class_id}</TableCell>
+                          <TableCell>
+                            {getTeacherById(plan.teacher_id)?.name || `#${plan.teacher_id}`}
+                          </TableCell>
+                          <TableCell>
+                            {getClassById(plan.class_id)?.class_name || `#${plan.class_id}`}
+                          </TableCell>
                           <TableCell>
                             <Badge>{(plan.activity_ids || []).length} activities</Badge>
                           </TableCell>
@@ -291,7 +548,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                           <TableCell className="text-sm max-w-xs truncate">
                             {plan.notes || '—'}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="whitespace-nowrap">
                             <Button
                               variant="outline"
                               size="sm"
@@ -305,7 +562,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                       ))}
                     </TableBody>
                   </Table>
-                )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -317,16 +574,35 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
         getTeacherById(selectedPlan.teacher_id) &&
         getClassById(selectedPlan.class_id) && (
           <ActivityReport
-            activities={activities.filter((a) => (selectedPlan.activity_ids || []).includes(a.id))}
-            teacherProfile={getTeacherById(selectedPlan.teacher_id)!}
-            classProfile={getClassById(selectedPlan.class_id)!}
+            activities={activities.filter((a) =>
+              (selectedPlan.activity_ids || []).includes(a.id)
+            )}
+            teacherProfile={{
+              name: getTeacherById(selectedPlan.teacher_id)!.name,
+              schoolName: school?.name || '',
+              yearsExperience: String(getTeacherById(selectedPlan.teacher_id)!.years_experience || 0),
+              specializations: getTeacherById(selectedPlan.teacher_id)!.specializations || [],
+              teachingStyle: getTeacherById(selectedPlan.teacher_id)!.teaching_style || '',
+            }}
+            classProfile={{
+              className: getClassById(selectedPlan.class_id)!.class_name,
+              ageGroup: getClassById(selectedPlan.class_id)!.age_group || '',
+              classSize: getClassById(selectedPlan.class_id)!.class_size || 0,
+              learningFocus: getClassById(selectedPlan.class_id)!.learning_focus || [],
+              availableResources: [],
+              specialNeeds: [],
+              dailySchedule: {
+                morningActivities: 30,
+                afternoonActivities: 30,
+              },
+            }}
             open={showReport}
             onClose={() => {
               setShowReport(false);
               setSelectedPlan(null);
             }}
           />
-      )}
+        )}
     </div>
   );
 }
