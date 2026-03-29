@@ -59,9 +59,9 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
     loadOverview();
   }, [user.id]);
 
-  const teachers = overview?.teachers_list || [];
-  const classes = overview?.classes_list || [];
-  const plans = overview?.plans_list || [];
+  const teachers: TeacherOverview[] = overview?.teachers_list || [];
+  const classes: ClassOverview[] = overview?.classes_list || [];
+  const plans: PlanOverview[] = overview?.plans_list || [];
   const school = overview?.school;
   const stats = overview?.stats;
 
