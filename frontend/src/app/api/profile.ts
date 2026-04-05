@@ -1,6 +1,5 @@
-import { Capacitor } from '@capacitor/core';
-
 import { API_BASE_URL, getAuthHeaders } from './base';
+import { clearAuthStorage } from './authStorage';
 
 export async function saveTeacherProfile(payload: {
   name: string;
@@ -16,6 +15,11 @@ export async function saveTeacherProfile(payload: {
 
   const data = await response.json();
 
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Your session has expired. Please log in again.');
+  }
+
   if (!response.ok) {
     throw new Error(data.error || 'Failed to save teacher profile');
   }
@@ -30,6 +34,11 @@ export async function getTeacherProfile() {
   });
 
   const data = await response.json();
+
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Your session has expired. Please log in again.');
+  }
 
   if (!response.ok) {
     throw new Error(data.error || 'Failed to load teacher profile');
@@ -54,6 +63,11 @@ export async function saveClassProfile(payload: {
 
   const data = await response.json();
 
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Your session has expired. Please log in again.');
+  }
+
   if (!response.ok) {
     throw new Error(data.error || 'Failed to save class profile');
   }
@@ -68,6 +82,11 @@ export async function getClassProfile() {
   });
 
   const data = await response.json();
+
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Your session has expired. Please log in again.');
+  }
 
   if (!response.ok) {
     throw new Error(data.error || 'Failed to load class profile');

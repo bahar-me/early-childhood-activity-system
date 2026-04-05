@@ -1,4 +1,5 @@
 import { API_BASE_URL, getAuthHeaders } from './base';
+import { clearAuthStorage } from './authStorage';
 
 export async function createActivityPlan(payload: {
   activity_ids: string[];
@@ -11,6 +12,11 @@ export async function createActivityPlan(payload: {
   });
 
   const data = await response.json();
+
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Your session has expired. Please log in again.');
+  }
 
   if (!response.ok) {
     throw new Error(data.error || 'Failed to create activity plan');

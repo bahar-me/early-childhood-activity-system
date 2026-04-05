@@ -6,6 +6,7 @@ import { SchoolAdminDashboard } from './components/SchoolAdminDashboard';
 import { SystemAdminDashboard } from './components/SystemAdminDashboard';
 import { Toaster } from './components/ui/sonner';
 import { logoutRequest } from './api/auth';
+import { clearAuthStorage } from './api/authStorage';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -18,19 +19,19 @@ export default function App() {
     if (savedUser && accessToken && refreshToken) {
       setCurrentUser(JSON.parse(savedUser));
     } else {
-      localStorage.removeItem('current-user');
-      localStorage.removeItem('access-token');
-      localStorage.removeItem('refresh-token');
+      clearAuthStorage();
       setCurrentUser(null);
     }
   }, []);
 
   const handleLogin = (user: User, accessToken: string, refreshToken: string) => {
-    setCurrentUser(user);
-
+    clearAuthStorage();   
+    
     localStorage.setItem('current-user', JSON.stringify(user));
     localStorage.setItem('access-token', accessToken);
     localStorage.setItem('refresh-token', refreshToken);
+
+    setCurrentUser(user);
   };
 
   const handleLogout = async () => {
@@ -44,9 +45,7 @@ export default function App() {
       console.error('Logout request failed:', error);
     } finally {
       setCurrentUser(null);
-      localStorage.removeItem('current-user');
-      localStorage.removeItem('access-token');
-      localStorage.removeItem('refresh-token');
+      clearAuthStorage();
     }
   };
 

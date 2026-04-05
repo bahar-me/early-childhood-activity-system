@@ -47,11 +47,14 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
       setOverview(data);
     } catch (error) {
       console.error('Failed to load school admin overview:', error);
-      setErrorMessage(
-        error instanceof Error ? error.message : 'Failed to load school admin overview'
-      );
-    } finally {
-      setLoading(false);
+      const message =
+        error instanceof Error ? error.message : 'Failed to load school admin overview';
+      if (message === 'Your session has expired. Please log in again.' || message === 'Unauthorized. Please log in again.') {
+        toast.error('Your session has expired. Please log in again.');
+        onLogout();
+        return;
+      }
+      setErrorMessage(message);
     }
   };
 
