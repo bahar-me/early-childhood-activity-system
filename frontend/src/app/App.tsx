@@ -58,15 +58,25 @@ export default function App() {
       <Toaster />
 
       {currentUser.role === 'teacher' && (
-        <TeacherApp user={currentUser} onLogout={handleLogout} />
+        <TeacherApp 
+        key={`teacher-${currentUser.id}`} 
+        user={currentUser} 
+        onLogout={handleLogout} 
+        />
       )}
 
       {currentUser.role === 'school_admin' && (
-        <SchoolAdminDashboard user={currentUser} onLogout={handleLogout} />
+        <SchoolAdminDashboard 
+        key={`school-admin-${currentUser.id}`} 
+        user={currentUser} 
+        onLogout={handleLogout} />
       )}
 
       {currentUser.role === 'system_admin' && (
-        <SystemAdminDashboard user={currentUser} onLogout={handleLogout} />
+        <SystemAdminDashboard 
+        key={`system-admin-${currentUser.id}`} 
+        user={currentUser} 
+        onLogout={handleLogout} />
       )}
     </>
   );

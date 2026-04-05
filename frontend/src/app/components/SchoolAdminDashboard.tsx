@@ -41,10 +41,15 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
   const loadOverview = async () => {
     try {
+      console.log('1. loadOverview called');
       setLoading(true);
       setErrorMessage('');
+
       const data = await getSchoolAdminOverview();
+      console.log('2. Overview data received:', data);
+
       setOverview(data);
+      console.log('3. Overview state updated');
     } catch (error) {
       console.error('Failed to load school admin overview:', error);
       const message =
@@ -55,6 +60,10 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
         return;
       }
       setErrorMessage(message);
+    }
+    finally {
+      console.log('4. loadOverview finished (success or error)');
+      setLoading(false);
     }
   };
 
