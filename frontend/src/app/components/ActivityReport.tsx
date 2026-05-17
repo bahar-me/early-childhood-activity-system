@@ -14,7 +14,18 @@ interface ActivityReportProps {
   teacherProfile: TeacherProfile;
   classProfile: ClassProfile;
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
+  aiExplanation?: {
+    summary: string;
+    source: string;
+    activity_explanations: {
+      activity_id: string;
+      title: string;
+      explanation: string;
+      teacher_guidance: string;
+      adaptation: string;
+    }[];
+  } | null;
 }
 
 export function ActivityReport({
@@ -23,6 +34,7 @@ export function ActivityReport({
   classProfile,
   open,
   onClose,
+  aiExplanation,
 }: ActivityReportProps) {
   const handlePrint = async () => {
     // Web'de normal print dialogunu aç
@@ -33,7 +45,7 @@ export function ActivityReport({
 
     const element = document.getElementById('report-content');
     if (!element) {
-      alert('Report content element not found');
+      alert('Rapor içeriği bulunamadı');
       return;
     }
 
@@ -78,15 +90,47 @@ export function ActivityReport({
         recursive: true,
       });
 
-      alert(`PDF saved at: ${savedFile.uri}`);
+      alert(`PDF şu konuma kaydedildi: ${savedFile.uri}`);
 
     } catch (error) {
       console.error('PDF export error:', error);
-      alert(`Error occurred while generating PDF: ${String(error)}`);
+      alert(`PDF oluşturulurken hata oluştu: ${String(error)}`);
     }
     finally {
       element.classList.remove('pdf-export-mode');
     }
+  };
+
+  const translateSubject = (subject: string) => {
+    const map: Record<string, string> = {
+      Math: 'Matematik',
+      Language: 'Dil Gelişimi',
+      Art: 'Sanat',
+      Science: 'Fen ve Doğa',
+      Music: 'Müzik',
+      Physical: 'Fiziksel Gelişim',
+      'Social-Emotional': 'Sosyal-Duygusal Gelişim',
+    };
+    return map[subject] || subject;
+  };
+
+  const translateGroupSize = (groupSize: string) => {
+    const map: Record<string, string> = {
+      Individual: 'Bireysel',
+      'Small Group': 'Küçük Grup',
+      'Whole Class': 'Tüm Sınıf',
+    };
+    return map[groupSize] || groupSize;
+  };
+
+  const translateTeachingStyle = (style: string) => {
+    const map: Record<string, string> = {
+      balanced: 'Dengeli',
+      'Play-based': 'Oyun Temelli',
+      Structured: 'Yapılandırılmış',
+      'Child-led': 'Çocuk Merkezli',
+    };
+    return map[style] || style;
   };
 
   const getSubjectColor = (subject: string) => {
@@ -114,19 +158,19 @@ export function ActivityReport({
       <div className="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-xl overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b">
           <div>
-            <h2 className="text-xl font-semibold">Activity Plan Report</h2>
+            <h2 className="text-xl font-semibold">Etkinlik Planı Raporu</h2>
             <p className="text-sm text-gray-500">
-              Review and print your customized activity plan
+              Oluşturduğun etkinlik planını inceleyebilir ve çıktısını alabilirsin
             </p>
           </div>
 
           <div className="flex gap-2">
             <Button onClick={handlePrint}>
               <Printer className="h-4 w-4 mr-2" />
-              {Capacitor.isNativePlatform() ? 'Export PDF' : 'Print'}
+              {Capacitor.isNativePlatform() ? 'PDF Dışa Aktar' : 'Yazdır'}
             </Button>
             <Button variant="outline" onClick={onClose}>
-              Close
+              Kapat
             </Button>
           </div>
         </div>
@@ -135,40 +179,70 @@ export function ActivityReport({
           <div className="space-y-6" id="report-content">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-2">Teacher Information</h3>
+                <h3 className="font-semibold mb-2">Öğretmen Bilgileri</h3>
                 <div className="space-y-1 text-sm">
-                  <p><strong>Name:</strong> {teacherProfile.name}</p>
-                  <p><strong>School:</strong> {teacherProfile.schoolName}</p>
-                  <p><strong>Experience:</strong> {teacherProfile.yearsExperience} years</p>
-                  <p><strong>Teaching Style:</strong> {teacherProfile.teachingStyle}</p>
+                  <p><strong>Ad:</strong> {teacherProfile.name}</p>
+                  <p><strong>Okul:</strong> {teacherProfile.schoolName}</p>
+                  <p><strong>Deneyim:</strong> {teacherProfile.yearsExperience} yıl</p>
+                  <p><strong>Öğretim Stili:</strong> {translateTeachingStyle(teacherProfile.teachingStyle)}</p>
                 </div>
               </div>
 
               <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-2">Class Information</h3>
+                <h3 className="font-semibold mb-2">Sınıf Bilgileri</h3>
                 <div className="space-y-1 text-sm">
-                  <p><strong>Class:</strong> {classProfile.className}</p>
-                  <p><strong>Age Group:</strong> {classProfile.ageGroup} years</p>
-                  <p><strong>Class Size:</strong> {classProfile.classSize} students</p>
-                  <p><strong>Total Activities:</strong> {activities.length}</p>
-                  <p><strong>Est. Duration:</strong> {totalDuration} minutes</p>
+                  <p><strong>Sınıf:</strong> {classProfile.className}</p>
+                  <p><strong>Yaş Grubu:</strong> {classProfile.ageGroup} yıl</p>
+                  <p><strong>Sınıf Mevcudu:</strong> {classProfile.classSize} öğrenci</p>
+                  <p><strong>Toplam Etkinlik:</strong> {activities.length}</p>
+                  <p><strong>Tahmini Süre:</strong> {totalDuration} dakika</p>
                 </div>
               </div>
             </div>
 
             <div className="border rounded-lg p-4">
-              <h3 className="font-semibold mb-2">Plan Summary</h3>
+              <h3 className="font-semibold mb-2">Plan Özeti</h3>
               <div className="flex flex-wrap gap-2">
                 {Array.from(new Set(activities.map((a) => a.subject))).map((subject) => (
                   <Badge key={subject} className={`${getSubjectColor(subject)} badge-export`}>
-                    {subject} ({activities.filter((a) => a.subject === subject).length})
+                    {translateSubject(subject)} ({activities.filter((a) => a.subject === subject).length})
                   </Badge>
                 ))}
               </div>
             </div>
+            
+            {aiExplanation && (
+              <div className="mt-6 rounded-lg border p-4">
+                <h3 className="font-semibold text-lg">YZ Destekli Plan Özeti</h3>
+
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Kaynak: {aiExplanation.source}
+                </p>
+
+                <p className="mt-3">{aiExplanation.summary}</p>
+
+                <div className="mt-4 space-y-3">
+                  {aiExplanation.activity_explanations.map((item) => (
+                    <div key={item.activity_id} className="rounded-lg border p-3">
+                      <h4 className="font-semibold">{item.title}</h4>
+
+                      <p className="mt-2 text-sm">{item.explanation}</p>
+
+                      <p className="mt-2 text-sm">
+                        <strong>Öğretmen rehberi:</strong> {item.teacher_guidance}
+                      </p>
+
+                      <p className="mt-2 text-sm">
+                        <strong>Farklılaştırma önerisi:</strong> {item.adaptation}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="space-y-4">
-              <h3 className="font-semibold">Planned Activities</h3>
+              <h3 className="font-semibold">Planlanan Etkinlikler</h3>
               {activities.map((activity, index) => (
                 <div key={activity.id} className="border rounded-lg p-4">
                   <div className="flex items-start justify-between mb-2">
@@ -178,7 +252,7 @@ export function ActivityReport({
                       </h4>
                       <div className="flex flex-wrap gap-2 mt-2">
                         <Badge className={`${getSubjectColor(activity.subject)} badge-export`}>
-                          {activity.subject}
+                          {translateSubject(activity.subject)}
                         </Badge>
                         <Badge variant="outline" className="flex items-center gap-1 badge-export">
                           <Clock className="h-3 w-3" />
@@ -186,7 +260,7 @@ export function ActivityReport({
                         </Badge>
                         <Badge variant="outline" className="flex items-center gap-1 badge-export">
                           <Users className="h-3 w-3" />
-                          {activity.groupSize}
+                          {translateGroupSize(activity.groupSize)}
                         </Badge>
                       </div>
                     </div>
@@ -196,7 +270,7 @@ export function ActivityReport({
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="font-semibold mb-1">Materials:</p>
+                      <p className="font-semibold mb-1">Materyaller:</p>
                       <ul className="list-disc list-inside text-gray-600 space-y-1">
                         {activity.materials.map((material, i) => (
                           <li key={i}>{material}</li>
@@ -205,7 +279,7 @@ export function ActivityReport({
                     </div>
 
                     <div>
-                      <p className="font-semibold mb-1">Learning Goals:</p>
+                      <p className="font-semibold mb-1">Öğrenme Hedefleri:</p>
                       <ul className="list-disc list-inside text-gray-600 space-y-1">
                         {activity.learningGoals.map((goal, i) => (
                           <li key={i}>{goal}</li>
@@ -215,7 +289,7 @@ export function ActivityReport({
                   </div>
 
                   <div className="mt-3">
-                    <p className="font-semibold mb-1 text-sm">Instructions:</p>
+                    <p className="font-semibold mb-1 text-sm">Uygulama Adımları:</p>
                     <ol className="list-decimal list-inside text-gray-600 space-y-1 text-sm">
                       {activity.instructions.map((instruction, i) => (
                         <li key={i}>{instruction}</li>
