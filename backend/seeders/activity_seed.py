@@ -435,6 +435,216 @@ ACTIVITIES = [
             "Beden farkındalığı"
         ],
     },
+    {
+        "title": "Sayı Treni",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Small Group",
+        "description": "Vagonlara sayı kartları yerleştirerek sayı sıralamasını öğrenme etkinliği.",
+        "materials": ["Karton tren vagonları", "Sayı kartları", "Mandallar veya yapıştırıcı", "Renkli kalemler"],
+        "instructions": [
+            "Tren vagonlarını sırayla çocukların önüne yerleştir",
+            "Sayı kartlarını karışık şekilde göster",
+            "Çocuklardan kartları doğru sırayla vagonlara yerleştirmelerini iste",
+            "Tren tamamlandıktan sonra sayıları birlikte tekrar et",
+            "İstersen bazı kartları çıkarıp eksik sayıyı bulma çalışması yap"
+        ],
+        "learning_goals": [
+            "Sayı sıralaması",
+            "1-10 arası sayı tanıma",
+            "Dikkat ve odaklanma",
+            "Görsel sıralama becerisi"
+        ],
+    },
+    {
+        "title": "Eksik Sayıyı Bul",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Small Group",
+        "description": "Sayı dizilerinde eksik bırakılan rakamları bulma etkinliği.",
+        "materials": ["Sayı kartları", "Kâğıt şeritler", "Kalem", "Mıknatıs veya yapıştırıcı"],
+        "instructions": [
+            "Sayı dizilerini sırayla hazırla",
+            "Bazı sayıları eksik bırak",
+            "Çocuklardan eksik sayıyı tahmin etmelerini iste",
+            "Doğru kartı yerine yerleştirerek kontrol et",
+            "Farklı sayı dizileriyle çalışmayı tekrar et"
+        ],
+        "learning_goals": [
+            "Sayı dizisini anlama",
+            "Eksik öğeyi bulma",
+            "Mantıksal düşünme",
+            "Sayı farkındalığı"
+        ],
+    },
+    {
+        "title": "Büyük mü Küçük mü",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Whole Class",
+        "description": "Nesneleri boyutlarına göre karşılaştırma ve sınıflandırma etkinliği.",
+        "materials": ["Farklı boyutlarda bloklar", "Karşılaştırma kartları", "Sepetler veya kutular"],
+        "instructions": [
+            "Farklı boyutlardaki nesneleri çocuklara göster",
+            "Büyük ve küçük kavramlarını örnekle açıkla",
+            "Çocuklardan nesneleri boyutlarına göre ayırmalarını iste",
+            "Birlikte hangi nesnenin daha büyük ya da daha küçük olduğunu konuş",
+            "İstersen orta boy nesneleri de ekleyerek etkinliği genişlet"
+        ],
+        "learning_goals": [
+            "Büyük-küçük kavramı",
+            "Karşılaştırma becerisi",
+            "Sınıflandırma",
+            "Matematiksel dil kullanımı"
+        ],
+    },
+    {
+        "title": "Desen Tamamlama Kartları",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Individual",
+        "description": "Renk ve şekil örüntülerini fark ederek eksik bölümleri tamamlama etkinliği.",
+        "materials": ["Desen kartları", "Renkli çıkartmalar veya şekiller", "Kalem"],
+        "instructions": [
+            "Basit örüntü kartlarını çocuklara göster",
+            "Desenin nasıl tekrar ettiğini birlikte incele",
+            "Eksik bırakılan kısmı bulmalarını iste",
+            "Uygun renk veya şekille deseni tamamlat",
+            "Daha sonra çocukların kendi desenlerini oluşturmalarına fırsat ver"
+        ],
+        "learning_goals": [
+            "Örüntü farkındalığı",
+            "Görsel dikkat",
+            "Tahmin becerisi",
+            "Matematiksel düşünme"
+        ],
+    },
+    {
+        "title": "Nesne Say ve Eşleştir",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Small Group",
+        "description": "Nesne gruplarını sayarak doğru sayı kartıyla eşleştirme etkinliği.",
+        "materials": ["Küçük oyuncaklar veya düğmeler", "Sayı kartları", "Tepsi veya masa alanı"],
+        "instructions": [
+            "Masaya farklı miktarlarda nesne grupları yerleştir",
+            "Her grup için çocukların nesneleri saymasını iste",
+            "Doğru sayı kartını bulup yanına koymalarını sağla",
+            "Sayma işlemini birlikte kontrol et",
+            "Farklı nesnelerle etkinliği tekrarla"
+        ],
+        "learning_goals": [
+            "Sayma becerisi",
+            "Birebir eşleştirme",
+            "Sayı-sembol ilişkisi",
+            "Dikkat geliştirme"
+        ],
+    },
+    {
+        "title": "Şekil Yolculuğu",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Whole Class",
+        "description": "Belirli şekilleri takip ederek sınıf içinde hareket etme etkinliği.",
+        "materials": ["Yere yapıştırılacak şekil kartları", "Şekil afişleri", "Müzik (isteğe bağlı)"],
+        "instructions": [
+            "Sınıf zeminine farklı şekiller yerleştir",
+            "Her şeklin adını birlikte tekrar et",
+            "Çocuklardan öğretmenin söylediği şeklin üzerine gitmelerini iste",
+            "Doğru şekle gelen çocuklarla şeklin özelliklerini konuş",
+            "İstersen müzikle hareket ekleyerek oyunu eğlenceli hale getir"
+        ],
+        "learning_goals": [
+            "Şekil tanıma",
+            "Mekansal farkındalık",
+            "Dinleme becerisi",
+            "Hareketle öğrenme"
+        ],
+    },
+    {
+        "title": "Sayı Kulesi Yapımı",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Individual",
+        "description": "Verilen sayı kadar blok kullanarak kule oluşturma etkinliği.",
+        "materials": ["Bloklar veya legolar", "Sayı kartları", "Çalışma alanı"],
+        "instructions": [
+            "Her çocuğa bloklar ve sayı kartları ver",
+            "Bir sayı kartı seçmelerini iste",
+            "Kartta yazan sayı kadar blokla kule kurmalarını söyle",
+            "Kuleleri birlikte sayarak kontrol et",
+            "Daha sonra en yüksek ve en alçak kuleleri karşılaştır"
+        ],
+        "learning_goals": [
+            "Sayı miktar ilişkisi",
+            "İnce motor becerisi",
+            "Karşılaştırma",
+            "Planlama ve dikkat"
+        ],
+    },
+    {
+        "title": "Renkli Boncuk Sıralama",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Small Group",
+        "description": "Boncukları renklerine ve sayılarına göre sıralama etkinliği.",
+        "materials": ["Renkli boncuklar veya düğmeler", "Kaplar", "Maşa veya kaşık", "Renk kartları"],
+        "instructions": [
+            "Boncukları karışık şekilde ortaya koy",
+            "Renk kartlarını çocuklara göster",
+            "Boncukları renklerine göre ayırmalarını iste",
+            "Her kaptaki boncukları birlikte say",
+            "Hangi renkten daha fazla veya daha az olduğunu konuş"
+        ],
+        "learning_goals": [
+            "Renk sınıflandırma",
+            "Sayma becerisi",
+            "Karşılaştırma yapma",
+            "İnce motor gelişimi"
+        ],
+    },
+    {
+        "title": "Takvimde Sayılar",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Whole Class",
+        "description": "Takvim üzerinden gün numaralarını tanıma ve sıralama etkinliği.",
+        "materials": ["Sınıf takvimi", "Sayı kartları", "Mıknatıslı tahtası veya pano"],
+        "instructions": [
+            "Takvimi çocuklarla birlikte incele",
+            "Bugünün tarihini göster",
+            "Önceki ve sonraki günü bulmalarını iste",
+            "Sayıların sırayla nasıl ilerlediğini konuş",
+            "Bazı günleri kapatıp eksik sayıları tahmin etmelerini iste"
+        ],
+        "learning_goals": [
+            "Sayı sıralaması",
+            "Gün ve tarih farkındalığı",
+            "Tahmin etme",
+            "Dikkat geliştirme"
+        ],
+    },
+    {
+        "title": "Kaç Adım Uzaklıkta",
+        "subject": "Math",
+        "duration": "15-30min",
+        "group_size": "Small Group",
+        "description": "Sınıf içindeki nesnelere kaç adımda ulaşıldığını ölçme etkinliği.",
+        "materials": ["Sınıf içi hedef nesneler", "Kâğıt", "Kalem", "Ölçüm çizelgesi"],
+        "instructions": [
+            "Sınıfta hedef olarak birkaç nesne seç",
+            "Çocuklardan başlangıç noktasından hedefe kadar adım saymalarını iste",
+            "Her denemede adım sayılarını kaydet",
+            "Hangi nesnenin daha yakın ya da daha uzak olduğunu konuş",
+            "Sonuçları birlikte karşılaştır"
+        ],
+        "learning_goals": [
+            "Standart olmayan ölçme",
+            "Sayma becerisi",
+            "Karşılaştırma yapma",
+            "Mekansal farkındalık"
+        ],
+    },
 ]
 
 
