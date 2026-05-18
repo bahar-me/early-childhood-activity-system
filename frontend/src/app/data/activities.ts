@@ -3,451 +3,451 @@ import { Activity } from '../types/activity';
 export const activities: Activity[] = [
   {
     id: '1',
-    title: 'Rainbow Counting',
+    title: 'Gökkuşağı ile Sayma',
     subject: 'Math',
     duration: '15-30min',
     groupSize: 'Small Group',
-    description: 'Learn numbers 1-10 using colorful objects and sorting activities.',
-    materials: ['Colored pom-poms or blocks', 'Number cards', 'Sorting trays'],
+    description: 'Renkli nesneler ve gruplama çalışmalarıyla 1-10 arası sayıları öğrenme etkinliği.',
+    materials: ['Renkli ponponlar veya bloklar', 'Sayı kartları', 'Sınıflandırma kapları'],
     instructions: [
-      'Display number cards 1-10 in sequence',
-      'Have children count out the corresponding number of colored objects',
-      'Sort objects by color and count each group',
-      'Practice recognizing numerals and quantities'
+      '1-10 arasındaki sayı kartlarını sırayla göster',
+      'Çocuklardan her sayı için uygun sayıda renkli nesne saymalarını iste',
+      'Nesneleri renklerine göre ayırıp her grubu say',
+      'Rakamları ve miktarları birlikte tanıma çalışması yap'
     ],
     learningGoals: [
-      'Number recognition 1-10',
-      'One-to-one correspondence',
-      'Color identification',
-      'Sorting and classification'
+      '1-10 arası sayı tanıma',
+      'Birebir eşleştirme',
+      'Renkleri ayırt etme',
+      'Sınıflandırma ve gruplama becerisi'
     ]
   },
   {
     id: '2',
-    title: 'Letter Sound Adventure',
+    title: 'Harf ve Ses Macerası',
     subject: 'Language',
     duration: '15-30min',
     groupSize: 'Whole Class',
-    description: 'Interactive phonics game where children identify beginning sounds.',
-    materials: ['Picture cards', 'Letter flashcards', 'Sound box or basket'],
+    description: 'Çocukların kelimelerin başlangıç seslerini ayırt ettiği etkileşimli bir ses farkındalığı oyunu.',
+    materials: ['Resim kartları', 'Harf kartları', 'Ses kutusu veya sepet'],
     instructions: [
-      'Show a letter and demonstrate its sound',
-      'Display 3-4 picture cards',
-      'Have children identify which pictures start with the target sound',
-      'Celebrate correct answers with movement or a song'
+      'Bir harf göster ve çıkardığı sesi örnekle',
+      '3-4 resim kartı göster',
+      'Çocuklardan hangi resimlerin hedef sesle başladığını bulmalarını iste',
+      'Doğru cevapları hareket ya da kısa bir şarkıyla kutla'
     ],
     learningGoals: [
-      'Phonemic awareness',
-      'Beginning sound identification',
-      'Letter-sound correspondence',
-      'Vocabulary development'
+      'Ses farkındalığı',
+      'Başlangıç seslerini ayırt etme',
+      'Harf-ses ilişkisini kurma',
+      'Kelime dağarcığını geliştirme'
     ]
   },
   {
     id: '3',
-    title: 'Nature Collage Creation',
+    title: 'Doğa Kolajı Oluşturma',
     subject: 'Art',
     duration: '30-45min',
     groupSize: 'Individual',
-    description: 'Create beautiful artwork using natural materials collected from outdoors.',
-    materials: ['Cardstock or construction paper', 'Glue', 'Natural materials (leaves, twigs, flowers)', 'Markers'],
+    description: 'Dışarıdan toplanan doğal malzemelerle yaratıcı bir sanat çalışması yapma etkinliği.',
+    materials: ['Fon kartonu veya renkli kâğıt', 'Yapıştırıcı', 'Doğal malzemeler (yaprak, dal, çiçek)', 'Keçeli kalemler'],
     instructions: [
-      'Take children on a nature walk to collect materials',
-      'Discuss the colors, textures, and shapes found in nature',
-      'Provide each child with paper and glue',
-      'Let children arrange and glue their materials creatively',
-      'Add details with markers if desired'
+      'Çocuklarla kısa bir doğa yürüyüşü yaparak malzemeler topla',
+      'Doğada bulunan renkler, dokular ve şekiller hakkında konuş',
+      'Her çocuğa kâğıt ve yapıştırıcı ver',
+      'Çocukların malzemeleri istedikleri gibi yerleştirip yapıştırmalarını sağla',
+      'İsterlerse keçeli kalemlerle ek detaylar eklemelerine izin ver'
     ],
     learningGoals: [
-      'Fine motor skills',
-      'Creative expression',
-      'Nature appreciation',
-      'Texture exploration'
+      'İnce motor becerileri',
+      'Yaratıcı ifade',
+      'Doğa farkındalığı',
+      'Doku keşfi'
     ]
   },
   {
     id: '4',
-    title: 'Sink or Float Experiment',
+    title: 'Batar mı Yüzer mi Deneyi',
     subject: 'Science',
     duration: '30-45min',
     groupSize: 'Small Group',
-    description: 'Explore buoyancy by testing various objects in water.',
-    materials: ['Water table or large tub', 'Various objects (toy, cork, rock, sponge, etc.)', 'Chart paper', 'Towels'],
+    description: 'Farklı nesneleri suda test ederek batma ve yüzme kavramlarını keşfetme etkinliği.',
+    materials: ['Su masası veya büyük kap', 'Çeşitli nesneler (oyuncak, mantar, taş, sünger vb.)', 'Grafik kâğıdı', 'Havlu'],
     instructions: [
-      'Introduce the concepts of sink and float',
-      'Show each object and ask children to predict',
-      'Test each object and record results on chart',
-      'Discuss why some objects sink and others float',
-      'Let children explore freely with the materials'
+      'Batan ve yüzen kavramlarını tanıt',
+      'Her nesneyi gösterip çocuklardan tahmin yapmalarını iste',
+      'Nesneleri tek tek test edip sonucu tabloya kaydet',
+      'Bazı nesnelerin neden battığı, bazılarının neden yüzdüğü hakkında konuş',
+      'Çocukların materyallerle serbestçe deneme yapmalarına fırsat ver'
     ],
     learningGoals: [
-      'Scientific prediction',
-      'Observation skills',
-      'Understanding buoyancy',
-      'Critical thinking'
+      'Bilimsel tahmin yapma',
+      'Gözlem becerileri',
+      'Yüzerlik kavramını anlama',
+      'Eleştirel düşünme'
     ]
   },
   {
     id: '5',
-    title: 'Musical Freeze Dance',
+    title: 'Müzikli Donma Oyunu',
     subject: 'Music',
     duration: '15-30min',
     groupSize: 'Whole Class',
-    description: 'Dance to music and freeze when it stops, building listening skills and body control.',
-    materials: ['Music player', 'Variety of songs', 'Open space'],
+    description: 'Müzik çalarken dans etme, müzik durduğunda donma oyunu ile dinleme ve beden kontrolünü geliştirme etkinliği.',
+    materials: ['Müzik çalar', 'Farklı şarkılar', 'Geniş hareket alanı'],
     instructions: [
-      'Explain the rules: dance when music plays, freeze when it stops',
-      'Start with slower songs to practice',
-      'Increase tempo gradually',
-      'Add challenges like "freeze on one foot" or "freeze in a funny shape"',
-      'Celebrate everyone\'s creative dancing and freezing'
+      'Kuralları açıkla: müzik çalarken dans edilir, müzik durunca hareketsiz kalınır',
+      'Önce daha yavaş şarkılarla alıştırma yap',
+      'Daha sonra tempoyu yavaş yavaş artır',
+      '“Tek ayak üstünde don” ya da “komik bir pozisyonda don” gibi küçük görevler ekle',
+      'Çocukların danslarını ve donma anlarını birlikte kutla'
     ],
     learningGoals: [
-      'Listening skills',
-      'Self-regulation',
-      'Gross motor control',
-      'Following directions'
+      'Dinleme becerileri',
+      'Öz denetim',
+      'Kaba motor kontrol',
+      'Yönergelere uyma'
     ]
   },
   {
     id: '6',
-    title: 'Obstacle Course Challenge',
+    title: 'Engel Parkuru Macerası',
     subject: 'Physical',
     duration: '30-45min',
     groupSize: 'Whole Class',
-    description: 'Navigate through a fun obstacle course to develop gross motor skills.',
-    materials: ['Cones', 'Hula hoops', 'Tunnel', 'Balance beam or tape line', 'Bean bags'],
+    description: 'Eğlenceli bir engel parkurunda ilerleyerek kaba motor becerilerini geliştirme etkinliği.',
+    materials: ['Huniler', 'Hula hooplar', 'Tünel', 'Denge tahtası veya bant çizgisi', 'Fasulye torbaları'],
     instructions: [
-      'Set up stations: jumping over cones, crawling through tunnel, walking balance beam, hopping in hoops',
-      'Demonstrate each station',
-      'Have children complete the course one at a time or in small groups',
-      'Cheer for each participant',
-      'Allow multiple turns'
+      'İstasyonları hazırla: hunilerin üzerinden atlama, tünelden sürünerek geçme, denge çizgisinde yürüme, halkaların içinde zıplama',
+      'Her istasyonu çocuklara örnek olarak göster',
+      'Çocukların parkuru tek tek ya da küçük gruplar halinde tamamlamasını sağla',
+      'Her katılımcıyı motive et ve cesaretlendir',
+      'İsteyen çocukların parkuru birden fazla kez denemesine fırsat ver'
     ],
     learningGoals: [
-      'Gross motor development',
-      'Balance and coordination',
-      'Following multi-step directions',
-      'Taking turns'
+      'Kaba motor gelişimi',
+      'Denge ve koordinasyon',
+      'Birden fazla adımdan oluşan yönergeleri takip etme',
+      'Sıra bekleme becerisi'
     ]
   },
   {
     id: '7',
-    title: 'Feelings Faces Match',
+    title: 'Duygu Yüzlerini Eşleştirme',
     subject: 'Social-Emotional',
     duration: '15-30min',
     groupSize: 'Small Group',
-    description: 'Identify and discuss different emotions using face cards and mirrors.',
-    materials: ['Emotion cards or pictures', 'Mirror', 'Books about feelings (optional)'],
+    description: 'Yüz ifadeleri kartları ve ayna kullanarak farklı duyguları tanıma ve konuşma etkinliği.',
+    materials: ['Duygu kartları veya görseller', 'Ayna', 'Duygularla ilgili kitaplar (isteğe bağlı)'],
     instructions: [
-      'Show each emotion card and name the feeling',
-      'Have children make that face in the mirror',
-      'Discuss when we might feel this way',
-      'Share personal experiences with each emotion',
-      'Practice matching emotion cards'
+      'Her duygu kartını göster ve duygunun adını söyle',
+      'Çocuklardan aynaya bakarak aynı yüz ifadesini yapmalarını iste',
+      'Bu duyguyu hangi durumlarda hissedebileceğimiz hakkında konuş',
+      'Çocukların kendi deneyimlerinden örnekler paylaşmasına fırsat ver',
+      'Duygu kartlarını eşleştirme çalışması yap'
     ],
     learningGoals: [
-      'Emotional vocabulary',
-      'Self-awareness',
-      'Empathy development',
-      'Social skills'
+      'Duygu kelime dağarcığı',
+      'Öz farkındalık',
+      'Empati geliştirme',
+      'Sosyal beceriler'
     ]
   },
   {
     id: '8',
-    title: 'Shape Hunt',
+    title: 'Şekil Avı',
     subject: 'Math',
     duration: '15-30min',
     groupSize: 'Small Group',
-    description: 'Find and identify shapes in the classroom environment.',
-    materials: ['Shape cards', 'Clipboards and paper', 'Crayons or markers'],
+    description: 'Sınıf ortamında şekilleri bulup tanıma etkinliği.',
+    materials: ['Şekil kartları', 'Sekreterlik veya altlık ve kâğıt', 'Boya kalemleri veya keçeli kalemler'],
     instructions: [
-      'Review basic shapes: circle, square, triangle, rectangle',
-      'Give each child a clipboard',
-      'Hunt for shapes around the classroom',
-      'Draw or mark each shape found',
-      'Count how many of each shape was discovered'
+      'Temel şekilleri gözden geçir: daire, kare, üçgen, dikdörtgen',
+      'Her çocuğa bir altlık ve kâğıt ver',
+      'Sınıf içinde şekil avına çık',
+      'Bulunan şekilleri çizerek ya da işaretleyerek kaydet',
+      'Her şekilden kaç tane bulunduğunu birlikte say'
     ],
     learningGoals: [
-      'Shape recognition',
-      'Spatial awareness',
-      'Observation skills',
-      'Counting and tallying'
+      'Şekilleri tanıma',
+      'Mekansal farkındalık',
+      'Gözlem becerileri',
+      'Sayma ve işaretleme becerisi'
     ]
   },
   {
     id: '9',
-    title: 'Story Time Theater',
+    title: 'Hikaye Zamanı Tiyatrosu',
     subject: 'Language',
     duration: '30-45min',
     groupSize: 'Whole Class',
-    description: 'Act out a favorite story with props and dramatic play.',
-    materials: ['Storybook', 'Simple props or costumes', 'Space for performance'],
+    description: 'Basit materyaller ve drama yoluyla sevilen bir hikâyeyi canlandırma etkinliği.',
+    materials: ['Hikaye kitabı', 'Basit aksesuarlar veya kostümler', 'Canlandırma için uygun alan'],
     instructions: [
-      'Read the story aloud first',
-      'Discuss the characters and plot',
-      'Assign roles to children',
-      'Practice acting out key scenes',
-      'Perform the story together',
-      'Switch roles and perform again'
+      'Önce hikayeyi çocuklara sesli olarak oku',
+      'Karakterler ve olay örgüsü hakkında konuş',
+      'Çocuklara roller dağıt',
+      'Önemli sahneleri birlikte prova et',
+      'Hikayeyi birlikte canlandır',
+      'İstersen rolleri değiştirip tekrar canlandır'
     ],
     learningGoals: [
-      'Story comprehension',
-      'Speaking and listening',
-      'Dramatic expression',
-      'Cooperation and teamwork'
+      'Hikayeyi anlama',
+      'Konuşma ve dinleme becerileri',
+      'Dramatik ifade',
+      'İş birliği ve takım çalışması'
     ]
   },
   {
     id: '10',
-    title: 'Playdough Creations',
+    title: 'Oyun Hamuru Tasarımları',
     subject: 'Art',
     duration: '30-45min',
     groupSize: 'Individual',
-    description: 'Free exploration with playdough to develop fine motor skills and creativity.',
-    materials: ['Playdough (various colors)', 'Rolling pins', 'Cookie cutters', 'Plastic tools', 'Mats'],
+    description: 'Oyun hamuru ile serbest keşif yaparak ince motor becerilerini ve yaratıcılığı geliştirme etkinliği.',
+    materials: ['Oyun hamuru (farklı renklerde)', 'Merdaneler', 'Kurabiye kalıpları', 'Plastik şekillendirme araçları', 'Çalışma matları'],
     instructions: [
-      'Set up individual workstations with playdough and tools',
-      'Demonstrate rolling, cutting, and sculpting techniques',
-      'Allow free exploration and creation',
-      'Encourage children to describe their creations',
-      'Display finished work if desired'
+      'Her çocuk için oyun hamuru ve araçların bulunduğu bireysel çalışma alanları hazırla',
+      'Yuvarlama, kesme ve şekillendirme tekniklerini örnekle göster',
+      'Çocukların serbestçe keşfetmesine ve üretmesine fırsat ver',
+      'Yaptıkları çalışmaları sözlü olarak anlatmaları için teşvik et',
+      'İstersen tamamlanan çalışmaları sergile'
     ],
     learningGoals: [
-      'Fine motor strength',
-      'Hand-eye coordination',
-      'Creative thinking',
-      'Descriptive language'
+      'İnce motor gücü',
+      'El-göz koordinasyonu',
+      'Yaratıcı düşünme',
+      'Betimleyici dil kullanımı'
     ]
   },
   {
     id: '11',
-    title: 'Plant Growth Observation',
+    title: 'Bitki Büyümesini Gözlemleme',
     subject: 'Science',
     duration: '45-60min',
     groupSize: 'Small Group',
-    description: 'Plant seeds and observe growth over time, documenting changes.',
-    materials: ['Seeds (beans work well)', 'Clear cups', 'Soil', 'Water', 'Journal sheets', 'Crayons'],
+    description: 'Tohum ekerek zaman içindeki büyümeyi gözlemleme ve değişimleri kaydetme etkinliği.',
+    materials: ['Tohumlar (özellikle fasulye uygundur)', 'Şeffaf bardaklar', 'Toprak', 'Su', 'Gözlem kâğıtları', 'Boya kalemleri'],
     instructions: [
-      'Discuss what plants need to grow',
-      'Plant seeds in clear cups with soil',
-      'Water appropriately',
-      'Place in sunny location',
-      'Observe and draw weekly progress',
-      'Measure plant growth'
+      'Bitkilerin büyümek için nelere ihtiyaç duyduğunu konuş',
+      'Şeffaf bardaklara toprak koyup tohumları ek',
+      'Uygun miktarda sulama yap',
+      'Bardakları güneş alan bir yere yerleştir',
+      'Her hafta gözlem yapıp gördüklerini çiz',
+      'Bitkinin büyümesini ölç ve karşılaştır'
     ],
     learningGoals: [
-      'Life cycle understanding',
-      'Scientific observation',
-      'Data collection',
-      'Responsibility and care'
+      'Yaşam döngüsünü anlama',
+      'Bilimsel gözlem becerisi',
+      'Veri toplama',
+      'Sorumluluk ve bakım becerisi'
     ]
   },
   {
     id: '12',
-    title: 'Rhythm Patterns',
+    title: 'Ritim Kalıpları',
     subject: 'Music',
     duration: '15-30min',
     groupSize: 'Whole Class',
-    description: 'Create and repeat simple rhythm patterns using body percussion and instruments.',
-    materials: ['Simple percussion instruments', 'Pattern cards (optional)'],
+    description: 'Beden perküsyonu ve basit müzik aletleriyle ritim kalıpları oluşturma ve tekrar etme etkinliği.',
+    materials: ['Basit ritim çalgıları', 'Ritim kartları (isteğe bağlı)'],
     instructions: [
-      'Start with body percussion (clap, stomp, snap)',
-      'Demonstrate a simple pattern (clap-clap-stomp)',
-      'Have children repeat the pattern',
-      'Let children create their own patterns',
-      'Add instruments for variety',
-      'Create pattern chains with the group'
+      'Önce beden perküsyonu ile başla (alkış, ayak vurma, parmak şıklatma)',
+      'Basit bir ritim örüntüsü göster (örneğin alkış-alkış-ayak vur)',
+      'Çocuklardan ritmi tekrar etmelerini iste',
+      'Daha sonra çocukların kendi ritimlerini oluşturmalarına fırsat ver',
+      'Farklılık için müzik aletleri ekle',
+      'Grup halinde ardışık ritim zincirleri oluştur'                                       
     ],
     learningGoals: [
-      'Pattern recognition',
-      'Rhythm and tempo',
-      'Auditory memory',
-      'Creative expression'
+      'Örüntü farkındalığı',
+      'Ritim ve tempo duygusu',
+      'İşitsel hafıza',
+      'Yaratıcı ifade'                                          
     ]
   },
   {
     id: '13',
-    title: 'Yoga and Mindfulness',
+    title: 'Yoga ve Farkındalık',
     subject: 'Physical',
     duration: '15-30min',
     groupSize: 'Whole Class',
-    description: 'Gentle yoga poses and breathing exercises to promote calm and body awareness.',
-    materials: ['Yoga mats or towels', 'Calm music', 'Picture cards of poses (optional)'],
+    description: 'Sakinleşmeyi ve beden farkındalığını destekleyen hafif yoga hareketleri ve nefes egzersizleri etkinliği.',
+    materials: ['Yoga matları veya havlular', 'Sakin müzik', 'Duruş görsel kartları (isteğe bağlı)'],
     instructions: [
-      'Create a calm environment',
-      'Begin with deep breathing exercises',
-      'Introduce animal-themed poses (cat, dog, tree, butterfly)',
-      'Hold each pose for a few breaths',
-      'End with relaxation time',
-      'Discuss how the body feels'
+      'Sakin ve rahat bir ortam oluştur',
+      'Derin nefes egzersizleri ile başla',
+      'Hayvan temalı duruşları tanıt (kedi, köpek, ağaç, kelebek)',
+      'Her duruşu birkaç nefes süresince koru',
+      'Etkinliği kısa bir gevşeme bölümüyle bitir',
+      'Çocuklarla bedenlerinin nasıl hissettiği hakkında konuş'
     ],
     learningGoals: [
-      'Body awareness',
-      'Flexibility and balance',
-      'Self-regulation',
-      'Mindfulness practice'
+      'Beden farkındalığı',
+      'Esneklik ve denge',
+      'Öz denetim',
+      'Farkındalık uygulaması'
     ]
   },
   {
     id: '14',
-    title: 'Friendship Circle',
+    title: 'Arkadaşlık Çemberi',
     subject: 'Social-Emotional',
     duration: '15-30min',
     groupSize: 'Whole Class',
-    description: 'Build classroom community through sharing and compliments.',
-    materials: ['Talking stick or object', 'Optional: friendship-themed book'],
+    description: 'Paylaşım ve güzel sözler yoluyla sınıf içi aidiyet duygusunu güçlendirme etkinliği.',
+    materials: ['Konuşma çubuğu veya bir nesne', 'İsteğe bağlı: arkadaşlık temalı kitap'],
     instructions: [
-      'Sit in a circle',
-      'Pass the talking stick',
-      'Each child shares something positive about a classmate',
-      'Practice kind words and compliments',
-      'Discuss what makes a good friend',
-      'End with a friendship song or cheer'
+      'Çocuklarla çember şeklinde otur',
+      'Konuşma nesnesini sırayla dolaştır',
+      'Her çocuktan bir arkadaşı hakkında olumlu bir şey söylemesini iste',
+      'Nazik sözler ve iltifat kullanımı üzerinde dur',
+      'İyi bir arkadaşın hangi özelliklere sahip olabileceği hakkında konuş',
+      'Etkinliği bir arkadaşlık şarkısı ya da kısa bir tezahüratla bitir'
     ],
     learningGoals: [
-      'Kindness and empathy',
-      'Speaking and listening',
-      'Positive peer relationships',
-      'Self-esteem building'
+      'Nezaket ve empati',
+      'Konuşma ve dinleme becerileri',
+      'Olumlu akran ilişkileri',
+      'Özgüveni destekleme'
     ]
   },
   {
     id: '15',
-    title: 'Pattern Block Designs',
+    title: 'Desen Bloklarıyla Tasarımlar',
     subject: 'Math',
     duration: '30-45min',
     groupSize: 'Individual',
-    description: 'Create patterns and designs using colorful geometric blocks.',
-    materials: ['Pattern blocks', 'Design cards (optional)', 'Paper', 'Pencils'],
+    description: 'Renkli geometrik bloklarla örüntüler ve tasarımlar oluşturma etkinliği.',
+    materials: ['Desen blokları', 'Tasarım kartları (isteğe bağlı)', 'Kâğıt', 'Kurşun kalem'],
     instructions: [
-      'Introduce the different block shapes',
-      'Show how to create simple patterns',
-      'Provide design cards for copying',
-      'Allow free creation time',
-      'Encourage symmetry and pattern repetition',
-      'Have children describe their designs'
+      'Farklı blok şekillerini çocuklara tanıt',
+      'Basit örüntülerin nasıl oluşturulacağını göster',
+      'İsteyen çocuklar için kopyalanacak tasarım kartları ver',
+      'Serbest oluşturma zamanı tanı',
+      'Simetri ve örüntü tekrarına dikkat çek',
+      'Çocuklardan yaptıkları tasarımları anlatmalarını iste'
     ],
     learningGoals: [
-      'Geometric shape recognition',
-      'Pattern creation',
-      'Spatial reasoning',
-      'Problem-solving'
+      'Geometrik şekilleri tanıma',
+      'Örüntü oluşturma',
+      'Mekânsal akıl yürütme',
+      'Problem çözme becerisi'
     ]
   },
   {
     id: '16',
-    title: 'Puppet Show Creation',
+    title: 'Kukla Gösterisi Hazırlama',
     subject: 'Language',
     duration: '45-60min',
     groupSize: 'Small Group',
-    description: 'Create simple puppets and perform a short story or skit.',
-    materials: ['Paper bags or socks', 'Craft supplies (markers, paper, glue)', 'Puppet theater or table'],
+    description: 'Basit kuklalar yaparak kısa bir hikâye ya da canlandırma hazırlama etkinliği.',
+    materials: ['Kâğıt poşetler veya çoraplar', 'El işi malzemeleri (kalem, kâğıt, yapıştırıcı)', 'Kukla sahnesi veya masa'],
     instructions: [
-      'Provide materials for puppet creation',
-      'Help children design their puppets',
-      'Brainstorm story ideas together',
-      'Practice puppet movements and voices',
-      'Perform for the class',
-      'Discuss the stories'
+      'Kukla yapımı için gerekli malzemeleri çocuklara dağıt',
+      'Çocukların kendi kuklalarını tasarlamalarına yardımcı ol',
+      'Birlikte kısa hikâye fikirleri üret',
+      'Kuklaları hareket ettirme ve seslendirme çalışması yap',
+      'Hazırlanan gösteriyi sınıfa sun',
+      'Gösteriden sonra hikâyeler hakkında konuş'
     ],
     learningGoals: [
-      'Creative storytelling',
-      'Oral language development',
-      'Collaboration',
-      'Presentation skills'
+      'Yaratıcı hikâye anlatımı',
+      'Sözlü dil gelişimi',
+      'İş birliği',
+      'Sunum becerileri'
     ]
   },
   {
     id: '17',
-    title: 'Color Mixing Magic',
+    title: 'Renk Karıştırma Sihri',
     subject: 'Art',
     duration: '30-45min',
     groupSize: 'Small Group',
-    description: 'Explore primary and secondary colors through hands-on mixing.',
-    materials: ['Primary color paints (red, yellow, blue)', 'Paint palettes or plates', 'Brushes', 'Paper', 'Smocks'],
+    description: 'Ana ve ara renkleri, boyaları karıştırarak keşfetme etkinliği.',
+    materials: ['Ana renk boyalar (kırmızı, sarı, mavi)', 'Palet veya tabaklar', 'Fırçalar', 'Kâğıt', 'Önlük'],
     instructions: [
-      'Review primary colors',
-      'Demonstrate mixing two colors',
-      'Predict what color will be created',
-      'Let children experiment with mixing',
-      'Paint pictures using mixed colors',
-      'Create a color mixing chart'
+      'Önce ana renkleri gözden geçir',
+      'İki rengin karıştırılmasını örnek olarak göster',
+      'Hangi yeni rengin oluşacağını çocuklarla tahmin et',
+      'Çocukların kendi karışımlarını denemelerine fırsat ver',
+      'Karıştırdıkları renklerle resim yapmalarını sağla',
+      'Bir renk karışım tablosu oluştur'
     ],
     learningGoals: [
-      'Color theory basics',
-      'Prediction and observation',
-      'Fine motor skills',
-      'Scientific process'
+      'Renk bilgisi temelleri',
+      'Tahmin ve gözlem becerisi',
+      'İnce motor gelişimi',
+      'Bilimsel süreç farkındalığı'
     ]
   },
   {
     id: '18',
-    title: 'Magnet Exploration',
+    title: 'Mıknatıs Keşfi',
     subject: 'Science',
     duration: '30-45min',
     groupSize: 'Small Group',
-    description: 'Investigate which objects are magnetic and which are not.',
-    materials: ['Magnets', 'Variety of objects (metal, plastic, wood, paper)', 'Sorting mat', 'Recording sheet'],
+    description: 'Hangi nesnelerin mıknatıs tarafından çekildiğini keşfetme etkinliği.',
+    materials: ['Mıknatıslar', 'Çeşitli nesneler (metal, plastik, tahta, kâğıt)', 'Ayırma matı', 'Kayıt kâğıdı'],
     instructions: [
-      'Introduce magnets and magnetism',
-      'Demonstrate testing an object',
-      'Predict which objects will be magnetic',
-      'Test each object',
-      'Sort into magnetic and non-magnetic groups',
-      'Record findings'
+      'Mıknatıs ve manyetizma kavramını tanıt',
+      'Bir nesneyi nasıl test edeceğini örnekle göster',
+      'Çocuklardan hangi nesnelerin mıknatısa tepki vereceğini tahmin etmelerini iste',
+      'Nesneleri tek tek test et',
+      'Nesneleri “mıknatısa yapışanlar” ve “yapışmayanlar” olarak ayır',
+      'Sonuçları birlikte kaydet'
     ],
     learningGoals: [
-      'Scientific inquiry',
-      'Properties of materials',
-      'Prediction and testing',
-      'Classification skills'
+      'Bilimsel sorgulama',
+      'Maddelerin özelliklerini tanıma',
+      'Tahmin etme ve test etme',
+      'Sınıflandırma becerileri'
     ]
   },
   {
     id: '19',
-    title: 'Instrument Parade',
+    title: 'Çalgı Geçidi',
     subject: 'Music',
     duration: '30-45min',
     groupSize: 'Whole Class',
-    description: 'March and play instruments while exploring different musical sounds.',
-    materials: ['Various rhythm instruments', 'March music', 'Space to move'],
+    description: 'Farklı ritim çalgılarıyla yürüyerek müzik ve hareketi birleştirme etkinliği.',
+    materials: ['Çeşitli ritim çalgıları', 'Yürüyüş müziği', 'Hareket etmek için uygun alan'],
     instructions: [
-      'Introduce each instrument and its sound',
-      'Practice playing together',
-      'Form a parade line',
-      'March around the space playing instruments',
-      'Try different tempos (slow, fast)',
-      'Switch instruments and repeat'
+      'Her çalgıyı tanıt ve çıkardığı sesi dinlet',
+      'Birlikte çalma denemesi yap',
+      'Çocuklarla bir geçit sırası oluştur',
+      'Müzik eşliğinde yürüyerek çalgıları çal',
+      'Farklı tempolar dene (yavaş, hızlı)',
+      'Çalgıları değiştirerek etkinliği tekrar et'
     ],
     learningGoals: [
-      'Rhythm and beat',
-      'Instrument identification',
-      'Coordination',
-      'Musical expression'
+      'Ritim ve tempo farkındalığı',
+      'Çalgıları tanıma',
+      'Koordinasyon',
+      'Müzikal ifade'
     ]
   },
   {
     id: '20',
-    title: 'Balancing Challenge',
+    title: 'Denge Becerisi Oyunu',
     subject: 'Physical',
     duration: '15-30min',
     groupSize: 'Small Group',
-    description: 'Practice balance through various fun challenges and activities.',
-    materials: ['Balance beam or tape line', 'Bean bags', 'Cushions or spots', 'Timer (optional)'],
+    description: 'Farklı eğlenceli görevlerle denge becerisini geliştirme etkinliği.',
+    materials: ['Denge tahtası veya bant çizgisi', 'Fasulye torbaları', 'Yastıklar veya yer işaretleri', 'Zamanlayıcı (isteğe bağlı)'],
     instructions: [
-      'Warm up with simple balance poses',
-      'Walk the balance beam forward and backward',
-      'Try walking with a bean bag on head',
-      'Stand on one foot and count',
-      'Create your own balance challenge',
-      'Cheer for each other'
+      'Basit denge duruşlarıyla ısınma yap',
+      'Denge çizgisinde öne ve arkaya doğru yürü',
+      'Başının üzerinde fasulye torbasıyla yürümeyi dene',
+      'Tek ayak üstünde durup say',
+      'Çocukların kendi denge görevlerini oluşturmalarına fırsat ver',
+      'Birbirlerini destekleyip motive etmelerini teşvik et'
     ],
     learningGoals: [
-      'Balance and stability',
-      'Core strength',
-      'Focus and concentration',
-      'Body control'
+      'Denge ve vücut kontrolü',
+      'Merkez kas gücü',
+      'Odaklanma ve dikkat',
+      'Beden farkındalığı'
     ]
   }
 ];

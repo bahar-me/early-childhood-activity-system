@@ -4,6 +4,7 @@ from backend.models.refresh_token import RefreshToken
 from backend.models.teacher_profile import TeacherProfile
 from backend.models.class_profile import ClassProfile
 from backend.models.activity_plan import ActivityPlan
+from backend.models.activity import Activity
 
 __all__ = [
     "School",
@@ -12,4 +13,5 @@ __all__ = [
     "TeacherProfile",
     "ClassProfile",
     "ActivityPlan",
+    "Activity"
 ]

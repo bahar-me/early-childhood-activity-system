@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Activity, Subject, Duration, GroupSize } from './types/activity';
 import { TeacherProfile, ClassProfile } from './types/profile';
 import { User } from './types/user';
-import { activities } from './data/activities';
+import { getActivities } from './api/activities';
 import { ActivityCard } from './components/ActivityCard';
 import { ActivityDetail } from './components/ActivityDetail';
 import { saveTeacherProfile, saveClassProfile, getTeacherProfile, getClassProfile } from './api/profile';
@@ -28,6 +28,8 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [setupStep, setSetupStep] = useState<SetupStep>('teacher');
   const [teacherProfile, setTeacherProfile] = useState<TeacherProfile | null>(null);
   const [classProfile, setClassProfile] = useState<ClassProfile | null>(null);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loadingActivities, setLoadingActivities] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [selectedForReport, setSelectedForReport] = useState<string[]>([]);
@@ -85,6 +87,30 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     setFavorites(JSON.parse(savedFavorites));
   }
 }, [user.id]);
+
+  // Load activities
+  useEffect(() => {
+    const loadActivities = async () => {
+      try {
+        setLoadingActivities(true);
+        const data = await getActivities();
+        setActivities(data);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Etkinlikler yüklenemedi';
+
+        toast.error(message);
+
+        if (message === 'Your session has expired. Please log in again.') {
+          onLogout();
+        }
+      } finally {
+        setLoadingActivities(false);
+      }
+    };
+
+    loadActivities();
+  }, [onLogout]);
 
   // Save favorites to localStorage
   useEffect(() => {
@@ -527,6 +553,17 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           onBack={() => setSetupStep('teacher')}
           initialData={classProfile || undefined}
         />
+      </div>
+    );
+  }
+
+  if (loadingActivities) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-purple-600">Etkinlikler yükleniyor...</h2>
+          <p className="text-gray-600 mt-2">Lütfen bekleyin</p>
+        </div>
       </div>
     );
   }

@@ -133,6 +133,16 @@ export function ActivityReport({
     return map[style] || style;
   };
 
+  const translateDuration = (duration: string) => {
+    const map: Record<string, string> = {
+      '5-15min': '5-15 dakika',
+      '15-30min': '15-30 dakika',
+      '30-45min': '30-45 dakika',
+      '45-60min': '45-60 dakika',
+    };
+    return map[duration] || duration;
+  };
+
   const getSubjectColor = (subject: string) => {
     const colors: Record<string, string> = {
       Math: 'bg-blue-100 text-blue-800 border-blue-300',
@@ -256,7 +266,7 @@ export function ActivityReport({
                         </Badge>
                         <Badge variant="outline" className="flex items-center gap-1 badge-export">
                           <Clock className="h-3 w-3" />
-                          {activity.duration}
+                          {translateDuration(activity.duration)}
                         </Badge>
                         <Badge variant="outline" className="flex items-center gap-1 badge-export">
                           <Users className="h-3 w-3" />

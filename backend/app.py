@@ -10,6 +10,7 @@ from backend.api.profile.routes import profile_bp # Import the profile blueprint
 from backend.api.activity_plan.routes import activity_plan_bp # Import the activity plan blueprint
 from backend.api.school_admin.routes import school_admin_bp # Import the school admin blueprint
 from backend.api.ai.routes import ai_bp # Import the AI blueprint
+from backend.api.activity.routes import activity_bp # Import the activity blueprint 
 
 def create_app(config_name="development"):
     if config_name is None:
@@ -31,7 +32,7 @@ def create_app(config_name="development"):
     app.register_blueprint(activity_plan_bp, url_prefix="/api/activity-plans")
     app.register_blueprint(school_admin_bp, url_prefix="/api/school-admin")
     app.register_blueprint(ai_bp, url_prefix="/api/ai")
-
+    app.register_blueprint(activity_bp, url_prefix="/api/activities")
     @app.route("/health", methods=["GET"])
     def health():
         return jsonify({"status": "ok", "message": "Backend is running"}), 200
