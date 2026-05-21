@@ -15,6 +15,9 @@ def serialize_activity(activity: Activity) -> dict:
         "materials": json.loads(activity.materials),
         "instructions": json.loads(activity.instructions),
         "learningGoals": json.loads(activity.learning_goals),
+        "sourceType": activity.source_type,
+        "parentActivityId": str(activity.parent_activity_id) if activity.parent_activity_id else None,
+        "createdByUserId": str(activity.created_by_user_id) if activity.created_by_user_id else None,
     }
 
 
@@ -37,9 +40,13 @@ def create_activity(data: dict) -> dict:
         materials=json.dumps(data["materials"], ensure_ascii=False),
         instructions=json.dumps(data["instructions"], ensure_ascii=False),
         learning_goals=json.dumps(data["learningGoals"], ensure_ascii=False),
+        source_type=data.get("sourceType", "manual_edit"),
+        parent_activity_id=int(data["parentActivityId"]) if data.get("parentActivityId") else None,
+        created_by_user_id=int(data["createdByUserId"]) if data.get("createdByUserId") else None,
     )
+    
 
     db.session.add(activity)
     db.session.commit()
-    
+
     return serialize_activity(activity)

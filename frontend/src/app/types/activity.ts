@@ -12,4 +12,8 @@ export interface Activity {
   materials: string[];
   instructions: string[];
   learningGoals: string[];
+
+  sourceType?: 'seed' | 'manual_edit' | 'llm_generated';
+  parentActivityId?: string | null;
+  createdByUserId?: string | null;
 }

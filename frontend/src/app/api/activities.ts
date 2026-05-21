@@ -2,6 +2,12 @@ import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
 import { Activity } from '../types/activity';
 
+export type CreateActivityPayload = Omit<Activity, 'id'> & {
+  sourceType?: 'seed' | 'manual_edit' | 'llm_generated';
+  parentActivityId?: string | null;
+  createdByUserId?: string | null;
+};
+
 export async function getActivities(): Promise<Activity[]> {
   const response = await fetch(`${API_BASE_URL}/api/activities/`, {
     method: 'GET',
@@ -22,7 +28,7 @@ export async function getActivities(): Promise<Activity[]> {
   return data.activities;
 }
 
-export async function createActivity(payload: Omit<Activity, 'id'>): Promise<Activity> {
+export async function createActivity(payload: CreateActivityPayload): Promise<Activity> {
     const response = await fetch(`${API_BASE_URL}/api/activities/`, {
         method: 'POST',
         headers: {

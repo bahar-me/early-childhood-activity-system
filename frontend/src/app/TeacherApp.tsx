@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Activity, Subject, Duration, GroupSize } from './types/activity';
 import { TeacherProfile, ClassProfile } from './types/profile';
 import { User } from './types/user';
-import { createActivity, getActivities } from './api/activities';
+import { createActivity, getActivities, CreateActivityPayload } from './api/activities';
 import { ActivityEditModal } from './components/ActivityEditModal';
 import { ActivityCard } from './components/ActivityCard';
 import { ActivityDetail } from './components/ActivityDetail';
@@ -98,6 +98,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       try {
         setLoadingActivities(true);
         const data = await getActivities();
+        console.log('Yüklenen etkinlikler:', data);
         setActivities(data);
       } catch (error) {
         const message =
@@ -127,10 +128,19 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   };
 
   const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
+    if (!editingActivity) return;
+
+    const enrichedPayload: CreateActivityPayload = {
+      ...payload,
+      sourceType: 'manual_edit',
+      parentActivityId: editingActivity.id,
+      createdByUserId: user.id,
+    };
+
     try {
       setIsCreatingActivity(true);
 
-      const newActivity = await createActivity(payload);
+      const newActivity = await createActivity(enrichedPayload);
 
       setActivities((prev) => [...prev, newActivity]);
 

@@ -1,3 +1,4 @@
+import { CreateActivityPayload } from '../api/activities';
 import { useEffect, useState } from 'react';
 import { Activity, Subject, Duration, GroupSize } from '../types/activity';
 import { Button } from './ui/button';
@@ -6,7 +7,7 @@ interface ActivityEditModalProps {
   open: boolean;
   activity: Activity | null;
   onClose: () => void;
-  onSave: (payload: Omit<Activity, 'id'>) => void;
+  onSave: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => void;
   isSaving?: boolean;
 }
 
@@ -41,8 +42,40 @@ export function ActivityEditModal({
 
   if (!open || !activity) return null;
 
+  const translateSubject = (subject: string) => {
+    const map: Record<string, string> = {
+        Math: 'Matematik',
+        Language: 'Dil Gelişimi',
+        Art: 'Sanat',
+        Science: 'Fen ve Doğa',
+        Music: 'Müzik',
+        Physical: 'Fiziksel Gelişim',
+        'Social-Emotional': 'Sosyal-Duygusal Gelişim',
+    };
+    return map[subject] || subject;
+  };
+
+  const translateDuration = (duration: string) => {
+    const map: Record<string, string> = {
+        '5-15min': '5-15 dakika',
+        '15-30min': '15-30 dakika',
+        '30-45min': '30-45 dakika',
+        '45-60min': '45-60 dakika',
+    };
+    return map[duration] || duration;
+  };
+
+  const translateGroupSize = (groupSize: string) => {
+    const map: Record<string, string> = {
+        Individual: 'Bireysel',
+        'Small Group': 'Küçük Grup',
+        'Whole Class': 'Tüm Sınıf',
+    };
+    return map[groupSize] || groupSize;
+  };
+
   const handleSave = () => {
-    const payload: Omit<Activity, 'id'> = {
+    const payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'> = {
       title: title.trim(),
       subject,
       duration,
@@ -93,13 +126,13 @@ export function ActivityEditModal({
                 value={subject}
                 onChange={(e) => setSubject(e.target.value as Subject)}
               >
-                <option value="Math">Math</option>
-                <option value="Language">Language</option>
-                <option value="Art">Art</option>
-                <option value="Science">Science</option>
-                <option value="Music">Music</option>
-                <option value="Physical">Physical</option>
-                <option value="Social-Emotional">Social-Emotional</option>
+                <option value="Math">{translateSubject('Math')}</option>
+                <option value="Language">{translateSubject('Language')}</option>
+                <option value="Art">{translateSubject('Art')}</option>
+                <option value="Science">{translateSubject('Science')}</option>
+                <option value="Music">{translateSubject('Music')}</option>
+                <option value="Physical">{translateSubject('Physical')}</option>
+                <option value="Social-Emotional">{translateSubject('Social-Emotional')}</option>
               </select>
             </div>
 
@@ -110,10 +143,10 @@ export function ActivityEditModal({
                 value={duration}
                 onChange={(e) => setDuration(e.target.value as Duration)}
               >
-                <option value="5-15min">5-15min</option>
-                <option value="15-30min">15-30min</option>
-                <option value="30-45min">30-45min</option>
-                <option value="45-60min">45-60min</option>
+                <option value="5-15min">{translateDuration('5-15min')}</option>
+                <option value="15-30min">{translateDuration('15-30min')}</option>
+                <option value="30-45min">{translateDuration('30-45min')}</option>
+                <option value="45-60min">{translateDuration('45-60min')}</option>
               </select>
             </div>
 
@@ -124,9 +157,9 @@ export function ActivityEditModal({
                 value={groupSize}
                 onChange={(e) => setGroupSize(e.target.value as GroupSize)}
               >
-                <option value="Individual">Individual</option>
-                <option value="Small Group">Small Group</option>
-                <option value="Whole Class">Whole Class</option>
+                <option value="Individual">{translateGroupSize('Individual')}</option>
+                <option value="Small Group">{translateGroupSize('Small Group')}</option>
+                <option value="Whole Class">{translateGroupSize('Whole Class')}</option>
               </select>
             </div>
           </div>
