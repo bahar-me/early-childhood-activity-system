@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Activity, Subject, Duration, GroupSize } from './types/activity';
 import { TeacherProfile, ClassProfile } from './types/profile';
 import { User } from './types/user';
-import { getActivities } from './api/activities';
+import { createActivity, getActivities } from './api/activities';
+import { ActivityEditModal } from './components/ActivityEditModal';
 import { ActivityCard } from './components/ActivityCard';
 import { ActivityDetail } from './components/ActivityDetail';
 import { saveTeacherProfile, saveClassProfile, getTeacherProfile, getClassProfile } from './api/profile';
@@ -32,6 +33,9 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [loadingActivities, setLoadingActivities] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [isCreatingActivity, setIsCreatingActivity] = useState(false);
   const [selectedForReport, setSelectedForReport] = useState<string[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const [selectedDurations, setSelectedDurations] = useState<Duration[]>([]);
@@ -101,7 +105,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
 
         toast.error(message);
 
-        if (message === 'Your session has expired. Please log in again.') {
+        if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
           onLogout();
         }
       } finally {
@@ -116,6 +120,35 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   useEffect(() => {
     localStorage.setItem(`favorites-${user.id}`, JSON.stringify(favorites));
   }, [favorites, user.id]);
+
+  const handleOpenEditModal = (activity: Activity) => {
+    setEditingActivity(activity);
+    setShowEditModal(true);
+  };
+
+  const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
+    try {
+      setIsCreatingActivity(true);
+
+      const newActivity = await createActivity(payload);
+
+      setActivities((prev) => [...prev, newActivity]);
+
+      toast.success('Etkinlik başarıyla kaydedildi!');
+      setShowEditModal(false);
+      setEditingActivity(null);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Etkinlik kaydedilemedi';
+
+      toast.error(message);
+
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+        onLogout();
+      }
+    } finally {
+      setIsCreatingActivity(false);
+    }
+  };
 
   const handleTeacherProfileSubmit = async (profile: TeacherProfile) => {
   try {
@@ -226,47 +259,47 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
         activity.subject === 'Language'
       ) {
         score += 4;
-        reasons.push('Okuryazarlık gelişimi hedefiyle eşleşiyor');
+        reasons.push('Okuryazarlık gelişimi odağıyla uyumlu');
       }
 
       if (
-        classProfile.learningFocus.includes('Math Foundations') &&
+        classProfile.learningFocus.includes('Matematik Temelleri') &&
         activity.subject === 'Math'
       ) {
         score += 4;
-        reasons.push('Matematik temelleri hedefiyle eşleşiyor');
+        reasons.push('Matematik temelleri odağıyla uyumlu');
       }
 
       if (
-        classProfile.learningFocus.includes('Creative Expression') &&
+        classProfile.learningFocus.includes('Yaratıcı İfade') &&
         activity.subject === 'Art'
       ) {
         score += 4;
-        reasons.push('Sanatsal ifade hedefiyle eşleşiyor');
+        reasons.push('Sanatsal ifade odağıyla uyumlu');
       }
 
       if (
-        classProfile.learningFocus.includes('Science Exploration') &&
+        classProfile.learningFocus.includes('Bilimsel Keşif') &&
         activity.subject === 'Science'
       ) {
         score += 4;
-        reasons.push('Bilimsel keşif hedefiyle eşleşiyor');
+        reasons.push('Bilimsel keşif odağıyla uyumlu');
       }
 
       if (
-        classProfile.learningFocus.includes('Physical Development') &&
+        classProfile.learningFocus.includes('Fiziksel Gelişim') &&
         activity.subject === 'Physical'
       ) {
         score += 4;
-        reasons.push('Fiziksel gelişim hedefiyle eşleşiyor');
+        reasons.push('Fiziksel gelişim odağıyla uyumlu');
       }
 
       if (
-        classProfile.learningFocus.includes('Social Skills') &&
+        classProfile.learningFocus.includes('Sosyal Beceriler') &&
         activity.subject === 'Social-Emotional'
       ) {
         score += 4;
-        reasons.push('Sosyal beceriler hedefiyle eşleşiyor');
+        reasons.push('Sosyal beceriler odağıyla uyumlu');
       }
 
       // 2. Age group suitability
@@ -345,7 +378,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
         (activity.subject === 'Art' || activity.subject === 'Social-Emotional')
       ) {
         score += 2;
-        reasons.push('Oyun temelli öğretim tarzına uygun');
+        reasons.push('Oyun temelli öğretim stiline uygun');
       }
 
       if (
@@ -353,7 +386,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
         (activity.subject === 'Math' || activity.subject === 'Language')
       ) {
         score += 2;
-        reasons.push('Yapılandırılmış öğretim tarzına uygun');
+        reasons.push('Yapılandırılmış öğretim stiline uygun');
       }
 
       if (
@@ -416,7 +449,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   };
 
   const handleAISuggest = () => {
-    const filtered = getSmartRecommendations();
+    const filtered = getFilteredActivities();
 
     if (filtered.length === 0) {
       toast.error('Uygun etkinlik bulunamadı. Filtrelerini değiştirmeyi deneyebilirsin!');
@@ -476,7 +509,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
 
       toast.error(message);
 
-      if (message === 'Your session has expired. Please log in again.') {
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
         onLogout();
       }
     } finally {
@@ -705,7 +738,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
                     <p className="text-gray-500">
                       {favorites.length === 0
                         ? 'Henüz favori etkinlik yok. Etkinliklerdeki kalp simgesine tıklayarak favorilere ekleyebilirsin!'
-                        : 'Favori etkinliklerin filtrelere uymuyor.'}
+                        : 'Filtrelerine uygun favori etkinlik bulunamadı.'}
                     </p>
                   </div>
                 ) : (
@@ -785,8 +818,24 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
         activity={selectedActivity}
         open={selectedActivity !== null}
         onClose={() => setSelectedActivity(null)}
+        onEdit={(activity) => {
+          setSelectedActivity(null);
+          handleOpenEditModal(activity);
+        }}
       />
 
+      {/* Edit/Create Activity Modal */}
+      <ActivityEditModal
+        activity={editingActivity}
+        open={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setEditingActivity(null);
+        }}
+        onSave={handleCreateEditedActivity}
+        isSaving={isCreatingActivity}
+      />
+      
       {/* Report Modal */}
       {teacherProfile && classProfile && (
         <ActivityReport

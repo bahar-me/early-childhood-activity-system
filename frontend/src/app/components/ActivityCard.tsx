@@ -25,6 +25,38 @@ export function ActivityCard({ activity, isFavorite, onToggleFavorite, onClick }
     return colors[subject] || 'bg-gray-100 text-gray-800 border-gray-300';
   };
 
+  const translateSubject = (subject: string) => {
+    const map: Record<string, string> = {
+      Math: 'Matematik',
+      Language: 'Dil Gelişimi',
+      Art: 'Sanat',
+      Science: 'Fen ve Doğa',
+      Music: 'Müzik',
+      Physical: 'Fiziksel Gelişim',
+      'Social-Emotional': 'Sosyal-Duygusal Gelişim',
+    };
+    return map[subject] || subject;
+  };
+
+  const translateGroupSize = (groupSize: string) => {
+    const map: Record<string, string> = {
+      Individual: 'Bireysel',
+      'Small Group': 'Küçük Grup',
+      'Whole Class': 'Tüm Sınıf',
+    };
+    return map[groupSize] || groupSize;
+  };
+
+  const translateDuration = (duration: string) => {
+    const map: Record<string, string> = {
+      '5-15min': '5-15 dakika',
+      '15-30min': '15-30 dakika',
+      '30-45min': '30-45 dakika',
+      '45-60min': '45-60 dakika',
+    };
+    return map[duration] || duration;
+  };
+
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer relative">
       <Button
@@ -46,7 +78,7 @@ export function ActivityCard({ activity, isFavorite, onToggleFavorite, onClick }
           <CardTitle>{activity.title}</CardTitle>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge className={getSubjectColor(activity.subject)}>
-              {activity.subject}
+              {translateSubject(activity.subject)}
             </Badge>
           </div>
         </CardHeader>
@@ -57,11 +89,11 @@ export function ActivityCard({ activity, isFavorite, onToggleFavorite, onClick }
           <div className="flex flex-wrap gap-4 text-sm text-gray-500">
             <div className="flex items-center gap-1">
               <Clock className="h-4 w-4" />
-              <span>{activity.duration}</span>
+              <span>{translateDuration(activity.duration)}</span>
             </div>
             <div className="flex items-center gap-1">
               <Users className="h-4 w-4" />
-              <span>{activity.groupSize}</span>
+              <span>{translateGroupSize(activity.groupSize)}</span>
             </div>
           </div>
         </CardContent>

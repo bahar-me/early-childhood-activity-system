@@ -9,14 +9,16 @@ import {
 import { Badge } from './ui/badge';
 import { Clock, Users } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
+import { Button } from './ui/button';
 
 interface ActivityDetailProps {
   activity: Activity | null;
   open: boolean;
   onClose: () => void;
+  onEdit?: (activity: Activity) => void;
 }
 
-export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps) {
+export function ActivityDetail({ activity, open, onClose, onEdit }: ActivityDetailProps) {
   if (!activity) return null;
 
   const getSubjectColor = (subject: string) => {
@@ -32,6 +34,38 @@ export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps)
     return colors[subject] || 'bg-gray-100 text-gray-800 border-gray-300';
   };
 
+  const translateSubject = (subject: string) => {
+    const map: Record<string, string> = {
+      Math: 'Matematik',
+      Language: 'Dil Gelişimi',
+      Art: 'Sanat',
+      Science: 'Fen ve Doğa',
+      Music: 'Müzik',
+      Physical: 'Fiziksel Gelişim',
+      'Social-Emotional': 'Sosyal-Duygusal Gelişim',
+    };
+    return map[subject] || subject;
+  };
+
+  const translateGroupSize = (groupSize: string) => {
+    const map: Record<string, string> = {
+      Individual: 'Bireysel',
+      'Small Group': 'Küçük Grup',
+      'Whole Class': 'Tüm Sınıf',
+    };
+    return map[groupSize] || groupSize;
+  };
+
+  const translateDuration = (duration: string) => {
+    const map: Record<string, string> = {
+      '5-15min': '5-15 dakika',
+      '15-30min': '15-30 dakika',
+      '30-45min': '30-45 dakika',
+      '45-60min': '45-60 dakika',
+    };
+    return map[duration] || duration;
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh]">
@@ -39,15 +73,15 @@ export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps)
           <DialogTitle>{activity.title}</DialogTitle>
           <DialogDescription className="flex flex-wrap gap-2 mt-2">
             <Badge className={getSubjectColor(activity.subject)}>
-              {activity.subject}
+              {translateSubject(activity.subject)}
             </Badge>
             <Badge variant="outline" className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
-              {activity.duration}
+              {translateDuration(activity.duration)}
             </Badge>
             <Badge variant="outline" className="flex items-center gap-1">
               <Users className="h-3 w-3" />
-              {activity.groupSize}
+              {translateGroupSize(activity.groupSize)}
             </Badge>
           </DialogDescription>
         </DialogHeader>
@@ -55,12 +89,12 @@ export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps)
         <ScrollArea className="max-h-[calc(90vh-120px)] pr-4">
           <div className="space-y-6">
             <div>
-              <h3 className="font-semibold mb-2">Description</h3>
+              <h3 className="font-semibold mb-2">Açıklama</h3>
               <p className="text-gray-600">{activity.description}</p>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-2">Materials Needed</h3>
+              <h3 className="font-semibold mb-2">Gerekli Materyaller</h3>
               <ul className="list-disc list-inside space-y-1 text-gray-600">
                 {activity.materials.map((material, index) => (
                   <li key={index}>{material}</li>
@@ -69,7 +103,7 @@ export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps)
             </div>
 
             <div>
-              <h3 className="font-semibold mb-2">Instructions</h3>
+              <h3 className="font-semibold mb-2">Uygulama Adımları</h3>
               <ol className="list-decimal list-inside space-y-2 text-gray-600">
                 {activity.instructions.map((instruction, index) => (
                   <li key={index} className="pl-2">{instruction}</li>
@@ -78,7 +112,7 @@ export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps)
             </div>
 
             <div>
-              <h3 className="font-semibold mb-2">Learning Goals</h3>
+              <h3 className="font-semibold mb-2">Öğrenme Hedefleri</h3>
               <ul className="list-disc list-inside space-y-1 text-gray-600">
                 {activity.learningGoals.map((goal, index) => (
                   <li key={index}>{goal}</li>
@@ -87,6 +121,21 @@ export function ActivityDetail({ activity, open, onClose }: ActivityDetailProps)
             </div>
           </div>
         </ScrollArea>
+
+        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
+          {activity && onEdit && (
+            <Button
+              variant="outline"
+              onClick={() => onEdit(activity)}
+            >
+              Düzenle
+            </Button>
+          )}
+
+          <Button variant="outline" onClick={onClose}>
+            Kapat
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
