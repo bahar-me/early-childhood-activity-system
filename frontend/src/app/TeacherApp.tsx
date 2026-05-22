@@ -16,7 +16,8 @@ import { Button } from './components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { WandSparkles, Heart, FileText, Settings, CheckSquare, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
-import { explainRecommendations, AIRecommendationExplanationResponse } from './api/ai';
+import { explainRecommendations, AIRecommendationExplanationResponse, AdaptActivityDraft } from './api/ai';
+import { ActivityAdaptModal } from './components/ActivityAdaptModal';
 
 type SetupStep = 'teacher' | 'class' | 'complete';
 
@@ -35,6 +36,8 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [adaptingActivity, setAdaptingActivity] = useState<Activity | null>(null);
+  const [showAdaptModal, setShowAdaptModal] = useState(false);
   const [isCreatingActivity, setIsCreatingActivity] = useState(false);
   const [selectedForReport, setSelectedForReport] = useState<string[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
@@ -98,7 +101,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       try {
         setLoadingActivities(true);
         const data = await getActivities();
-        console.log('Yüklenen etkinlikler:', data);
         setActivities(data);
       } catch (error) {
         const message =
@@ -149,6 +151,44 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       setEditingActivity(null);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Etkinlik kaydedilemedi';
+
+      toast.error(message);
+
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+        onLogout();
+      }
+    } finally {
+      setIsCreatingActivity(false);
+    }
+  };
+
+  const handleOpenAdaptModal = (activity: Activity) => {
+    setAdaptingActivity(activity);
+    setShowAdaptModal(true);
+  };
+
+  const handleSaveAdaptedDraft = async (draft: AdaptActivityDraft) => {
+    if (!adaptingActivity) return;
+
+    const enrichedPayload: CreateActivityPayload = {
+      ...draft,
+      sourceType: 'llm_generated',
+      parentActivityId: adaptingActivity.id,
+      createdByUserId: user.id,
+    };
+
+    try {
+      setIsCreatingActivity(true);
+
+      const newActivity = await createActivity(enrichedPayload);
+
+      setActivities((prev) => [...prev, newActivity]);
+
+      toast.success('YZ ile oluşturulan etkinlik başarıyla kaydedildi!');
+      setShowAdaptModal(false);
+      setAdaptingActivity(null);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Uyarlanan etkinlik kaydedilemedi';
 
       toast.error(message);
 
@@ -832,6 +872,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           setSelectedActivity(null);
           handleOpenEditModal(activity);
         }}
+        onAdapt={(activity) => {
+          setSelectedActivity(null);
+          handleOpenAdaptModal(activity);
+        }}
       />
 
       {/* Edit/Create Activity Modal */}
@@ -843,6 +887,19 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           setEditingActivity(null);
         }}
         onSave={handleCreateEditedActivity}
+        isSaving={isCreatingActivity}
+      />
+
+      <ActivityAdaptModal
+        open={showAdaptModal}
+        activity={adaptingActivity}
+        teacherProfile={teacherProfile}
+        classProfile={classProfile}
+        onClose={() => {
+          setShowAdaptModal(false);
+          setAdaptingActivity(null);
+        }}
+        onSaveDraft={handleSaveAdaptedDraft}
         isSaving={isCreatingActivity}
       />
       

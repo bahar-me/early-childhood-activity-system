@@ -16,9 +16,10 @@ interface ActivityDetailProps {
   open: boolean;
   onClose: () => void;
   onEdit?: (activity: Activity) => void;
+  onAdapt?: (activity: Activity) => void;
 }
 
-export function ActivityDetail({ activity, open, onClose, onEdit }: ActivityDetailProps) {
+export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: ActivityDetailProps) {
   if (!activity) return null;
 
   const getSubjectColor = (subject: string) => {
@@ -131,10 +132,14 @@ export function ActivityDetail({ activity, open, onClose, onEdit }: ActivityDeta
               Düzenle
             </Button>
           )}
-
-          <Button variant="outline" onClick={onClose}>
-            Kapat
-          </Button>
+          {activity && onAdapt && (
+            <Button
+              variant="outline"
+              onClick={() => onAdapt(activity)}
+            >
+              YZ ile Uyarlat
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 
-from backend.services.ai_service import generate_recommendation_explanation
+from backend.services.ai_service import generate_recommendation_explanation, adapt_activity_mock
 from backend.utils.auth_middleware import roles_required
 
 ai_bp = Blueprint("ai", __name__)
@@ -19,3 +19,18 @@ def explain_recommendations_route():
         return jsonify(result), 200
 
     return jsonify({"error": result.get("error", "AI explanation failed")}), 400
+
+@ai_bp.route("/adapt-activity", methods=["POST"])
+@jwt_required()
+@roles_required("teacher")
+def adapt_activity():
+    data = request.get_json() or {}
+
+    try:
+        result = adapt_activity_mock(data)
+        return jsonify(result), 200
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    except Exception as error:
+        print(f"Adapt activity error: {error}")
+        return jsonify({"error": "Etkinlik uyarlanamadı."}), 500

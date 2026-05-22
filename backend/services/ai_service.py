@@ -98,3 +98,76 @@ def generate_recommendation_explanation(data: Dict[str, Any]) -> Dict[str, Any]:
         "recommendation_reasons": recommendation_reasons,
         "source": "mock_ai",
     }
+
+def adapt_activity_mock(payload: dict) -> dict:
+    activity = payload.get("activity", {})
+    teacher_profile = payload.get("teacher_profile", {})
+    class_profile = payload.get("class_profile", {})
+    adaptation_prompt = (payload.get("adaptation_prompt") or "").strip()
+
+    if not activity:
+        raise ValueError("Etkinlik verisi eksik.")
+    if not adaptation_prompt:
+        raise ValueError("Uyarlama isteği boş olamaz.")
+
+    original_title = activity.get("title", "Yeni Etkinlik")
+    original_description = activity.get("description", "")
+    original_materials = activity.get("materials", [])
+    original_instructions = activity.get("instructions", [])
+    original_learning_goals = activity.get("learningGoals", [])
+    original_subject = activity.get("subject", "Math")
+    original_duration = activity.get("duration", "15-30min")
+    original_group_size = activity.get("groupSize", "Small Group")
+
+    age_group = class_profile.get("age_group") or class_profile.get("ageGroup") or "okul öncesi"
+    teaching_style = teacher_profile.get("teaching_style") or teacher_profile.get("teachingStyle") or "öğretmenin yaklaşımı"
+
+    adapted_title = f"{original_title} - Uyarlanmış Versiyon"
+
+    adapted_description = (
+        f"Bu etkinlik, '{adaptation_prompt}' isteği dikkate alınarak yeniden düzenlenmiştir. "
+        f"{age_group} yaş grubu ve {teaching_style} öğretim yaklaşımı göz önünde bulundurulmuştur. "
+        f"{original_description}"
+    )
+
+    adapted_materials = original_materials[:]
+    adapted_instructions = original_instructions[:]
+    adapted_learning_goals = original_learning_goals[:]
+
+    prompt_lower = adaptation_prompt.lower()
+
+    if "materyalsiz" in prompt_lower or "malzemesiz" in prompt_lower:
+        adapted_materials = ["Ek materyal gerektirmeden uygulanabilir."]
+        adapted_instructions = [
+            "Öğretmen etkinliği sözlü yönergelerle başlatır.",
+            "Çocuklar etkinliği beden hareketleri, konuşma veya sınıf içi mevcut nesnelerle uygular.",
+            "Etkinlik sonunda kısa bir değerlendirme yapılır.",
+        ]
+
+    if "15 dakika" in prompt_lower or "kısa" in prompt_lower:
+        original_duration = "15-30min"
+
+    if "bireysel" in prompt_lower:
+        original_group_size = "Individual"
+    elif "küçük grup" in prompt_lower:
+        original_group_size = "Small Group"
+    elif "tüm sınıf" in prompt_lower or "whole class" in prompt_lower:
+        original_group_size = "Whole Class"
+
+    adapted_learning_goals = adapted_learning_goals[:]
+    if "sadeleştir" in prompt_lower:
+        adapted_learning_goals = adapted_learning_goals[:3]
+
+    return {
+        "activity_draft": {
+            "title": adapted_title,
+            "subject": original_subject,
+            "duration": original_duration,
+            "groupSize": original_group_size,
+            "description": adapted_description,
+            "materials": adapted_materials,
+            "instructions": adapted_instructions,
+            "learningGoals": adapted_learning_goals,
+        },
+        "source": "mock_ai",
+    }

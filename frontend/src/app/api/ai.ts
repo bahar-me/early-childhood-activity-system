@@ -1,5 +1,6 @@
 import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
+import { Activity, Subject, Duration, GroupSize } from '../types/activity'; 
 
 export interface AIRecommendationExplanationRequest {
   teacher_profile: unknown;
@@ -24,6 +25,50 @@ export interface AIRecommendationExplanationResponse {
   source: string;
 }
 
+export interface AdaptActivityRequest {
+  activity: {
+    title: string;
+    subject: string;
+    duration: string;
+    groupSize: string;
+    description: string;
+    materials: string[];
+    instructions: string[];
+    learningGoals: string[];
+  };
+  teacher_profile?: {
+    name?: string;
+    years_experience?: string;
+    specializations?: string[];
+    teaching_style?: string;
+  };
+  class_profile?: {
+    class_name?: string;
+    age_group?: string;
+    class_size?: number;
+    learning_focus?: string[];
+    available_resources?: string[];
+    special_needs?: string[];
+  };
+  adaptation_prompt: string;
+}
+
+export interface AdaptActivityDraft {
+    title: string;
+    subject: Subject;
+    duration: Duration;
+    groupSize: GroupSize;
+    description: string;
+    materials: string[];
+    instructions: string[];
+    learningGoals: string[];
+}
+
+export interface AdaptActivityResponse {
+  activity_draft: AdaptActivityDraft;
+  source: string;
+}
+
 export async function explainRecommendations(
   payload: AIRecommendationExplanationRequest
 ): Promise<AIRecommendationExplanationResponse> {
@@ -37,11 +82,34 @@ export async function explainRecommendations(
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yap.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to generate AI explanation');
+    throw new Error(data.error || 'YZ açıklaması oluşturulamadı.');
+  }
+
+  return data;
+}
+
+export async function adaptActivity(
+  payload: AdaptActivityRequest
+): Promise<AdaptActivityResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/ai/adapt-activity`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yap.');
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Etkinlik uyarlanamadı.');
   }
 
   return data;
