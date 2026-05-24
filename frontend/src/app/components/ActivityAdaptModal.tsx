@@ -22,7 +22,7 @@ export function ActivityAdaptModal({
   classProfile,
   onClose,
   onSaveDraft,
-  isSaving= false,
+  isSaving = false,
 }: ActivityAdaptModalProps) {
   const [adaptationPrompt, setAdaptationPrompt] = useState('');
   const [isAdapting, setIsAdapting] = useState(false);

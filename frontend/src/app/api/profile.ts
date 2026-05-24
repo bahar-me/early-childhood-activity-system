@@ -17,11 +17,11 @@ export async function saveTeacherProfile(payload: {
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to save teacher profile');
+    throw new Error(data.error || 'Öğretmen profili kaydedilemedi.');
   }
 
   return data.profile;
@@ -37,11 +37,11 @@ export async function getTeacherProfile() {
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to load teacher profile');
+    throw new Error(data.error || 'Öğretmen profili yüklenemedi.');
   }
 
   return data.profile;
@@ -65,11 +65,11 @@ export async function saveClassProfile(payload: {
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to save class profile');
+    throw new Error(data.error || 'Sınıf profili kaydedilemedi.');
   }
 
   return data.class_profile;
@@ -85,11 +85,11 @@ export async function getClassProfile() {
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to load class profile');
+    throw new Error(data.error || 'Sınıf profili yüklenemedi.');
   }
 
   return data.class_profile;

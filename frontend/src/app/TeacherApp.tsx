@@ -146,7 +146,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
 
       setActivities((prev) => [...prev, newActivity]);
 
-      toast.success('Etkinlik başarıyla kaydedildi!');
+      toast.success('Etkinlik başarıyla kaydedildi. \nYazdır veya PDF dışa aktar ile dosya oluşturabilirsin.');
       setShowEditModal(false);
       setEditingActivity(null);
     } catch (error) {

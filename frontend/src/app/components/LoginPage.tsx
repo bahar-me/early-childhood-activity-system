@@ -28,7 +28,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
       onLogin(data.user, data.access_token, data.refresh_token);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Login failed';
+      const message = err instanceof Error ? err.message : 'Giriş başarısız oldu. Lütfen bilgilerinizi kontrol edip tekrar deneyin.';
       setError(message);
     } finally {
       setLoading(false);
@@ -60,15 +60,15 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             KinderActivity AI
           </h1>
           <p className="text-gray-600">
-            Smart activity recommendations for kindergarten education
+            Anaokulu eğitimi için akıllı etkinlik önerileri
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Sign In</CardTitle>
+            <CardTitle>Oturum Aç</CardTitle>
             <CardDescription>
-              Enter your credentials to access the system
+              Sisteme erişmek için kimlik bilgilerinizi girin
             </CardDescription>
           </CardHeader>
 
@@ -106,7 +106,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               )}
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? 'Oturum açılıyor...' : 'Oturum Aç'}
               </Button>
             </form>
           </CardContent>
@@ -114,9 +114,9 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Quick Fill</CardTitle>
+            <CardTitle className="text-sm">Hızlı Doldurma</CardTitle>
             <CardDescription className="text-xs">
-              Automatically fill demo backend users
+              Otomatik olarak demo backend kullanıcılarını doldur
             </CardDescription>
           </CardHeader>
 
@@ -128,7 +128,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               type="button"
             >
               <GraduationCap className="h-4 w-4 mr-2" />
-              Teacher
+              Öğretmen
               <span className="ml-auto text-xs text-gray-500">teacher@test.com</span>
             </Button>
 
@@ -139,7 +139,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               type="button"
             >
               <GraduationCap className="h-4 w-4 mr-2" />
-              School Admin
+              Okul Yöneticisi
               <span className="ml-auto text-xs text-gray-500">schooladmin@test.com</span>
             </Button>
 
@@ -150,7 +150,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               type="button"
             >
               <GraduationCap className="h-4 w-4 mr-2" />
-              System Admin
+              Sistem Yöneticisi
               <span className="ml-auto text-xs text-gray-500">admin@test.com</span>
             </Button>
           </CardContent>

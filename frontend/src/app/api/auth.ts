@@ -14,7 +14,7 @@ export async function loginRequest(credentials: LoginCredentials): Promise<Login
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Login failed');
+    throw new Error(data.error || 'Giriş başarısız oldu.');
   }
 
   return data;
@@ -32,7 +32,7 @@ export async function logoutRequest(refreshToken: string): Promise<{ message: st
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Logout failed');
+    throw new Error(data.error || 'Çıkış başarısız oldu.');
   }
 
   return data;

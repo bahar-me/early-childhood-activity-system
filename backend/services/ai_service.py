@@ -25,10 +25,17 @@ def translate_group_size(group_size: str) -> str:
 
 def translate_teaching_style(style: str) -> str:
     translations = {
+        "Balanced": "dengeli",
         "balanced": "dengeli",
+        "Play-based": "oyun temelli",
         "play-based": "oyun temelli",
+        "Structured": "yapılandırılmış",
         "structured": "yapılandırılmış",
+        "Child-led": "çocuk merkezli",
+        "child-led": "çocuk merkezli",
+        "Creative": "yaratıcı",
         "creative": "yaratıcı",
+        "Interactive": "etkileşimli",
         "interactive": "etkileşimli",
     }
     return translations.get(style, style or "öğretmenin yaklaşımı")
@@ -111,7 +118,7 @@ def adapt_activity_mock(payload: dict) -> dict:
         raise ValueError("Uyarlama isteği boş olamaz.")
 
     original_title = activity.get("title", "Yeni Etkinlik")
-    original_description = activity.get("description", "")
+    original_description = (activity.get("description") or "").strip() 
     original_materials = activity.get("materials", [])
     original_instructions = activity.get("instructions", [])
     original_learning_goals = activity.get("learningGoals", [])
@@ -119,20 +126,43 @@ def adapt_activity_mock(payload: dict) -> dict:
     original_duration = activity.get("duration", "15-30min")
     original_group_size = activity.get("groupSize", "Small Group")
 
-    age_group = class_profile.get("age_group") or class_profile.get("ageGroup") or "okul öncesi"
-    teaching_style = teacher_profile.get("teaching_style") or teacher_profile.get("teachingStyle") or "öğretmenin yaklaşımı"
+    raw_age_group = class_profile.get("age_group") or class_profile.get("ageGroup") or "okul öncesi"
+    raw_style = (
+        teacher_profile.get("teaching_style") 
+        or teacher_profile.get("teachingStyle") 
+        or ""
+    )
+    style_map = {
+        "Balanced": "dengeli",
+        "balanced": "dengeli",
+        "Play-based": "oyun temelli",
+        "play-based": "oyun temelli",
+        "Structured": "yapılandırılmış",
+        "structured": "yapılandırılmış",
+        "Child-led": "çocuk merkezli",
+        "child-led": "çocuk merkezli",
+        "Creative": "yaratıcı",
+        "creative": "yaratıcı",
+        "Interactive": "etkileşimli",
+        "interactive": "etkileşimli",
+    }
+    display_style = style_map.get(raw_style, raw_style or "öğretmenin yaklaşımı")
+    
+    def strip_previous_adaptation_text(description: str) -> str:
+        marker = "göz önünde bulundurulmuştur."
+        if marker in description:
+            return description.split(marker, 1)[-1].strip()
+        return description
+    
+    base_description = strip_previous_adaptation_text(original_description)
 
     adapted_title = f"{original_title} - Uyarlanmış Versiyon"
-
-    adapted_description = (
-        f"Bu etkinlik, '{adaptation_prompt}' isteği dikkate alınarak yeniden düzenlenmiştir. "
-        f"{age_group} yaş grubu ve {teaching_style} öğretim yaklaşımı göz önünde bulundurulmuştur. "
-        f"{original_description}"
-    )
 
     adapted_materials = original_materials[:]
     adapted_instructions = original_instructions[:]
     adapted_learning_goals = original_learning_goals[:]
+    adapted_duration = original_duration
+    adapted_group_size = original_group_size
 
     prompt_lower = adaptation_prompt.lower()
 
@@ -144,26 +174,42 @@ def adapt_activity_mock(payload: dict) -> dict:
             "Etkinlik sonunda kısa bir değerlendirme yapılır.",
         ]
 
-    if "15 dakika" in prompt_lower or "kısa" in prompt_lower:
-        original_duration = "15-30min"
+    if "5-15" in prompt_lower or "kısa" in prompt_lower or "15 dakikalık" in prompt_lower:
+        adapted_duration = "5-15min"
+    elif "15-30" in prompt_lower or "orta" in prompt_lower or "30 dakikalık" in prompt_lower:
+        adapted_duration = "15-30min"  
+    elif "30-45" in prompt_lower:
+        adapted_duration = "30-45min"
+    elif "45-60" in prompt_lower:
+        adapted_duration = "45-60min"
 
     if "bireysel" in prompt_lower:
-        original_group_size = "Individual"
+        adapted_group_size = "Individual"
     elif "küçük grup" in prompt_lower:
-        original_group_size = "Small Group"
+        adapted_group_size = "Small Group"
     elif "tüm sınıf" in prompt_lower or "whole class" in prompt_lower:
-        original_group_size = "Whole Class"
+        adapted_group_size = "Whole Class"
 
-    adapted_learning_goals = adapted_learning_goals[:]
     if "sadeleştir" in prompt_lower:
         adapted_learning_goals = adapted_learning_goals[:3]
+        if len(adapted_instructions) > 3:
+            adapted_instructions = adapted_instructions[:3]
+
+    if "1-20" in prompt_lower or "1 den 20" in prompt_lower or "1'den 20" in prompt_lower:
+        adapted_learning_goals = list(dict.fromkeys(adapted_learning_goals +["1-20 arası sayıları tanıma"]))
+
+    adapted_description = (
+        f"Bu etkinlik, '{adaptation_prompt}' isteği dikkate alınarak düzenlenmiştir. "
+        f"{raw_age_group} yaş grubu ve {display_style} öğretim yaklaşımı göz önünde bulundurulmuştur. "
+        f"{base_description}"
+    ).strip()
 
     return {
         "activity_draft": {
             "title": adapted_title,
             "subject": original_subject,
-            "duration": original_duration,
-            "groupSize": original_group_size,
+            "duration": adapted_duration,
+            "groupSize": adapted_group_size,
             "description": adapted_description,
             "materials": adapted_materials,
             "instructions": adapted_instructions,

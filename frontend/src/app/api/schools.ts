@@ -11,7 +11,7 @@ export async function getSchools(): Promise<School[]> {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to fetch schools');
+    throw new Error(data.error || 'Okullar yüklenemedi.');
   }
 
   return data.schools || [];
@@ -30,7 +30,7 @@ export async function createSchool(payload: {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to create school');
+    throw new Error(data.error || 'Okul oluşturulamadı.');
   }
 
   return data.school;
@@ -49,7 +49,7 @@ export async function updateSchool(
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to update school');
+    throw new Error(data.error || 'Okul güncellenemedi.');
   }
 
   return data.school;
@@ -64,6 +64,6 @@ export async function deleteSchool(schoolId: number): Promise<void> {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to delete school');
+    throw new Error(data.error || 'Okul silinemedi.');
   }
 }

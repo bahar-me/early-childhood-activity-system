@@ -18,11 +18,11 @@ export async function getActivities(): Promise<Activity[]> {
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to load activities');
+    throw new Error(data.error || 'Etkinlikler yüklenemedi.');
   }
 
   return data.activities;
@@ -42,7 +42,7 @@ export async function createActivity(payload: CreateActivityPayload): Promise<Ac
 
     if (response.status === 401) {
         clearAuthStorage();
-        throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yap.');
+        throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
     }
 
     if (!response.ok) {

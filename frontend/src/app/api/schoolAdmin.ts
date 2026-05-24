@@ -16,11 +16,11 @@ export async function getSchoolAdminOverview() {
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Your session has expired. Please log in again.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Failed to load school admin overview');
+    throw new Error(data.error || 'Okul yöneticisi genel bakışı yüklenemedi.');
   }
 
   return data;

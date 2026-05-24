@@ -8,6 +8,31 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
+import { toast } from 'sonner';
+
+async function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const result = reader.result;
+
+      if (typeof result !== 'string') {
+        reject(new Error('Blob verisi base64 formatına dönüştürülemedi.'));
+        return;
+      }
+
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+
+    reader.onerror = () => {
+      reject(new Error('Blob okunurken hata oluştu.'));
+    };
+
+    reader.readAsDataURL(blob);
+  });
+}
 
 interface ActivityReportProps {
   activities: Activity[];
@@ -37,21 +62,100 @@ export function ActivityReport({
   aiExplanation,
 }: ActivityReportProps) {
   const handlePrint = async () => {
-    // Web'de normal print dialogunu aç
-    if (!Capacitor.isNativePlatform()) {
-      window.print();
+    const element = document.getElementById('report-content');
+    console.log('Rapor HTML uzunluğu:', element.innerHTML.length);
+    
+    if (!element) {
+      toast.error('Rapor içeriği bulunamadı');
       return;
     }
 
-    const element = document.getElementById('report-content');
-    if (!element) {
-      alert('Rapor içeriği bulunamadı');
+    if (!Capacitor.isNativePlatform()) {
+      const html = `
+        <!DOCTYPE html>
+        <html lang="tr">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Etkinlik Raporu</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                padding: 24px;
+                color: #111827;
+                background: #ffffff;
+              }
+
+              h1, h2, h3, h4 {
+                margin-top: 0;
+              }
+
+              .activity-card {
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                padding: 16px;
+                margin-bottom: 16px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+              }
+
+              .badge-export {
+                display: inline-block;
+                border: 1px solid #d1d5db;
+                border-radius: 9999px;
+                padding: 4px 10px;
+                margin-right: 6px;
+                margin-bottom: 6px;
+                background: #f3f4f6;
+                color: #111827;
+                font-size: 12px;
+              }
+
+              .text-gray-500,
+              .text-gray-600,
+              .text-muted-foreground {
+                color: #4b5563 !important;
+              }
+
+              ul, ol {
+                padding-left: 20px;
+              }
+
+              @page {
+                margin: 18mm;
+              }
+            </style>
+          </head>
+          <body>
+            ${element.innerHTML}
+          </body>
+        </html>
+      `;
+
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+
+      const printWindow = window.open(url, '_blank', 'width=1000,height=1400');
+
+      if (!printWindow) {
+        URL.revokeObjectURL(url);
+        toast.error('Yazdırma penceresi açılamadı.');
+        return;
+      }
+
+      printWindow.onload = () => {
+        setTimeout(() => {
+          printWindow.focus();
+          printWindow.print();
+          printWindow.close();
+          URL.revokeObjectURL(url);
+        }, 500);
+      };
+
       return;
-    }
+    }   
 
     try {
-      element.classList.add('pdf-export-mode');
-
       const canvas = await html2canvas(element, { 
         scale: 2,
         useCORS: true,
@@ -59,47 +163,51 @@ export function ActivityReport({
       });
 
       const imgData = canvas.toDataURL('image/png');
-
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
 
-      const imgWidth = pageWidth;
+      const pageWidth = 210; // A4 sayfa genişliği mm cinsinden
+      const pageHeight = 297; // A4 sayfa yüksekliği mm cinsinden
+      const margin = 10; // Kenar boşluğu mm cinsinden
+      const usableWidth = pageWidth - margin * 2;
+      const usableHeight = pageHeight - margin * 2;
+      
+      const imgWidth = usableWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       let heightLeft = imgHeight;
-      let position = 0;
+      let position = margin;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+      heightLeft -= usableHeight;
 
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
+        position = heightLeft - imgHeight + margin;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+        heightLeft -= usableHeight;
       }
 
-      const base64PDF = pdf.output('datauristring').split(',')[1];
-      const fileName = `Activity_Report_${Date.now()}.pdf`;
+      const pdfBlob = pdf.output('blob');
+      const fileName = 'etkinlik-raporu.pdf';
 
-      const savedFile = await Filesystem.writeFile({
-        path: fileName,
-        data: base64PDF,
-        directory: Directory.Cache,
+      if (Capacitor.isNativePlatform()) {
+        const base64Data = await blobToBase64(pdfBlob);
+        const filePath = `documents/${fileName}`;
+          
+       await Filesystem.writeFile({
+        path: filePath,
+        data: base64Data,
+        directory: Directory.Documents,
         recursive: true,
       });
 
-      alert(`PDF şu konuma kaydedildi: ${savedFile.uri}`);
-
-    } catch (error) {
-      console.error('PDF export error:', error);
-      alert(`PDF oluşturulurken hata oluştu: ${String(error)}`);
+      toast.success('PDF başarıyla oluşturuldu.');
     }
-    finally {
-      element.classList.remove('pdf-export-mode');
-    }
-  };
+  } catch (error) {
+      console.error('PDF oluşturma hatası:', error);
+      toast.error('PDF oluşturulamadı.');
+  }
+};
 
   const translateSubject = (subject: string) => {
     const map: Record<string, string> = {
@@ -254,7 +362,7 @@ export function ActivityReport({
             <div className="space-y-4">
               <h3 className="font-semibold">Planlanan Etkinlikler</h3>
               {activities.map((activity, index) => (
-                <div key={activity.id} className="border rounded-lg p-4">
+                <div key={activity.id} className="activity-card border rounded-lg p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
                       <h4 className="font-semibold">
