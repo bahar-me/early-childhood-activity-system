@@ -1,5 +1,13 @@
 from typing import Dict, List, Any
+import os
+import json
+from click import prompt
+from google import genai
+from google.genai import types 
+#from openai import OpenAI
 
+#client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def translate_subject(subject: str) -> str:
     translations = {
@@ -216,4 +224,222 @@ def adapt_activity_mock(payload: dict) -> dict:
             "learningGoals": adapted_learning_goals,
         },
         "source": "mock_ai",
+    }
+
+# def adapt_activity_with_llm(payload: dict) -> dict:
+#     activity = payload.get("activity", {})
+#     teacher_profile = payload.get("teacher_profile", {})
+#     class_profile = payload.get("class_profile", {})
+#     adaptation_prompt = (payload.get("adaptation_prompt") or "").strip()
+
+#     if not activity:
+#         raise ValueError("Etkinlik verisi eksik.")
+#     if not adaptation_prompt:
+#         raise ValueError("Uyarlama isteği boş olamaz.")
+
+#     schema = {
+#         "type": "object",
+#         "properties": {
+#             "title": {"type": "string"},
+#             "subject": {
+#                 "type": "string",
+#                 "enum": [
+#                     "Math",
+#                     "Language",
+#                     "Art",
+#                     "Science",
+#                     "Music",
+#                     "Physical",
+#                     "Social-Emotional",
+#                 ],
+#             },
+#             "duration": {
+#                 "type": "string",
+#                 "enum": ["5-15min", "15-30min", "30-45min", "45-60min"],
+#             },
+#             "groupSize": {
+#                 "type": "string",
+#                 "enum": ["Individual", "Small Group", "Whole Class"],
+#             },
+#             "description": {"type": "string"},
+#             "materials": {
+#                 "type": "array",
+#                 "items": {"type": "string"},
+#             },
+#             "instructions": {
+#                 "type": "array",
+#                 "items": {"type": "string"},
+#             },
+#             "learningGoals": {
+#                 "type": "array",
+#                 "items": {"type": "string"},
+#             },
+#         },
+#         "required": [
+#             "title",
+#             "subject",
+#             "duration",
+#             "groupSize",
+#             "description",
+#             "materials",
+#             "instructions",
+#             "learningGoals",
+#         ],
+#         "additionalProperties": False,
+#     }
+
+#     prompt = f"""
+# Sen okul öncesi eğitim alanında uzman bir yardımcı asistansın.
+
+# Görev:
+# Verilen mevcut etkinliği, öğretmenin isteğine göre yeniden uyarlayacaksın.
+
+# Kurallar:
+# - Çıktıyı yalnızca verilen şemaya uygun JSON olarak üret.
+# - Dil: Türkçe
+# - subject yalnızca verilen enumlardan biri olsun.
+# - duration yalnızca verilen enumlardan biri olsun.
+# - groupSize yalnızca verilen enumlardan biri olsun.
+# - Etkinlik uygulanabilir, güvenli ve pedagojik olarak uygun olsun.
+# - Eski uyarlama açıklamalarını tekrar etme; temiz ve tek bir yeni açıklama yaz.
+
+# Öğretmen Profili:
+# {json.dumps(teacher_profile, ensure_ascii=False)}
+
+# Sınıf Profili:
+# {json.dumps(class_profile, ensure_ascii=False)}
+
+# Mevcut Etkinlik:
+# {json.dumps(activity, ensure_ascii=False)}
+
+# Öğretmenin Uyarlama İsteği:
+# {adaptation_prompt}
+# """.strip()
+
+#     response = client.responses.create(
+#         model="gpt-4.1-mini",
+#         input=prompt,
+#         text={
+#             "format": {
+#                 "type": "json_schema",
+#                 "name": "adapted_activity",
+#                 "schema": schema,
+#                 "strict": True,
+#             }
+#         },
+#     )
+
+#     raw_text = response.output_text
+#     draft = json.loads(raw_text)
+
+#     return {
+#         "activity_draft": draft,
+#         "source": "openai",
+#     }
+
+def adapt_activity_with_gemini(payload: dict) -> dict:
+    activity = payload.get("activity", {})
+    teacher_profile = payload.get("teacher_profile", {})
+    class_profile = payload.get("class_profile", {})
+    adaptation_prompt = (payload.get("adaptation_prompt") or "").strip()
+
+    if not activity:
+        raise ValueError("Etkinlik verisi eksik.")
+    if not adaptation_prompt:
+        raise ValueError("Uyarlama isteği boş olamaz.")
+
+    schema = {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string"},
+            "subject": {
+                "type": "string",
+                "enum": [
+                    "Math",
+                    "Language",
+                    "Art",
+                    "Science",
+                    "Music",
+                    "Physical",
+                    "Social-Emotional",
+                ],
+            },
+            "duration": {
+                "type": "string",
+                "enum": ["5-15min", "15-30min", "30-45min", "45-60min"],
+            },
+            "groupSize": {
+                "type": "string",
+                "enum": ["Individual", "Small Group", "Whole Class"],
+            },
+            "description": {"type": "string"},
+            "materials": {
+                "type": "array",
+                "items": {"type": "string"},
+            },
+            "instructions": {
+                "type": "array",
+                "items": {"type": "string"},
+            },
+            "learningGoals": {
+                "type": "array",
+                "items": {"type": "string"},
+            },
+        },
+        "required": [
+            "title",
+            "subject",
+            "duration",
+            "groupSize",
+            "description",
+            "materials",
+            "instructions",
+            "learningGoals",
+        ],
+    }
+
+    prompt = f"""
+Sen okul öncesi eğitim alanında uzman bir yardımcı asistansın.
+
+Görev:
+Verilen mevcut etkinliği, öğretmenin isteğine göre yeniden uyarlayacaksın.
+
+Kurallar:
+- Çıktıyı yalnızca verilen JSON şemasına uygun üret.
+- Dil Türkçe olsun.
+- subject yalnızca verilen enumlardan biri olsun.
+- duration yalnızca verilen enumlardan biri olsun.
+- groupSize yalnızca verilen enumlardan biri olsun.
+- Etkinlik uygulanabilir, güvenli ve pedagojik açıdan uygun olsun.
+- Önceki yapay uyarlama cümlelerini tekrar etme.
+- Açıklama doğal ve tek parça olsun.
+
+Öğretmen Profili:
+{json.dumps(teacher_profile, ensure_ascii=False)}
+
+Sınıf Profili:
+{json.dumps(class_profile, ensure_ascii=False)}
+
+Mevcut Etkinlik:
+{json.dumps(activity, ensure_ascii=False)}
+
+Öğretmenin Uyarlama İsteği:
+{adaptation_prompt}
+""".strip()
+
+    response = gemini_client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            response_mime_type="application/json",
+            response_schema=schema,
+        ),
+    )
+
+    raw_text = response.text
+    draft = json.loads(raw_text)
+
+    return {
+        "activity_draft": draft,
+        "source": "gemini",
     }

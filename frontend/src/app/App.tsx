@@ -42,7 +42,7 @@ export default function App() {
         await logoutRequest(refreshToken);
       }
     } catch (error) {
-      console.error('Logout request failed:', error);
+      console.error('Çıkış başarısız oldu:', error);
     } finally {
       setCurrentUser(null);
       clearAuthStorage();
