@@ -7,7 +7,11 @@ from google.genai import types
 #from openai import OpenAI
 
 #client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+def get_gemini_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY bulunamadı.")
+    return genai.Client(api_key=api_key)
 
 def translate_subject(subject: str) -> str:
     translations = {
@@ -426,6 +430,8 @@ Mevcut Etkinlik:
 Öğretmenin Uyarlama İsteği:
 {adaptation_prompt}
 """.strip()
+
+    gemini_client = get_gemini_client()
 
     response = gemini_client.models.generate_content(
         model="gemini-2.5-flash-lite",
