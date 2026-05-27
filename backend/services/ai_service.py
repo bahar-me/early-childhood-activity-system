@@ -1,7 +1,6 @@
 from typing import Dict, List, Any
 import os
 import json
-from click import prompt
 from google import genai
 from google.genai import types 
 #from openai import OpenAI
@@ -175,6 +174,14 @@ def adapt_activity_mock(payload: dict) -> dict:
     adapted_learning_goals = original_learning_goals[:]
     adapted_duration = original_duration
     adapted_group_size = original_group_size
+    adapted_assessment_questions = [
+        "Bu etkinlikte en çok hangi bölümü sevdin?",
+        "Hangi materyali ya da adımı hatırlıyorsun?",
+        "Bu etkinlikte neler öğrendin?"
+    ]
+    adapted_differentiation_notes = "Etkinlik, çocukların bireysel ihtiyaçlarına göre sadeleştirilebilir veya ek ipuçları ile desteklenebilir."
+    adapted_family_community_notes = "Ailelere, etkinliğin evde benzer materyallerle kısa bir tekrarının yapılması önerilebilir."
+    adapted_learning_outcomes_summary = "Çocukların temel öğrenme hedeflerini deneyimleyerek pekiştirmesi amaçlanmıştır."
 
     prompt_lower = adaptation_prompt.lower()
 
@@ -226,6 +233,10 @@ def adapt_activity_mock(payload: dict) -> dict:
             "materials": adapted_materials,
             "instructions": adapted_instructions,
             "learningGoals": adapted_learning_goals,
+            "assessmentQuestions": adapted_assessment_questions,
+            "differentiationNotes": adapted_differentiation_notes,
+            "familyCommunityNotes": adapted_family_community_notes,
+            "learningOutcomesSummary": adapted_learning_outcomes_summary,
         },
         "source": "mock_ai",
     }
@@ -389,6 +400,13 @@ def adapt_activity_with_gemini(payload: dict) -> dict:
                 "type": "array",
                 "items": {"type": "string"},
             },
+            "assessmentQuestions": {
+                "type": "array",
+                "items": {"type": "string"},
+            },
+            "differentiationNotes": {"type": "string"},
+            "familyCommunityNotes": {"type": "string"},
+            "learningOutcomesSummary": {"type": "string"},
         },
         "required": [
             "title",
@@ -399,6 +417,10 @@ def adapt_activity_with_gemini(payload: dict) -> dict:
             "materials",
             "instructions",
             "learningGoals",
+            "assessmentQuestions",
+            "differentiationNotes",
+            "familyCommunityNotes",
+            "learningOutcomesSummary",
         ],
     }
 
@@ -417,6 +439,10 @@ Kurallar:
 - Etkinlik uygulanabilir, güvenli ve pedagojik açıdan uygun olsun.
 - Önceki yapay uyarlama cümlelerini tekrar etme.
 - Açıklama doğal ve tek parça olsun.
+- assessmentQuestions alanında etkinlik sonrası kullanılabilecek 3 kısa değerlendirme sorusu üret.
+- differentiationNotes alanında kısa bir farklılaştırma önerisi yaz.
+- familyCommunityNotes alanında aile veya toplum katılımına yönelik kısa ve uygulanabilir bir öneri yaz.
+- learningOutcomesSummary alanında etkinliğin öğrenme çıktısını özetleyen kısa bir paragraf yaz.
 
 Öğretmen Profili:
 {json.dumps(teacher_profile, ensure_ascii=False)}

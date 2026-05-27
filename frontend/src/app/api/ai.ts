@@ -62,6 +62,10 @@ export interface AdaptActivityDraft {
     materials: string[];
     instructions: string[];
     learningGoals: string[];
+    assessmentQuestions?: string[];
+    differentiationNotes?: string;
+    familyCommunityNotes?: string;
+    learningOutcomesSummary?: string;
 }
 
 export interface AdaptActivityResponse {

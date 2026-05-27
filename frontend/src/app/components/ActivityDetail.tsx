@@ -120,6 +120,39 @@ export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: Act
                 ))}
               </ul>
             </div>
+
+            {activity.learningOutcomesSummary && (
+              <div>
+                <h3 className="font-semibold mb-2">Öğrenme Çıktısı Özeti</h3>
+                <p className="text-gray-600">{activity.learningOutcomesSummary}</p>
+              </div>
+            )}
+
+            {activity.assessmentQuestions && activity.assessmentQuestions.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-2">Değerlendirme Soruları</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                  {activity.assessmentQuestions.map((question, index) => (
+                    <li key={index}>{question}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {activity.differentiationNotes && (
+              <div>
+                <h3 className="font-semibold mb-2">Farklılaştırma</h3>
+                <p className="text-gray-600">{activity.differentiationNotes}</p>
+              </div>
+            )}
+
+            {activity.familyCommunityNotes && (
+              <div>
+                <h3 className="font-semibold mb-2">Aile / Toplum Katılımı</h3>
+                <p className="text-gray-600">{activity.familyCommunityNotes}</p>
+              </div>
+            )}
+
           </div>
         </ScrollArea>
 

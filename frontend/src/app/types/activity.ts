@@ -13,6 +13,11 @@ export interface Activity {
   instructions: string[];
   learningGoals: string[];
 
+  assessmentQuestions?: string[];
+  differentiationNotes?: string;
+  familyCommunityNotes?: string;
+  learningOutcomesSummary?: string;
+
   sourceType?: 'seed' | 'manual_edit' | 'llm_generated';
   parentActivityId?: string | null;
   createdByUserId?: string | null;

@@ -63,12 +63,13 @@ export function ActivityReport({
 }: ActivityReportProps) {
   const handlePrint = async () => {
     const element = document.getElementById('report-content');
-    console.log('Rapor HTML uzunluğu:', element.innerHTML.length);
     
     if (!element) {
       toast.error('Rapor içeriği bulunamadı');
       return;
     }
+
+    console.log('Rapor HTML uzunluğu:', element.innerHTML.length);
 
     if (!Capacitor.isNativePlatform()) {
       const html = `
@@ -414,6 +415,39 @@ export function ActivityReport({
                       ))}
                     </ol>
                   </div>
+
+                  {activity.learningOutcomesSummary && (
+                    <div className="mt-3">
+                      <p className="font-semibold mb-1 text-sm">Öğrenme Çıktısı Özeti:</p>
+                      <p className="text-sm text-gray-600">{activity.learningOutcomesSummary}</p>
+                    </div>
+                  )}
+
+                  {activity.assessmentQuestions && activity.assessmentQuestions.length > 0 && (
+                    <div className="mt-3">
+                      <p className="font-semibold mb-1 text-sm">Değerlendirme Soruları:</p>
+                      <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
+                        {activity.assessmentQuestions.map((question, i) => (
+                          <li key={i}>{question}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {activity.differentiationNotes && (
+                    <div className="mt-3">
+                      <p className="font-semibold mb-1 text-sm">Farklılaştırma:</p>
+                      <p className="text-sm text-gray-600">{activity.differentiationNotes}</p>
+                    </div>
+                  )}
+
+                  {activity.familyCommunityNotes && (
+                    <div className="mt-3">
+                      <p className="font-semibold mb-1 text-sm">Aile / Toplum Katılımı:</p>
+                      <p className="text-sm text-gray-600">{activity.familyCommunityNotes}</p>
+                    </div>
+                  )}
+
                 </div>
               ))}
             </div>

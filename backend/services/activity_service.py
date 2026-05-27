@@ -15,6 +15,12 @@ def serialize_activity(activity: Activity) -> dict:
         "materials": json.loads(activity.materials),
         "instructions": json.loads(activity.instructions),
         "learningGoals": json.loads(activity.learning_goals),
+
+        "assessmentQuestions": json.loads(activity.assessment_questions) if activity.assessment_questions else [],
+        "differentiationNotes": activity.differentiation_notes,
+        "familyCommunityNotes": activity.family_community_notes,
+        "learningOutcomesSummary": activity.learning_outcomes_summary,
+
         "sourceType": activity.source_type,
         "parentActivityId": str(activity.parent_activity_id) if activity.parent_activity_id else None,
         "createdByUserId": str(activity.created_by_user_id) if activity.created_by_user_id else None,
@@ -40,6 +46,12 @@ def create_activity(data: dict) -> dict:
         materials=json.dumps(data["materials"], ensure_ascii=False),
         instructions=json.dumps(data["instructions"], ensure_ascii=False),
         learning_goals=json.dumps(data["learningGoals"], ensure_ascii=False),
+        
+        assessment_questions=json.dumps(data.get("assessmentQuestions", []), ensure_ascii=False),
+        differentiation_notes=data.get("differentiationNotes"),
+        family_community_notes=data.get("familyCommunityNotes"),
+        learning_outcomes_summary=data.get("learningOutcomesSummary"),
+        
         source_type=data.get("sourceType", "manual_edit"),
         parent_activity_id=int(data["parentActivityId"]) if data.get("parentActivityId") else None,
         created_by_user_id=int(data["createdByUserId"]) if data.get("createdByUserId") else None,
