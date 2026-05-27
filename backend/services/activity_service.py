@@ -62,7 +62,7 @@ def create_activity(data: dict) -> dict:
     return serialize_activity(activity)
     
 def update_activity(activity_id: int, data: dict) -> dict:
-    activity = Activity.query.get(activity_id)
+    activity = db.session.get(Activity, activity_id)
     if not activity:
         raise ValueError("Etkinlik bulunamadı.")
 
