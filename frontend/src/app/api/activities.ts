@@ -51,3 +51,30 @@ export async function createActivity(payload: CreateActivityPayload): Promise<Ac
 
     return data.activity;
 }
+
+export async function updateActivity(
+  activityId: string,
+  payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>
+): Promise<Activity> {
+  const response = await fetch(`${API_BASE_URL}/api/activities/${activityId}`, {
+    method: 'PUT',
+    headers: {
+      ...getAuthHeaders(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Etkinlik güncellenemedi.');
+  }
+
+  return data.activity;
+}

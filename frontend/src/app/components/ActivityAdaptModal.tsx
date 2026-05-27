@@ -177,6 +177,38 @@ export function ActivityAdaptModal({
                 </ul>
               </div>
 
+              {draft.learningOutcomesSummary && (
+                <div>
+                  <p className="text-sm font-medium">Öğrenme Çıktısı Özeti</p>
+                  <p>{draft.learningOutcomesSummary}</p>
+                </div>
+              )}
+
+              {draft.assessmentQuestions && draft.assessmentQuestions.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium">Değerlendirme Soruları</p>
+                  <ul className="list-disc list-inside">
+                    {draft.assessmentQuestions.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {draft.differentiationNotes && (
+                <div>
+                  <p className="text-sm font-medium">Farklılaştırma</p>
+                  <p>{draft.differentiationNotes}</p>
+                </div>
+              )}
+
+              {draft.familyCommunityNotes && (
+                <div>
+                  <p className="text-sm font-medium">Aile / Toplum Katılımı</p>
+                  <p>{draft.familyCommunityNotes}</p>
+                </div>
+              )}
+
               <div className="flex justify-end gap-2 pt-2">
                 <Button 
                     variant="outline" 

@@ -7,7 +7,8 @@ interface ActivityEditModalProps {
   open: boolean;
   activity: Activity | null;
   onClose: () => void;
-  onSave: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => void;
+  onSaveAsNew: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => void;
+  onUpdate: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => void;
   isSaving?: boolean;
 }
 
@@ -15,7 +16,8 @@ export function ActivityEditModal({
   open,
   activity,
   onClose,
-  onSave,
+  onSaveAsNew,
+  onUpdate,
   isSaving = false,
 }: ActivityEditModalProps) {
   const [title, setTitle] = useState('');
@@ -26,6 +28,10 @@ export function ActivityEditModal({
   const [materialsText, setMaterialsText] = useState('');
   const [instructionsText, setInstructionsText] = useState('');
   const [learningGoalsText, setLearningGoalsText] = useState('');
+  const [assessmentQuestionsText, setAssessmentQuestionsText] = useState('');
+  const [differentiationNotes, setDifferentiationNotes] = useState('');
+  const [familyCommunityNotes, setFamilyCommunityNotes] = useState('');
+  const [learningOutcomesSummary, setLearningOutcomesSummary] = useState('');
 
   useEffect(() => {
     if (activity) {
@@ -37,6 +43,10 @@ export function ActivityEditModal({
       setMaterialsText(activity.materials.join('\n'));
       setInstructionsText(activity.instructions.join('\n'));
       setLearningGoalsText(activity.learningGoals.join('\n'));
+      setAssessmentQuestionsText((activity.assessmentQuestions || []).join('\n'));
+      setDifferentiationNotes(activity.differentiationNotes || '');
+      setFamilyCommunityNotes(activity.familyCommunityNotes || '');
+      setLearningOutcomesSummary(activity.learningOutcomesSummary || '');
     }
   }, [activity]);
 
@@ -74,7 +84,7 @@ export function ActivityEditModal({
     return map[groupSize] || groupSize;
   };
 
-  const handleSave = () => {
+  const buildPayload = () => {
     const payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'> = {
       title: title.trim(),
       subject,
@@ -93,20 +103,41 @@ export function ActivityEditModal({
         .split('\n')
         .map((item) => item.trim())
         .filter(Boolean),
+      assessmentQuestions: assessmentQuestionsText
+        .split('\n')
+        .map((item) => item.trim())
+        .filter(Boolean),
+      differentiationNotes: differentiationNotes.trim(),
+      familyCommunityNotes: familyCommunityNotes.trim(),
+      learningOutcomesSummary: learningOutcomesSummary.trim(),
     };
 
-    onSave(payload);
+    return payload;
+  };
+
+  const handleUpdate = () => {
+    const payload = buildPayload();
+    onUpdate(payload);
+  };
+
+  const handleSaveAsNew = () => {
+    const payload = buildPayload();
+    onSaveAsNew(payload);
   };
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg shadow-xl p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Etkinliği Düzenle</h2>
+          <h2 className="text-xl font-semibold">Etkinliği Düzenle / Yeni Kayıt Oluştur</h2>
           <Button variant="outline" onClick={onClose}>
             Kapat
           </Button>
         </div>
+
+        <p className="text-sm text-gray-500 mb-4">
+          Bu işlem mevcut etkinliği değiştirmez, yeni bir etkinlik kaydı oluşturur.
+        </p>
 
         <div className="space-y-4">
           <div>
@@ -199,15 +230,58 @@ export function ActivityEditModal({
               onChange={(e) => setLearningGoalsText(e.target.value)}
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Değerlendirme Soruları (her satıra bir soru)
+            </label>
+            <textarea
+              className="w-full border rounded-md px-3 py-2 min-h-[120px]"
+              value={assessmentQuestionsText}
+              onChange={(e) => setAssessmentQuestionsText(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Farklılaştırma</label>
+            <textarea
+              className="w-full border rounded-md px-3 py-2 min-h-[100px]"
+              value={differentiationNotes}
+              onChange={(e) => setDifferentiationNotes(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Aile / Toplum Katılımı</label>
+            <textarea
+              className="w-full border rounded-md px-3 py-2 min-h-[100px]"
+              value={familyCommunityNotes}
+              onChange={(e) => setFamilyCommunityNotes(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Öğrenme Çıktısı Özeti</label>
+            <textarea
+              className="w-full border rounded-md px-3 py-2 min-h-[100px]"
+              value={learningOutcomesSummary}
+              onChange={(e) => setLearningOutcomesSummary(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className="flex justify-end gap-2 mt-6">
           <Button variant="outline" onClick={onClose}>
             İptal
           </Button>
-          <Button onClick={handleSave} disabled={isSaving}>
+          
+          <Button variant="outline" onClick={handleUpdate} disabled={isSaving}>
+            {isSaving ? 'Kaydediliyor...' : 'Güncelle'}
+          </Button>
+
+          <Button onClick={handleSaveAsNew} disabled={isSaving}>
             {isSaving ? 'Kaydediliyor...' : 'Yeni Etkinlik Olarak Kaydet'}
           </Button>
+
         </div>
       </div>
     </div>

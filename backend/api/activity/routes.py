@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 
-from backend.services.activity_service import get_all_activities, create_activity
+from backend.services.activity_service import get_all_activities, create_activity, update_activity
 
 activity_bp = Blueprint("activity", __name__)
 
@@ -20,6 +20,19 @@ def create_activity_route():
     try:
         activity = create_activity(data)
         return jsonify({"activity": activity}), 201
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    except Exception as error:
+        return jsonify({"error": "Bilinmeyen bir hata oluştu"}), 500
+    
+@activity_bp.route("/<int:activity_id>", methods=["PUT"])
+@jwt_required()
+def update_activity_route(activity_id: int):
+    data = request.get_json() or {}
+
+    try:
+        activity = update_activity(activity_id, data)
+        return jsonify({"activity": activity}), 200
     except ValueError as error:
         return jsonify({"error": str(error)}), 400
     except Exception as error:

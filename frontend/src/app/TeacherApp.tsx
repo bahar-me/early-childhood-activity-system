@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Activity, Subject, Duration, GroupSize } from './types/activity';
 import { TeacherProfile, ClassProfile } from './types/profile';
 import { User } from './types/user';
-import { createActivity, getActivities, CreateActivityPayload } from './api/activities';
+import { createActivity, getActivities, CreateActivityPayload, updateActivity } from './api/activities';
 import { ActivityEditModal } from './components/ActivityEditModal';
 import { ActivityCard } from './components/ActivityCard';
 import { ActivityDetail } from './components/ActivityDetail';
@@ -157,6 +157,32 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
         onLogout();
       }
+    } finally {
+      setIsCreatingActivity(false);
+    }
+  };
+
+  const handleUpdateEditedActivity = async (
+    payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>
+  ) => {
+    if (!editingActivity) return;
+
+    try {
+      setIsCreatingActivity(true);
+
+      const updatedActivity = await updateActivity(editingActivity.id, payload);
+
+      setActivities((prev) =>
+        prev.map((item) => (item.id === updatedActivity.id ? updatedActivity : item))
+      );
+
+      toast.success('Etkinlik başarıyla güncellendi.');
+      setShowEditModal(false);
+      setEditingActivity(null);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Etkinlik güncellenemedi.';
+      toast.error(message);
     } finally {
       setIsCreatingActivity(false);
     }
@@ -880,13 +906,14 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
 
       {/* Edit/Create Activity Modal */}
       <ActivityEditModal
-        activity={editingActivity}
         open={showEditModal}
+        activity={editingActivity}
         onClose={() => {
           setShowEditModal(false);
           setEditingActivity(null);
         }}
-        onSave={handleCreateEditedActivity}
+        onSaveAsNew={handleCreateEditedActivity}
+        onUpdate={handleUpdateEditedActivity}
         isSaving={isCreatingActivity}
       />
 

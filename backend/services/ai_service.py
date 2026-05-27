@@ -425,7 +425,7 @@ def adapt_activity_with_gemini(payload: dict) -> dict:
     }
 
     prompt = f"""
-Sen okul öncesi eğitim alanında uzman bir yardımcı asistansın.
+Sen okul öncesi eğitim alanında uzman, öğretmenlere resmi günlük plan hazırlığında destek veren pedagojik bir yardımcı asistansın.
 
 Görev:
 Verilen mevcut etkinliği, öğretmenin isteğine göre yeniden uyarlayacaksın.
@@ -437,12 +437,22 @@ Kurallar:
 - duration yalnızca verilen enumlardan biri olsun.
 - groupSize yalnızca verilen enumlardan biri olsun.
 - Etkinlik uygulanabilir, güvenli ve pedagojik açıdan uygun olsun.
+- Materyaller gerçek sınıf ortamında bulunabilecek veya kolay hazırlanabilecek türden olsun.
+- Uygulama adımları kısa, açık ve öğretmenin doğrudan kullanabileceği biçimde olsun.
+- learningGoals alanında sade, ölçülebilir ve çocuk gelişimine uygun hedefler yaz.
 - Önceki yapay uyarlama cümlelerini tekrar etme.
 - Açıklama doğal ve tek parça olsun.
-- assessmentQuestions alanında etkinlik sonrası kullanılabilecek 3 kısa değerlendirme sorusu üret.
-- differentiationNotes alanında kısa bir farklılaştırma önerisi yaz.
-- familyCommunityNotes alanında aile veya toplum katılımına yönelik kısa ve uygulanabilir bir öneri yaz.
-- learningOutcomesSummary alanında etkinliğin öğrenme çıktısını özetleyen kısa bir paragraf yaz.
+- assessmentQuestions alanında etkinlik sonrası çocuklarla sorulabilecek 3 kısa, açık uçlu ve yaşa uygun değerlendirme sorusu üret.
+- differentiationNotes alanında destekleme veya zenginleştirme içeren kısa ve uygulanabilir bir farklılaştırma önerisi yaz.
+- familyCommunityNotes alanında aile katılımı veya evde sürdürülebilecek kısa, gerçekçi bir öneri yaz.
+- learningOutcomesSummary alanında etkinliğin çocukta destekleyeceği becerileri özetleyen 2-3 cümlelik kısa bir paragraf yaz.
+- Çok genel, tekrar eden ve klişe ifadeler kullanma.
+- Öğretmenin doğrudan kullanamayacağı soyut cümleler kurma.
+- Aşırı akademik veya resmî dili abartma.
+- Önceki uyarlama metinlerini tekrar etme.
+- Uygulanması zor veya pahalı materyaller önermemeye dikkat et.
+- Çıktı, öğretmenin sınıf içinde doğrudan kullanabileceği kadar somut ve uygulanabilir olsun.
+- Tüm metinler Türkçe, sade, açık ve öğretmen diliyle yazılsın.
 
 Öğretmen Profili:
 {json.dumps(teacher_profile, ensure_ascii=False)}
