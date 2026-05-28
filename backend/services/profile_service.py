@@ -1,6 +1,5 @@
 import json
-import profile
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from backend.extensions import db
 from backend.models import TeacherProfile, ClassProfile, User

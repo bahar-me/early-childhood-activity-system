@@ -135,10 +135,6 @@ export function ActivityEditModal({
           </Button>
         </div>
 
-        <p className="text-sm text-gray-500 mb-4">
-          Bu işlem mevcut etkinliği değiştirmez, yeni bir etkinlik kaydı oluşturur.
-        </p>
-
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Başlık</label>

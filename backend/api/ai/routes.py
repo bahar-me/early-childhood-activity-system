@@ -5,7 +5,7 @@ import os
 from backend.services.ai_service import (
     generate_recommendation_explanation, 
     adapt_activity_mock, 
-    adapt_activity_with_gemini,  #adapt_activity_with_llm
+    adapt_activity_with_gemini,  
 )
 
 from backend.utils.auth_middleware import roles_required
@@ -33,25 +33,14 @@ def adapt_activity():
     data = request.get_json() or {}
 
     try:
-#         if os.getenv("OPENAI_API_KEY"):
           if os.getenv("GEMINI_API_KEY"):  
             try:
                 result = adapt_activity_with_gemini(data)
-                print("Adapt source:", result.get("source"))
                 return jsonify(result), 200
             except Exception as gemini_error:
                 print(f"Gemini adapt hatası, mock fallback kullanılacak: {gemini_error}")
 
-#                 result = adapt_activity_with_llm(data)
-#                 print("Adapt source:", result.get("source"))
-#                 print("LLM draft title:", result.get("activity_draft", {}).get("title"))
-#                 return jsonify(result), 200
-#             except Exception as llm_error:
-#                 print(f"LLM adapt hatası, mock fallback kullanılacak: {llm_error}")
-
-
           result = adapt_activity_mock(data)
-          print("Adapt source:", result.get("source"))
           return jsonify(result), 200
     
     except ValueError as error:

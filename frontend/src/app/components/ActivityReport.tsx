@@ -69,8 +69,6 @@ export function ActivityReport({
       return;
     }
 
-    console.log('Rapor HTML uzunluğu:', element.innerHTML.length);
-
     if (!Capacitor.isNativePlatform()) {
       const html = `
         <!DOCTYPE html>

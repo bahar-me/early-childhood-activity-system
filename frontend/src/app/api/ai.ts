@@ -1,6 +1,6 @@
 import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
-import { Activity, Subject, Duration, GroupSize } from '../types/activity'; 
+import { Subject, Duration, GroupSize } from '../types/activity'; 
 
 export interface AIRecommendationExplanationRequest {
   teacher_profile: unknown;
