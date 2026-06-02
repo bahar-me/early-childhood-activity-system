@@ -7,7 +7,7 @@ class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     address = db.Column(db.String(255), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda:datetime.now(timezone.utc))
 
     users = db.relationship("User", back_populates="school", lazy=True, cascade="all, delete")    
 

@@ -9,21 +9,29 @@ class TeacherProfile(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey("schools.id"), nullable=False)
 
+    school = db.relationship("School", backref="teacher_profiles", lazy=True)
+
     name = db.Column(db.String(150), nullable=False)
     years_experience = db.Column(db.Integer, nullable=False, default=0)
     specializations = db.Column(db.Text, nullable=True)  # JSON string
     teaching_style = db.Column(db.String(150), nullable=True)
 
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     def to_dict(self):
         import json
+
+        try:
+            specializations = json.loads(self.specializations) if self.specializations else []
+        except (json.JSONDecodeError, TypeError):
+            specializations = []
 
         return {
             "id": self.id,
             "user_id": self.user_id,
             "school_id": self.school_id,
+            "school_name": self.school.name if self.school else None,
             "name": self.name,
             "years_experience": self.years_experience,
             "specializations": json.loads(self.specializations) if self.specializations else [],

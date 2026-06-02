@@ -11,12 +11,14 @@ import { User } from 'lucide-react';
 interface TeacherProfileFormProps {
   onSubmit: (profile: TeacherProfile) => void;
   initialData?: TeacherProfile;
+  schools: { id: number; name: string }[];
 }
 
-export function TeacherProfileForm({ onSubmit, initialData }: TeacherProfileFormProps) {
+export function TeacherProfileForm({ onSubmit, initialData, schools }: TeacherProfileFormProps) {
   const [formData, setFormData] = useState<TeacherProfile>(
-    initialData || {
+    initialData ?? {
       name: '',
+      schoolId: null,
       schoolName: '',
       yearsExperience: '',
       specializations: [],
@@ -68,50 +70,68 @@ export function TeacherProfileForm({ onSubmit, initialData }: TeacherProfileForm
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Ms. Sarah Johnson"
+              placeholder="Ms. Ayşe Yılmaz"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="schoolName">School Name *</Label>
-            <Input
-              id="schoolName"
-              value={formData.schoolName}
-              onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
-              placeholder="Sunshine Elementary School"
+            <Label htmlFor="school">Okul *</Label>
+            <select
+              id="school"
+              className="w-full border rounded-md px-3 py-2"
+              value={formData.schoolId ?? ''}
+              onChange={(e) => {
+                const selectedId = e.target.value ? Number(e.target.value) : null;
+                const selectedSchool = schools.find((school) => school.id === selectedId);
+
+                setFormData({
+                  ...formData,
+                  schoolId: selectedId,
+                  schoolName: selectedSchool?.name || '',
+                });
+              }}
               required
-            />
+            >
+              <option value="">Okul seçin</option>
+              {schools.map((school) => (
+                <option key={school.id} value={school.id}>
+                  {school.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="space-y-2">
-            <Label>Years of Teaching Experience *</Label>
+            <Label>Deneyim yılı *</Label>
             <RadioGroup
-              value={formData.yearsExperience}
-              onValueChange={(value) => setFormData({ ...formData, yearsExperience: value })}
+              value={String(formData.yearsExperience ?? '')}
+              onValueChange={(value) =>
+                setFormData({ ...formData, yearsExperience: Number(value) })
+              }
               required
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="0-2" id="exp1" />
-                <Label htmlFor="exp1">0-2 years (New Teacher)</Label>
+                <RadioGroupItem value="1" id="exp1" />
+                <Label htmlFor="exp1">0-2 yıl</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="3-5" id="exp2" />
-                <Label htmlFor="exp2">3-5 years</Label>
+                <RadioGroupItem value="4" id="exp2" />
+                <Label htmlFor="exp2">3-5 yıl</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="6-10" id="exp3" />
-                <Label htmlFor="exp3">6-10 years</Label>
+                <RadioGroupItem value="8" id="exp3" />
+                <Label htmlFor="exp3">6-10 yıl</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="10+" id="exp4" />
-                <Label htmlFor="exp4">10+ years (Experienced)</Label>
+                <RadioGroupItem value="10" id="exp4" />
+                <Label htmlFor="exp4">10+ yıl</Label>
               </div>
             </RadioGroup>
           </div>
 
           <div className="space-y-2">
-            <Label>Areas of Specialization</Label>
+            <Label>Alanları *</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {specializationOptions.map((spec) => (
                 <div key={spec} className="flex items-center gap-2">
@@ -129,7 +149,7 @@ export function TeacherProfileForm({ onSubmit, initialData }: TeacherProfileForm
           </div>
 
           <div className="space-y-2">
-            <Label>Teaching Style *</Label>
+            <Label>Öğretim Stili *</Label>
             <RadioGroup
               value={formData.teachingStyle}
               onValueChange={(value) => setFormData({ ...formData, teachingStyle: value })}
@@ -137,21 +157,21 @@ export function TeacherProfileForm({ onSubmit, initialData }: TeacherProfileForm
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="structured" id="style1" />
-                <Label htmlFor="style1">Structured & Guided</Label>
+                <Label htmlFor="style1">Yapılandırılmış ve Rehberli</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="balanced" id="style2" />
-                <Label htmlFor="style2">Balanced Mix</Label>
+                <Label htmlFor="style2">Dengeli Karışım</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="exploratory" id="style3" />
-                <Label htmlFor="style3">Exploratory & Child-Led</Label>
+                <Label htmlFor="style3">Keşfetme ve Çocuk-Merkezli</Label>
               </div>
             </RadioGroup>
           </div>
 
           <Button type="submit" className="w-full" size="lg">
-            Continue to Class Profile
+            Sınıf Profiline Geç
           </Button>
         </form>
       </CardContent>

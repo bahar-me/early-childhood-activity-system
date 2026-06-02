@@ -22,7 +22,7 @@ def register_route():
 
     if result["success"]:
         return jsonify({
-            "message": "User registered successfully",
+            "message": "Kullanıcı başarıyla oluşturuldu",
             "user": result["user"]
         }), 201
 
@@ -39,7 +39,7 @@ def login_route():
 
     if result["success"]:
         return jsonify({
-            "message": "Login successful",
+            "message": "Giriş başarılı",
             "access_token": result["access_token"],
             "refresh_token": result["refresh_token"],
             "user": result["user"]

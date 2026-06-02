@@ -7,8 +7,8 @@ interface ActivityEditModalProps {
   open: boolean;
   activity: Activity | null;
   onClose: () => void;
-  onSaveAsNew: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => void;
-  onUpdate: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => void;
+  onSaveAsNew: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => Promise<void> | void;
+  onUpdate: (payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>) => Promise<void> | void;
   isSaving?: boolean;
 }
 
@@ -48,7 +48,22 @@ export function ActivityEditModal({
       setFamilyCommunityNotes(activity.familyCommunityNotes || '');
       setLearningOutcomesSummary(activity.learningOutcomesSummary || '');
     }
-  }, [activity]);
+
+    if (!open) {
+      setTitle('');
+      setSubject('Math');
+      setDuration('15-30min');
+      setGroupSize('Small Group');
+      setDescription('');
+      setMaterialsText('');
+      setInstructionsText('');
+      setLearningGoalsText('');
+      setAssessmentQuestionsText('');
+      setDifferentiationNotes('');
+      setFamilyCommunityNotes('');
+      setLearningOutcomesSummary('');
+    }
+  }, [open, activity]);
 
   if (!open || !activity) return null;
 

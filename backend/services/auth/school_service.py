@@ -6,7 +6,7 @@ from backend.models import School
 
 def create_school(name: str, address: Optional[str] = None) -> Dict[str, Any]:
     if not name:
-        return {"success": False, "error": "School name is required"}
+        return {"success": False, "error": "Okul adı gereklidir"}
 
     school = School(name=name, address=address)
     db.session.add(school)
@@ -15,7 +15,7 @@ def create_school(name: str, address: Optional[str] = None) -> Dict[str, Any]:
     return {"success": True, "school": school.to_dict()}
 
 def get_all_schools() -> Dict[str, Any]:
-    schools = School.query.order_by(School.id.asc()).all()
+    schools = db.session.query(School).order_by(School.id.asc()).all()
     return {
         "success": True, 
         "schools": [school.to_dict() for school in schools]
@@ -24,14 +24,14 @@ def get_all_schools() -> Dict[str, Any]:
 def get_school_by_id(school_id: int) -> Dict[str, Any]:
     school = db.session.get(School, school_id)
     if not school:
-        return {"success": False, "error": "School not found"}
+        return {"success": False, "error": "Okul bulunamadı"}
     
     return {"success": True, "school": school.to_dict()}
 
 def update_school(school_id: int, name: Optional[str], address: Optional[str] = None) -> Dict[str, Any]:
     school = db.session.get(School, school_id)
     if not school:
-        return {"success": False, "error": "School not found"}
+        return {"success": False, "error": "Okul bulunamadı"}
 
     if name is not None and name.strip():
         school.name = name.strip()
@@ -47,9 +47,9 @@ def update_school(school_id: int, name: Optional[str], address: Optional[str] = 
 def delete_school(school_id: int) -> Dict[str, Any]:
     school = db.session.get(School, school_id)
     if not school:
-        return {"success": False, "error": "School not found"}
+        return {"success": False, "error": "Okul bulunamadı"}
 
     db.session.delete(school)
     db.session.commit()
 
-    return {"success": True, "message": "School deleted successfully"}
+    return {"success": True, "message": "Okul başarıyla silindi"}

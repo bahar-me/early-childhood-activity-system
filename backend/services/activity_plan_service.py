@@ -23,7 +23,7 @@ def create_activity_plan(user_id: int, payload: Dict[str, Any]) -> Dict[str, Any
     plan = ActivityPlan(
         teacher_id=teacher.id,
         class_id=class_profile.id,
-        school_id=teacher.school_id,
+        school_id=class_profile.school_id,
         activity_ids=json.dumps(activity_ids),
         notes=notes,
     )

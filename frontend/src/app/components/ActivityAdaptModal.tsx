@@ -60,6 +60,8 @@ export function ActivityAdaptModal({
         teacher_profile: teacherProfile
           ? {
               name: teacherProfile.name,
+              school_id: teacherProfile.schoolId,
+              school_name: teacherProfile.schoolName,
               years_experience: teacherProfile.yearsExperience,
               specializations: teacherProfile.specializations,
               teaching_style: teacherProfile.teachingStyle,

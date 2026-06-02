@@ -11,13 +11,13 @@ def seed_data():
     with app.app_context():
         db.create_all()
 
-        school = School.query.filter_by(name="Test School").first()
+        school = db.session.query(School).filter_by(name="Test School").first()
         if not school:
             school = School(name="Test School", address="Istanbul")
             db.session.add(school)
             db.session.commit()
 
-        admin = User.query.filter_by(email="admin@test.com").first()
+        admin = db.session.query(User).filter_by(email="admin@test.com").first()
         if not admin:
             admin = User(
                 email="admin@test.com",
@@ -27,7 +27,7 @@ def seed_data():
             )
             db.session.add(admin)
 
-        teacher = User.query.filter_by(email="teacher@test.com").first()
+        teacher = db.session.query(User).filter_by(email="teacher@test.com").first()
         if not teacher:
             teacher = User(
                 email="teacher@test.com",
@@ -37,7 +37,7 @@ def seed_data():
             )
             db.session.add(teacher)
 
-        school_admin = User.query.filter_by(email="schooladmin@test.com").first()
+        school_admin = db.session.query(User).filter_by(email="schooladmin@test.com").first()
         if not school_admin:
             school_admin = User(
                 email="schooladmin@test.com",
@@ -48,7 +48,7 @@ def seed_data():
             db.session.add(school_admin)
 
         db.session.commit()
-        print("Database seeded successfully.")
+        print("Veri tabanı başarıyla dolduruldu.")
 
 
 if __name__ == "__main__":

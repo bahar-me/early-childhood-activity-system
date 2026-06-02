@@ -24,7 +24,7 @@ def explain_recommendations_route():
     if result.get("success"):
         return jsonify(result), 200
 
-    return jsonify({"error": result.get("error", "AI explanation failed")}), 400
+    return jsonify({"error": result.get("error", "YZ Açıklaması oluşturulamadı")}), 400
 
 @ai_bp.route("/adapt-activity", methods=["POST"])
 @jwt_required()

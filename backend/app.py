@@ -1,16 +1,18 @@
 import os
+
 from flask import Flask, jsonify
 from flask_cors import CORS
+
 from backend.config import config_by_name
 from backend.extensions import db, migrate, jwt
 
-from backend.api.auth.routes import auth_bp # Import the auth blueprint
-from backend.api.school.routes import school_bp # Import the school blueprint
-from backend.api.profile.routes import profile_bp # Import the profile blueprint
-from backend.api.activity_plan.routes import activity_plan_bp # Import the activity plan blueprint
-from backend.api.school_admin.routes import school_admin_bp # Import the school admin blueprint
-from backend.api.ai.routes import ai_bp # Import the AI blueprint
-from backend.api.activity.routes import activity_bp # Import the activity blueprint 
+from backend.api.auth.routes import auth_bp 
+from backend.api.school.routes import school_bp 
+from backend.api.profile.routes import profile_bp 
+from backend.api.activity_plan.routes import activity_plan_bp 
+from backend.api.school_admin.routes import school_admin_bp 
+from backend.api.ai.routes import ai_bp 
+from backend.api.activity.routes import activity_bp 
 
 def create_app(config_name="development"):
     if config_name is None:
@@ -24,7 +26,15 @@ def create_app(config_name="development"):
     jwt.init_app(app)
 
     # Import models to ensure they are registered with SQLAlchemy
-    from backend.models import School, User, RefreshToken # noqa: F401
+    from backend.models import (
+        School, 
+        User, 
+        RefreshToken,
+        TeacherProfile,
+        ClassProfile,
+        ActivityPlan,
+        Activity,
+    ) # noqa: F401
 
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(school_bp, url_prefix="/api/schools")
@@ -33,17 +43,18 @@ def create_app(config_name="development"):
     app.register_blueprint(school_admin_bp, url_prefix="/api/school-admin")
     app.register_blueprint(ai_bp, url_prefix="/api/ai")
     app.register_blueprint(activity_bp, url_prefix="/api/activities")
+    
     @app.route("/health", methods=["GET"])
     def health():
-        return jsonify({"status": "ok", "message": "Backend is running"}), 200
+        return jsonify({"status": "ok", "message": "Backend çalışıyor"}), 200
 
     @app.errorhandler(404)
     def not_found(_e):
-        return jsonify({"error": "Not found"}), 404
+        return jsonify({"error": "Veri bulunamadı"}), 404
     
     @app.errorhandler(500)
     def internal_error(_e):
-        return jsonify({"error": "Internal server error"}), 500
+        return jsonify({"error": "Server hatası"}), 500
     
     CORS(app, 
          resources={

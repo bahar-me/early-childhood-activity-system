@@ -17,7 +17,7 @@ interface ClassProfileFormProps {
 
 export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfileFormProps) {
   const [formData, setFormData] = useState<ClassProfile>(
-    initialData || {
+    initialData ?? {
       className: '',
       ageGroup: '',
       classSize: 20,
@@ -81,10 +81,10 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
       <CardHeader>
         <div className="flex items-center gap-2">
           <Users className="h-6 w-6 text-purple-600" />
-          <CardTitle>Class Profile</CardTitle>
+          <CardTitle>Sınıf Profili</CardTitle>
         </div>
         <CardDescription>
-          Provide details about your class for tailored activity suggestions
+          Sınıfınız hakkında bize bilgi verin, böylece kişiselleştirilmiş etkinlik önerileri sunabilelim
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -101,7 +101,7 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
           </div>
 
           <div className="space-y-2">
-            <Label>Age Group *</Label>
+            <Label>Yaş Grubu *</Label>
             <RadioGroup
               value={formData.ageGroup}
               onValueChange={(value) => setFormData({ ...formData, ageGroup: value })}
@@ -109,33 +109,33 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="4-5" id="age1" />
-                <Label htmlFor="age1">4-5 years (Pre-K)</Label>
+                <Label htmlFor="age1">4-5 yıl (Okul Öncesi)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5-6" id="age2" />
-                <Label htmlFor="age2">5-6 years (Kindergarten)</Label>
+                <Label htmlFor="age2">5-6 yıl (Anaokulu)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="6-7" id="age3" />
-                <Label htmlFor="age3">6-7 years (Transitional K/1st)</Label>
+                <Label htmlFor="age3">6-7 yıl (Geçiş K/1. Sınıf)</Label>
               </div>
             </RadioGroup>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="classSize">Class Size: {formData.classSize} students</Label>
+            <Label htmlFor="classSize">Sınıf Boyutu: {formData.classSize} öğrenci</Label>
             <Slider
               id="classSize"
               min={5}
               max={35}
               step={1}
               value={[formData.classSize]}
-              onValueChange={(value) => setFormData({ ...formData, classSize: value[0] })}
+              onValueChange={(value) => setFormData({ ...formData, classSize: value[0] ?? formData.classSize })}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Special Needs or Considerations</Label>
+            <Label>Özel İhtiyaçlar veya Dikkat Edilmesi Gerekenler</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {specialNeedsOptions.map((need) => (
                 <div key={need} className="flex items-center gap-2">
@@ -153,7 +153,7 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
           </div>
 
           <div className="space-y-2">
-            <Label>Primary Learning Focus Areas</Label>
+            <Label>Öğrenme Odak Noktaları</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {learningFocusOptions.map((focus) => (
                 <div key={focus} className="flex items-center gap-2">
@@ -171,7 +171,7 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
           </div>
 
           <div className="space-y-2">
-            <Label>Available Resources</Label>
+            <Label>Mevcut Kaynaklar</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {resourceOptions.map((resource) => (
                 <div key={resource} className="flex items-center gap-2">
@@ -189,10 +189,10 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
           </div>
 
           <div className="space-y-4">
-            <Label>Daily Activity Schedule</Label>
+            <Label>Günlük Etkinlik Programı</Label>
             <div className="space-y-2">
               <Label htmlFor="morning">
-                Morning Activities: {formData.dailySchedule.morningActivities} minutes
+                Sabah Etkinlikleri: {formData.dailySchedule.morningActivities} dakika
               </Label>
               <Slider
                 id="morning"
@@ -203,14 +203,14 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
                 onValueChange={(value) =>
                   setFormData({
                     ...formData,
-                    dailySchedule: { ...formData.dailySchedule, morningActivities: value[0] },
+                    dailySchedule: { ...formData.dailySchedule, morningActivities: value[0] ?? formData.dailySchedule.morningActivities },
                   })
                 }
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="afternoon">
-                Afternoon Activities: {formData.dailySchedule.afternoonActivities} minutes
+                Öğleden Sonra Etkinlikleri: {formData.dailySchedule.afternoonActivities} dakika
               </Label>
               <Slider
                 id="afternoon"
@@ -221,7 +221,7 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
                 onValueChange={(value) =>
                   setFormData({
                     ...formData,
-                    dailySchedule: { ...formData.dailySchedule, afternoonActivities: value[0] },
+                    dailySchedule: { ...formData.dailySchedule, afternoonActivities: value[0] ?? formData.dailySchedule.afternoonActivities },
                   })
                 }
               />
@@ -230,10 +230,10 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
 
           <div className="flex gap-3">
             <Button type="button" variant="outline" onClick={onBack} className="flex-1">
-              Back
+              Geri
             </Button>
             <Button type="submit" className="flex-1" size="lg">
-              Start Using App
+              Uygulamayı Kullanmaya Başla
             </Button>
           </div>
         </form>

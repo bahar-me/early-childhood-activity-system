@@ -3,6 +3,14 @@ import json
 from backend.extensions import db
 from backend.models.activity import Activity
 
+def safe_json_loads(value: str | None, default):
+    if not value:
+        return default
+
+    try:
+        return json.loads(value)
+    except (json.JSONDecodeError, TypeError):
+        return default
 
 def serialize_activity(activity: Activity) -> dict:
     return {
@@ -12,11 +20,11 @@ def serialize_activity(activity: Activity) -> dict:
         "duration": activity.duration,
         "groupSize": activity.group_size,
         "description": activity.description,
-        "materials": json.loads(activity.materials),
-        "instructions": json.loads(activity.instructions),
-        "learningGoals": json.loads(activity.learning_goals),
+        "materials": safe_json_loads(activity.materials, []),
+        "instructions": safe_json_loads(activity.instructions, []),
+        "learningGoals": safe_json_loads(activity.learning_goals, []),
 
-        "assessmentQuestions": json.loads(activity.assessment_questions) if activity.assessment_questions else [],
+        "assessmentQuestions": safe_json_loads(activity.assessment_questions, []),
         "differentiationNotes": activity.differentiation_notes,
         "familyCommunityNotes": activity.family_community_notes,
         "learningOutcomesSummary": activity.learning_outcomes_summary,

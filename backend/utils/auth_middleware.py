@@ -15,7 +15,7 @@ def roles_required(*allowed_roles):
                 return func(*args, **kwargs)
             
             if user_role not in allowed_roles:
-                return jsonify({"error": "Access forbidden"}), 403
+                return jsonify({"error": "Bu işlemi yapma yetkiniz yok"}), 403
 
             return func(*args, **kwargs)
         

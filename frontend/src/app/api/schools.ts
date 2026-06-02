@@ -1,6 +1,11 @@
 import { School } from '../types/school';
-
+import { clearAuthStorage } from './authStorage';
 import { API_BASE_URL, getAuthHeaders } from './base';
+
+async function parseJSONSafely(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
 
 export async function getSchools(): Promise<School[]> {
   const response = await fetch(`${API_BASE_URL}/api/schools/`, {
@@ -8,7 +13,7 @@ export async function getSchools(): Promise<School[]> {
     headers: getAuthHeaders(),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Okullar yüklenemedi.');
@@ -27,7 +32,7 @@ export async function createSchool(payload: {
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Okul oluşturulamadı.');
@@ -46,7 +51,7 @@ export async function updateSchool(
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Okul güncellenemedi.');
@@ -61,7 +66,12 @@ export async function deleteSchool(schoolId: number): Promise<void> {
     headers: getAuthHeaders(),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
+
+  if (response.status === 401) {
+      clearAuthStorage();
+      throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
+    }
 
   if (!response.ok) {
     throw new Error(data.error || 'Okul silinemedi.');

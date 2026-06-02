@@ -18,6 +18,8 @@ import { WandSparkles, Heart, FileText, Settings, CheckSquare, LogOut } from 'lu
 import { toast } from 'sonner';
 import { explainRecommendations, AIRecommendationExplanationResponse, AdaptActivityDraft } from './api/ai';
 import { ActivityAdaptModal } from './components/ActivityAdaptModal';
+import { getSchools } from './api/schools';
+import { School } from './types/school';
 
 type SetupStep = 'teacher' | 'class' | 'complete';
 
@@ -30,6 +32,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [setupStep, setSetupStep] = useState<SetupStep>('teacher');
   const [teacherProfile, setTeacherProfile] = useState<TeacherProfile | null>(null);
   const [classProfile, setClassProfile] = useState<ClassProfile | null>(null);
+  const [schools, setSchools] = useState<School[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loadingActivities, setLoadingActivities] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -46,7 +49,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'selected'>('all');
   const [showReport, setShowReport] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
-
   const [aiExplanation, setAIExplanation] = useState<AIRecommendationExplanationResponse | null>(null);
   const [isGeneratingAIExplanation, setIsGeneratingAIExplanation] = useState(false);
 
@@ -54,19 +56,36 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   useEffect(() => {
   const savedFavorites = localStorage.getItem(`favorites-${user.id}`);
 
-  const loadProfiles = async () => {
+  const loadInitialData = async () => {
+    let schoolList: School[] = [];
+
+    try {
+      schoolList = await getSchools();
+      setSchools(schoolList);
+    } catch (error) {
+      console.error('Okul verileri yüklenemedi:', error);
+    }
+
     try {
       const teacher = await getTeacherProfile();
+
+      const resolvedSchoolName = 
+        teacher.school_name ||
+        schoolList.find((school) => school.id === teacher.school_id)?.name ||
+        '';
+
       setTeacherProfile({
         name: teacher.name,
-        schoolName: '',
-        yearsExperience: String(teacher.years_experience),
+        schoolId: teacher.school_id ?? null,
+        schoolName: resolvedSchoolName,
+        yearsExperience: teacher.years_experience ?? '',
         specializations: teacher.specializations || [],
-        teachingStyle: teacher.teaching_style || '',
+        teachingStyle: teacher.teaching_style || '',        
       });
 
       try {
         const classData = await getClassProfile();
+
         setClassProfile({
           className: classData.class_name,
           ageGroup: classData.age_group,
@@ -75,10 +94,11 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           availableResources: classData.available_resources || [],
           specialNeeds: classData.special_needs || [],
           dailySchedule: {
-            morningActivities: 30,
-            afternoonActivities: 30,
+            morningActivities: classData.daily_schedule?.morning_activities ?? 45,
+            afternoonActivities: classData.daily_schedule?.afternoon_activities ?? 30,
           },
         });
+
         setSetupStep('complete');
       } catch {
         setSetupStep('class');
@@ -88,69 +108,22 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     }
   };
 
-  loadProfiles();
+  loadInitialData();
 
   if (savedFavorites) {
     setFavorites(JSON.parse(savedFavorites));
   }
 }, [user.id]);
 
-  // Load activities
-  useEffect(() => {
-    const loadActivities = async () => {
-      try {
-        setLoadingActivities(true);
-        const data = await getActivities();
-        setActivities(data);
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Etkinlikler yüklenemedi';
-
-        toast.error(message);
-
-        if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
-          onLogout();
-        }
-      } finally {
-        setLoadingActivities(false);
-      }
-    };
-
-    loadActivities();
-  }, [onLogout]);
-
-  // Save favorites to localStorage
-  useEffect(() => {
-    localStorage.setItem(`favorites-${user.id}`, JSON.stringify(favorites));
-  }, [favorites, user.id]);
-
-  const handleOpenEditModal = (activity: Activity) => {
-    setEditingActivity(activity);
-    setShowEditModal(true);
-  };
-
-  const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
-    if (!editingActivity) return;
-
-    const enrichedPayload: CreateActivityPayload = {
-      ...payload,
-      sourceType: 'manual_edit',
-      parentActivityId: editingActivity.id,
-      createdByUserId: user.id,
-    };
-
+useEffect(() => {
+  const loadActivities = async () => {
     try {
-      setIsCreatingActivity(true);
-
-      const newActivity = await createActivity(enrichedPayload);
-
-      setActivities((prev) => [...prev, newActivity]);
-
-      toast.success('Etkinlik başarıyla kaydedildi. \nYazdır veya PDF dışa aktar ile dosya oluşturabilirsin.');
-      setShowEditModal(false);
-      setEditingActivity(null);
+      setLoadingActivities(true);
+      const data = await getActivities();
+      setActivities(data);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Etkinlik kaydedilemedi';
+      const message =
+        error instanceof Error ? error.message : 'Etkinlikler yüklenemedi';
 
       toast.error(message);
 
@@ -158,12 +131,57 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
         onLogout();
       }
     } finally {
-      setIsCreatingActivity(false);
+      setLoadingActivities(false);
     }
   };
 
+  loadActivities();
+}, [user.id, onLogout]);
+
+useEffect(() => {
+  localStorage.setItem(`favorites-${user.id}`, JSON.stringify(favorites));
+}, [favorites, user.id]);
+
+const handleOpenEditModal = (activity: Activity) => {
+  setEditingActivity(activity);
+  setShowEditModal(true);
+};
+
+const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
+  if (!editingActivity) return;
+
+  const enrichedPayload: CreateActivityPayload = {
+    ...payload,
+    sourceType: 'manual_edit',
+    parentActivityId: editingActivity.id,
+    createdByUserId: user.id,
+  };
+
+  try {
+    setIsCreatingActivity(true);
+
+    const newActivity = await createActivity(enrichedPayload);
+    setActivities((prev) => [...prev, newActivity]);
+
+    toast.success('Etkinlik başarıyla kaydedildi. \nYazdır veya PDF dışa aktar ile dosya oluşturabilirsin.');
+    setShowEditModal(false);
+    setEditingActivity(null);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Etkinlik kaydedilemedi';
+
+    toast.error(message);
+
+    if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+      onLogout();
+    }
+  } finally {
+    setIsCreatingActivity(false);
+  }
+};
+  
+
   const handleUpdateEditedActivity = async (
-    payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>
+    payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'>,
   ) => {
     if (!editingActivity) return;
 
@@ -173,7 +191,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       const updatedActivity = await updateActivity(editingActivity.id, payload);
 
       setActivities((prev) =>
-        prev.map((item) => (item.id === updatedActivity.id ? updatedActivity : item))
+        prev.map((item) => (item.id === updatedActivity.id ? updatedActivity : item)),
       );
 
       toast.success('Etkinlik başarıyla güncellendi.');
@@ -207,7 +225,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       setIsCreatingActivity(true);
 
       const newActivity = await createActivity(enrichedPayload);
-
       setActivities((prev) => [...prev, newActivity]);
 
       toast.success('YZ ile oluşturulan etkinlik başarıyla kaydedildi!');
@@ -230,9 +247,11 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   try {
     await saveTeacherProfile({
       name: profile.name,
-      years_experience: Number(profile.yearsExperience),
+      years_experience: 
+        profile.yearsExperience === '' ? 0 : Number(profile.yearsExperience),
       specializations: profile.specializations,
       teaching_style: profile.teachingStyle,
+      school_id: profile.schoolId,
     });
 
     setTeacherProfile(profile);
@@ -253,6 +272,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       learning_focus: profile.learningFocus,
       available_resources: profile.availableResources,
       special_needs: profile.specialNeeds,
+      daily_schedule: {
+        morning_activities: profile.dailySchedule.morningActivities,
+        afternoon_activities: profile.dailySchedule.afternoonActivities,
+      },
     });
 
     setClassProfile(profile);
@@ -273,10 +296,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       if (prev.includes(id)) {
         toast.success('Favorilerden kaldırıldı');
         return prev.filter((fav) => fav !== id);
-      } else {
-        toast.success('Favorilere eklendi');
-        return [...prev, id];
-      }
+      } 
+      
+      toast.success('Favorilere eklendi');
+      return [...prev, id];
     });
   };
 
@@ -285,10 +308,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       if (prev.includes(id)) {
         toast.success('Rapordan kaldırıldı');
         return prev.filter((item) => item !== id);
-      } else {
-        toast.success('Rapora eklendi');
-        return [...prev, id];
-      }
+      } 
+      
+      toast.success('Rapora eklendi');
+      return [...prev, id];
     });
   };
 
@@ -296,7 +319,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     setSelectedSubjects((prev) =>
       prev.includes(subject)
         ? prev.filter((s) => s !== subject)
-        : [...prev, subject]
+        : [...prev, subject],
     );
   };
 
@@ -304,7 +327,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     setSelectedDurations((prev) =>
       prev.includes(duration)
         ? prev.filter((d) => d !== duration)
-        : [...prev, duration]
+        : [...prev, duration],
     );
   };
 
@@ -312,7 +335,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     setSelectedGroupSizes((prev) =>
       prev.includes(groupSize)
         ? prev.filter((g) => g !== groupSize)
-        : [...prev, groupSize]
+        : [...prev, groupSize],
     );
   };
 
@@ -320,6 +343,125 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
     setSelectedSubjects([]);
     setSelectedDurations([]);
     setSelectedGroupSizes([]);
+  };
+
+  const normalizeTeachingStyle = (style: string) => {
+    const map: Record<string, string> = {
+      structured: 'structured',
+      Structured: 'structured',
+
+      balanced: 'balanced',
+      Balanced: 'balanced',
+
+      exploratory: 'exploratory',
+      Exploratory: 'exploratory',
+
+      'Play-based': 'play_based',
+      'play-based': 'play_based',
+
+      'Child-led': 'child_led',
+      'child-led': 'child_led',
+
+      Interactive: 'interactive',
+      interactive: 'interactive',
+
+      Creative: 'creative',
+      creative: 'creative',
+    };
+
+    return map[style] || style;
+  };
+
+  const getTeachingStyleScore = (style: string, activity: Activity) => {
+    const normalized = normalizeTeachingStyle(style);
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (
+      normalized === 'structured' &&
+      (
+        activity.subject === 'Math' || 
+        activity.subject === 'Language'
+      )
+    ) {
+      score += 2;
+      reasons.push('Yapılandırılmış öğretim stiline uygun');
+    }
+
+    if (
+      normalized === 'balanced' &&
+      (
+        activity.subject === 'Art' ||
+        activity.subject === 'Social-Emotional' ||
+        activity.subject === 'Science'
+      )
+    ) {
+      score += 2;
+      reasons.push('Dengeli öğretim stiline uygun');
+    }
+
+    if (
+      normalized === 'exploratory' &&
+      (
+        activity.groupSize === 'Individual' ||
+        activity.groupSize === 'Small Group' ||
+        activity.subject === 'Science'
+      )
+    ) {
+      score += 2;
+      reasons.push('Keşfetmeye dayalı öğretim stiline uygun');
+    }
+
+    if (
+      normalized === 'play_based' &&
+      (
+        activity.subject === 'Art' ||
+        activity.subject === 'Music' ||
+        activity.subject === 'Physical' ||
+        activity.subject === 'Social-Emotional'
+      )
+    ) {
+      score += 2;
+      reasons.push('Oyun temelli öğretim stiline uygun');
+    }
+
+    if (
+      normalized === 'child_led' &&
+      (
+        activity.groupSize === 'Individual' ||
+        activity.groupSize === 'Small Group'
+      )
+    ) {
+      score += 2;
+      reasons.push('Çocuk merkezli öğretim stiline uygun');
+    }
+
+    if (
+      normalized === 'interactive' &&
+      (
+        activity.groupSize === 'Whole Class' ||
+        activity.groupSize === 'Small Group' ||
+        activity.subject === 'Music' ||
+        activity.subject === 'Language'
+      )
+    ) {
+      score += 2;
+      reasons.push('Etkileşimli öğretim stiline uygun');
+    }
+
+    if (
+      normalized === 'creative' &&
+      (
+        activity.subject === 'Art' ||
+        activity.subject === 'Music' ||
+        activity.subject === 'Language'
+      )
+    ) {
+      score += 2;
+      reasons.push('Yaratıcı öğretim stiline uygun');
+    }
+
+    return { score, reasons };
   };
 
   const getSmartRecommendations = (): Activity[] => {
@@ -402,13 +544,11 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           score += 2;
           reasons.push('Daha kalabalık sınıf mevcudu için uygun');
         }
-      } else {
-        if (activity.groupSize === 'Small Group') {
+      } else if (activity.groupSize === 'Small Group') {
           score += 1;
           reasons.push('Orta büyüklükteki sınıflar için esnek bir yapı sunuyor');
         }
-      }
-
+      
       // 4. Available resources match
       const materialsText = activity.materials.join(' ').toLowerCase();
 
@@ -449,29 +589,9 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
       }
 
       // 5. Teaching style alignment
-      if (
-        teacherProfile.teachingStyle === 'Play-based' &&
-        (activity.subject === 'Art' || activity.subject === 'Social-Emotional')
-      ) {
-        score += 2;
-        reasons.push('Oyun temelli öğretim stiline uygun');
-      }
-
-      if (
-        teacherProfile.teachingStyle === 'Structured' &&
-        (activity.subject === 'Math' || activity.subject === 'Language')
-      ) {
-        score += 2;
-        reasons.push('Yapılandırılmış öğretim stiline uygun');
-      }
-
-      if (
-        teacherProfile.teachingStyle === 'Child-led' &&
-        (activity.groupSize === 'Individual' || activity.groupSize === 'Small Group')
-      ) {
-        score += 2;
-        reasons.push('Çocuk merkezli öğretim stiline uygun');
-      }
+      const styleResult = getTeachingStyleScore(teacherProfile.teachingStyle, activity);
+      score += styleResult.score;
+      reasons.push(...styleResult.reasons);
 
       // 6. Special needs support
       if (
@@ -570,6 +690,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           learning_focus: classProfile?.learningFocus,
           available_resources: classProfile?.availableResources,
           special_needs: classProfile?.specialNeeds,
+          daily_schedule: {
+            morning_activities: classProfile?.dailySchedule.morningActivities,
+            afternoon_activities: classProfile?.dailySchedule.afternoonActivities,
+          }
         },
         activities: selectedActivities,
         recommendation_reasons: [],
@@ -594,34 +718,33 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   };
 
   const handleGenerateReport = async () => {
-  if (selectedForReport.length === 0) {
-    toast.error('Lütfen rapor için en az bir etkinlik seç.');
-    return;
-  }
+    if (selectedForReport.length === 0) {
+      toast.error('Lütfen rapor için en az bir etkinlik seç.');
+      return;
+    }
 
-  if (!classProfile) {
-    toast.error('Sınıf profili eksik. Rapor oluşturmak için sınıf profilinizi tamamla.');
-    return;
-  }
+    if (!classProfile) {
+      toast.error('Sınıf profili eksik. Rapor oluşturmak için sınıf profilinizi tamamla.');
+      return;
+    }
 
-  try {
-    setIsSavingPlan(true);
+    try {
+      setIsSavingPlan(true);
 
-    await createActivityPlan({
-      activity_ids: selectedForReport,
-      notes: 'Öğretmen etkinlik akışından oluşturuldu',
-    });
+      await createActivityPlan({
+        activity_ids: selectedForReport,
+        notes: 'Öğretmen etkinlik akışından oluşturuldu',
+      });
 
-    setShowReport(true);
-    toast.success('Etkinlik planı başarıyla kaydedildi');
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Etkinlik planı kaydedilemedi';
-    toast.error(message);
-  }
-    finally {
+      setShowReport(true);
+      toast.success('Etkinlik planı başarıyla kaydedildi');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Etkinlik planı kaydedilemedi';
+      toast.error(message);
+    } finally {
       setIsSavingPlan(false);
     }
-};
+  };
 
   const filteredActivities = getFilteredActivities();
   const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
@@ -641,6 +764,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
         <TeacherProfileForm
           onSubmit={handleTeacherProfileSubmit}
           initialData={teacherProfile || undefined}
+          schools={schools.map((school) => ({
+            id: Number(school.id),
+            name: school.name,
+          }))}
         />
       </div>
     );
@@ -886,8 +1013,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
           </div>
         </div>
       </main>
-
-      
 
       {/* Activity Detail Modal */}
       <ActivityDetail

@@ -1,10 +1,10 @@
 from typing import Dict, List, Any
 import os
 import json
-from google import genai
-from google.genai import types 
 
 def get_gemini_client():
+    from google import genai
+
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY bulunamadı.")
@@ -31,24 +31,44 @@ def translate_group_size(group_size: str) -> str:
     }
     return translations.get(group_size, group_size or "uygun grup yapısı")
 
+def normalize_teaching_style(style: str) -> str:
+    mapping = {
+        "structured": "structured",
+        "Structured": "structured",
+
+        "balanced": "balanced",
+        "Balanced": "balanced",
+
+        "exploratory": "exploratory",
+        "Exploratory": "exploratory",
+
+        "Play-based": "play_based",
+        "play-based": "play_based",
+
+        "Child-led": "child_led",
+        "child-led": "child_led",
+
+        "Interactive": "interactive",
+        "interactive": "interactive",
+
+        "Creative": "creative",
+        "creative": "creative",
+    }
+    return mapping.get(style, style or "")
 
 def translate_teaching_style(style: str) -> str:
-    translations = {
-        "Balanced": "dengeli",
-        "balanced": "dengeli",
-        "Play-based": "oyun temelli",
-        "play-based": "oyun temelli",
-        "Structured": "yapılandırılmış",
-        "structured": "yapılandırılmış",
-        "Child-led": "çocuk merkezli",
-        "child-led": "çocuk merkezli",
-        "Creative": "yaratıcı",
-        "creative": "yaratıcı",
-        "Interactive": "etkileşimli",
-        "interactive": "etkileşimli",
-    }
-    return translations.get(style, style or "öğretmenin yaklaşımı")
+    normalized = normalize_teaching_style(style)
 
+    translations = {
+        "structured": "yapılandırılmış",
+        "balanced": "dengeli",
+        "exploratory": "keşfetmeye dayalı",
+        "play_based": "oyun temelli",
+        "child_led": "çocuk merkezli",
+        "interactive": "etkileşimli",
+        "creative": "yaratıcı",
+    }
+    return translations.get(normalized, style or "öğretmenin yaklaşımı")
 
 def translate_duration(duration: str) -> str:
     translations = {
@@ -73,7 +93,11 @@ def generate_recommendation_explanation(data: Dict[str, Any]) -> Dict[str, Any]:
 
     class_name = class_profile.get("class_name") or "bu sınıf"
     age_group = class_profile.get("age_group") or "seçilen yaş grubu"
-    teaching_style = translate_teaching_style(teacher_profile.get("teaching_style") or "öğretmenin yaklaşımı")
+    teaching_style = translate_teaching_style(
+        teacher_profile.get("teaching_style")
+        or teacher_profile.get("teachingStyle") 
+        or "öğretmenin yaklaşımı"
+    )
 
     activity_explanations = []
 
@@ -137,26 +161,12 @@ def adapt_activity_mock(payload: dict) -> dict:
 
     raw_age_group = class_profile.get("age_group") or class_profile.get("ageGroup") or "okul öncesi"
     raw_style = (
-        teacher_profile.get("teaching_style") 
-        or teacher_profile.get("teachingStyle") 
+        teacher_profile.get("teaching_style")
+        or teacher_profile.get("teachingStyle")
         or ""
     )
-    style_map = {
-        "Balanced": "dengeli",
-        "balanced": "dengeli",
-        "Play-based": "oyun temelli",
-        "play-based": "oyun temelli",
-        "Structured": "yapılandırılmış",
-        "structured": "yapılandırılmış",
-        "Child-led": "çocuk merkezli",
-        "child-led": "çocuk merkezli",
-        "Creative": "yaratıcı",
-        "creative": "yaratıcı",
-        "Interactive": "etkileşimli",
-        "interactive": "etkileşimli",
-    }
-    display_style = style_map.get(raw_style, raw_style or "öğretmenin yaklaşımı")
-    
+    display_style = translate_teaching_style(raw_style) 
+       
     def strip_previous_adaptation_text(description: str) -> str:
         marker = "göz önünde bulundurulmuştur."
         if marker in description:
@@ -240,6 +250,8 @@ def adapt_activity_mock(payload: dict) -> dict:
     }
 
 def adapt_activity_with_gemini(payload: dict) -> dict:
+    from google.genai import types
+    
     activity = payload.get("activity", {})
     teacher_profile = payload.get("teacher_profile", {})
     class_profile = payload.get("class_profile", {})
@@ -312,7 +324,7 @@ def adapt_activity_with_gemini(payload: dict) -> dict:
     }
 
     prompt = f"""
-Sen okul öncesi eğitim alanında uzman, öğretmenlere resmi günlük plan hazırlığında destek veren pedagojik bir yardımcı asistansın.
+Sen okul öncesi eğitim alanında uzman, öğretmenlere resmi günlük plan hazırlığında destek veren pedagojik bir yardımcısın.
 
 Görev:
 Verilen mevcut etkinliği, öğretmenin isteğine göre yeniden uyarlayacaksın.
@@ -366,7 +378,11 @@ Mevcut Etkinlik:
     )
 
     raw_text = response.text
-    draft = json.loads(raw_text)
+
+    try:
+        draft = json.loads(raw_text)
+    except json.JSONDecodeError as error:
+        raise ValueError(f"Gemini JSON çıktısı çözümlenemedi: {error}")
 
     return {
         "activity_draft": draft,

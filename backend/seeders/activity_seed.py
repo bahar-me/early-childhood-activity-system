@@ -2760,7 +2760,7 @@ def seed_activities():
                 materials=json.dumps(item["materials"], ensure_ascii=False),
                 instructions=json.dumps(item["instructions"], ensure_ascii=False),
                 learning_goals=json.dumps(item["learning_goals"], ensure_ascii=False),
-                assessment_questions=json.dumps(item["assessment_questions"], ensure_ascii=False),
+                assessment_questions=json.dumps(item.get("assessment_questions", []), ensure_ascii=False),
                 differentiation_notes=item.get("differentiation_notes"),
                 family_community_notes=item.get("family_community_notes"),
                 learning_outcomes_summary=item.get("learning_outcomes_summary"),

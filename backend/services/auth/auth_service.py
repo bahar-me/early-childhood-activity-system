@@ -12,7 +12,7 @@ def _validate_email(email: str) -> bool:
     return bool(email and "@" in email and "." in email)
 
 def _get_user_by_email(email: str) -> Optional[User]:
-    return User.query.filter_by(email=email).first()
+    return db.session.query(User).filter_by(email=email).first()
 
 def register(email: str, password: str, role: str = "teacher", school_id: Optional[int] = None) -> Dict[str, Any]:
     if not email or not password:
@@ -35,7 +35,7 @@ def register(email: str, password: str, role: str = "teacher", school_id: Option
 
     school = None
     if school_id:
-        school = School.query.get(school_id)
+        school = db.session.get(School,school_id)
         if not school:
             return {"success": False, "error": "School not found"}
         
@@ -90,7 +90,7 @@ def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
     if not refresh_token:
         return {"success": False, "error": "Refresh token is required"}
 
-    stored_token = RefreshToken.query.filter_by(token=refresh_token, is_revoked=False).first()
+    stored_token = db.session.query(RefreshToken).filter_by(token=refresh_token, is_revoked=False).first()
     if not stored_token:
         return {"success": False, "error": "Invalid or revoked refresh token"}
     
@@ -121,7 +121,7 @@ def logout(refresh_token: str) -> Dict[str, Any]:
     if not refresh_token:
         return {"success": False, "error": "Refresh token is required"}
 
-    token_record = RefreshToken.query.filter_by(token=refresh_token, is_revoked=False).first()
+    token_record = db.session.query(RefreshToken).filter_by(token=refresh_token, is_revoked=False).first()
     if not token_record:
         return {"success": False, "error": "Invalid refresh token"}
 

@@ -1,11 +1,17 @@
 import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
 
+async function parseJSONSafely(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
+
 export async function saveTeacherProfile(payload: {
   name: string;
   years_experience: number;
   specializations: string[];
   teaching_style: string;
+  school_id: number | null;
 }) {
   const response = await fetch(`${API_BASE_URL}/api/profile/teacher`, {
     method: 'POST',
@@ -13,7 +19,7 @@ export async function saveTeacherProfile(payload: {
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();
@@ -33,7 +39,7 @@ export async function getTeacherProfile() {
     headers: getAuthHeaders(),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();
@@ -54,6 +60,10 @@ export async function saveClassProfile(payload: {
   learning_focus: string[];
   available_resources: string[];
   special_needs: string[];
+  daily_schedule: {
+    morning_activities: number;
+    afternoon_activities: number;
+  };
 }) {
   const response = await fetch(`${API_BASE_URL}/api/profile/class`, {
     method: 'POST',
@@ -61,7 +71,7 @@ export async function saveClassProfile(payload: {
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();
@@ -81,7 +91,7 @@ export async function getClassProfile() {
     headers: getAuthHeaders(),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();

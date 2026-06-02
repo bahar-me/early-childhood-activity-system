@@ -9,7 +9,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False, default="teacher")
     school_id = db.Column(db.Integer, db.ForeignKey("schools.id"), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     school = db.relationship("School", back_populates="users")
     refresh_tokens = db.relationship(

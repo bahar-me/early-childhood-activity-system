@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
 from backend.services.auth.school_service import (
     create_school,
@@ -13,6 +14,7 @@ school_bp = Blueprint("school", __name__)
 
 # CREATE SCHOOL
 @school_bp.route("/", methods=["POST"])
+@jwt_required()
 @roles_required("system_admin")
 def create_school_route():
     data = request.get_json() or {}
@@ -24,13 +26,14 @@ def create_school_route():
 
     if result["success"]:
         return jsonify({
-            "message": "School created successfully",
+            "message": "Okul başarıyla oluşturuldu",
             "school": result["school"]
         }), 201
     
     return jsonify({"error": result["error"]}), 400
 
 @school_bp.route("/", methods=["GET"])
+@jwt_required()
 @roles_required("system_admin", "school_admin", "teacher")
 def list_schools_route():
     result = get_all_schools()
@@ -59,7 +62,7 @@ def update_school_route(school_id):
 
     if result["success"]:
         return jsonify({
-            "message": "School updated successfully",
+            "message": "Okul başarıyla güncellendi",
             "school": result["school"]
         }), 200
     
@@ -71,6 +74,6 @@ def delete_school_route(school_id):
     result = delete_school(school_id)
 
     if result["success"]:
-        return jsonify({"message": "School deleted successfully"}), 200
+        return jsonify({"message": "Okul başarıyla silindi"}), 200
     
     return jsonify({"error": result["error"]}), 404

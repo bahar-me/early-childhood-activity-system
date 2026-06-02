@@ -2,6 +2,11 @@ import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
 import { Activity } from '../types/activity';
 
+async function parseJsonSafely(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
+
 export type CreateActivityPayload = Omit<Activity, 'id'> & {
   sourceType?: 'seed' | 'manual_edit' | 'llm_generated';
   parentActivityId?: string | null;
@@ -14,7 +19,7 @@ export async function getActivities(): Promise<Activity[]> {
     headers: getAuthHeaders(),
   });
 
-  const data = await response.json();
+  const data = await parseJsonSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();
@@ -38,7 +43,7 @@ export async function createActivity(payload: CreateActivityPayload): Promise<Ac
         body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const data = await parseJsonSafely(response);
 
     if (response.status === 401) {
         clearAuthStorage();
@@ -65,7 +70,7 @@ export async function updateActivity(
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJsonSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();

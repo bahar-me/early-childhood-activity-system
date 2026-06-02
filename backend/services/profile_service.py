@@ -17,11 +17,16 @@ def upsert_teacher_profile(user_id: int, payload: Dict[str, Any]) -> Dict[str, A
         db.session.add(profile)
 
     years_experience = payload.get("years_experience")
+    school_id = payload.get("school_id")
 
     profile.name = payload.get("name", "")
     profile.years_experience = int(years_experience) if years_experience not in (None, "") else 0
     profile.specializations = json.dumps(payload.get("specializations", []))
     profile.teaching_style = payload.get("teaching_style")
+    
+    if school_id  not in (None, ""):
+        profile.school_id = int(school_id)
+        user.school_id = int(school_id)
 
     db.session.commit()
     return {"success": True, "profile": profile.to_dict()}
@@ -41,12 +46,15 @@ def upsert_class_profile(user_id: int, payload: Dict[str, Any]) -> Dict[str, Any
         return {"success": False, "error": "Teacher profile not found"}
 
     class_profile = ClassProfile.query.filter_by(teacher_id=teacher.id).first()
-
+    
     if not class_profile:
         class_profile = ClassProfile(teacher_id=teacher.id, school_id=teacher.school_id)
         db.session.add(class_profile)
 
+    class_profile.school_id = teacher.school_id  # Ensure class profile is linked to the same school as the teacher
+
     class_size = payload.get("class_size")
+    daily_schedule = payload.get("daily_schedule", {})
 
     class_profile.class_name = payload.get("class_name", "")
     class_profile.age_group = payload.get("age_group", "")
@@ -54,6 +62,8 @@ def upsert_class_profile(user_id: int, payload: Dict[str, Any]) -> Dict[str, Any
     class_profile.learning_focus = json.dumps(payload.get("learning_focus", []))
     class_profile.available_resources = json.dumps(payload.get("available_resources", []))
     class_profile.special_needs = json.dumps(payload.get("special_needs", []))
+    class_profile.morning_activities = int(daily_schedule.get("morning_activities", 45))  # Default to 45 minutes if not provided
+    class_profile.afternoon_activities = int(daily_schedule.get("afternoon_activities", 30))  # Default to 30 minutes if not provided
 
     db.session.commit()
     return {"success": True, "class_profile": class_profile.to_dict()}

@@ -1,7 +1,8 @@
 export interface TeacherProfile {
   name: string;
-  schoolName: string;
-  yearsExperience: string;
+  schoolId: number | null;
+  schoolName?: string;
+  yearsExperience: number | '';
   specializations: string[];
   teachingStyle: string;
 }

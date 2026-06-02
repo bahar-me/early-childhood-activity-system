@@ -1,6 +1,10 @@
 import { LoginCredentials, LoginResponse } from '../types/user';
-
 import { API_BASE_URL } from './base';
+
+async function parseJSONSafely(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
 
 export async function loginRequest(credentials: LoginCredentials): Promise<LoginResponse> {
   const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
@@ -11,7 +15,7 @@ export async function loginRequest(credentials: LoginCredentials): Promise<Login
     body: JSON.stringify(credentials),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Giriş başarısız oldu.');
@@ -29,7 +33,7 @@ export async function logoutRequest(refreshToken: string): Promise<{ message: st
     body: JSON.stringify({ refresh_token: refreshToken }),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Çıkış başarısız oldu.');

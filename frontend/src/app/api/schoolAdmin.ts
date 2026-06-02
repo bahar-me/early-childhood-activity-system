@@ -1,19 +1,20 @@
 import { API_BASE_URL, getAuthHeaders} from './base';
 import { clearAuthStorage } from './authStorage';
 
-export async function getSchoolAdminOverview() {
-  console.log('A. overview API called');
+async function parseJSONSafely(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
 
+export async function getSchoolAdminOverview() {
+  
   const response = await fetch(`${API_BASE_URL}/api/school-admin/overview`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  console.log('B. overview API response received, status:', response.status);
-
-  const data = await response.json();
-  console.log('C. overview API data parsed:', data);
-
+  const data = await parseJSONSafely(response);
+  
   if (response.status === 401) {
     clearAuthStorage();
     throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');

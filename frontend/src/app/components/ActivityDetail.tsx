@@ -68,7 +68,9 @@ export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: Act
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(nextOpen) => {
+      if (!nextOpen) onClose();
+    }}>
       <DialogContent className="max-w-2xl max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>{activity.title}</DialogTitle>
@@ -157,7 +159,7 @@ export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: Act
         </ScrollArea>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-          {activity && onEdit && (
+          {onEdit && (
             <Button
               variant="outline"
               onClick={() => onEdit(activity)}
@@ -165,7 +167,7 @@ export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: Act
               Düzenle
             </Button>
           )}
-          {activity && onAdapt && (
+          {onAdapt && (
             <Button
               variant="outline"
               onClick={() => onAdapt(activity)}

@@ -1,20 +1,20 @@
 from backend.models import TeacherProfile, ClassProfile, ActivityPlan, School, User
-
+from backend.extensions import db
 
 def get_school_admin_overview(user_id: int):
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     if not user or not user.school_id:
-        return {"success": False, "error": "School admin not linked to a school"}
+        return {"success": False, "error": "Okul yöneticisi bulunamadı"}
 
-    school = School.query.get(user.school_id)
+    school = db.session.get(School, user.school_id)
     if not school:
-        return {"success": False, "error": "School not found"}
+        return {"success": False, "error": "Okul bulunamadı"}
 
-    teachers = TeacherProfile.query.filter_by(school_id=user.school_id).all()
-    classes = ClassProfile.query.filter_by(school_id=user.school_id).all()
-    plans = ActivityPlan.query.filter_by(school_id=user.school_id).all()
+    teachers = db.session.query(TeacherProfile).filter_by(school_id=user.school_id).all()
+    classes = db.session.query(ClassProfile).filter_by(school_id=user.school_id).all()
+    plans = db.session.query(ActivityPlan).filter_by(school_id=user.school_id).all()
 
-    total_students = sum(c.class_size for c in classes)
+    total_students = sum((c.class_size or 0) for c in classes)
 
     return {
         "success": True,

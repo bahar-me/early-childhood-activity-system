@@ -2,11 +2,34 @@ import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
 import { Subject, Duration, GroupSize } from '../types/activity'; 
 
+async function parseJSONSafely(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
+
 export interface AIRecommendationExplanationRequest {
-  teacher_profile: unknown;
-  class_profile: unknown;
-  activities: unknown[];
-  recommendation_reasons?: unknown[];
+  teacher_profile: {
+    name?: string;
+    school_id?: number | null;
+    school_name?: string;
+    years_experience?: number | '';
+    specializations?: string[];
+    teaching_style?: string;
+  };
+  class_profile: {
+    class_name?: string;
+    age_group?: string;
+    class_size?: number;
+    learning_focus?: string[];
+    available_resources?: string[];
+    special_needs?: string[];
+    daily_schedule?: {
+      morning_activities?: number;
+      afternoon_activities?: number;
+    };
+  };
+  activities: unknown[]; // This should ideally be typed more specifically based on the expected structure of activities
+  recommendation_reasons?: unknown[]; // This can be further typed based on the expected structure of recommendation reasons
 }
 
 export interface AIActivityExplanation {
@@ -38,7 +61,9 @@ export interface AdaptActivityRequest {
   };
   teacher_profile?: {
     name?: string;
-    years_experience?: string;
+    school_id?: number | null;
+    school_name?: string;
+    years_experience?: number | '';
     specializations?: string[];
     teaching_style?: string;
   };
@@ -49,6 +74,10 @@ export interface AdaptActivityRequest {
     learning_focus?: string[];
     available_resources?: string[];
     special_needs?: string[];
+    daily_schedule?: {
+      morning_activities?: number;
+      afternoon_activities?: number;
+    };
   };
   adaptation_prompt: string;
 }
@@ -78,11 +107,14 @@ export async function explainRecommendations(
 ): Promise<AIRecommendationExplanationResponse> {
   const response = await fetch(`${API_BASE_URL}/api/ai/explain-recommendations`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    headers: {
+      ...getAuthHeaders(),
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();
@@ -101,11 +133,14 @@ export async function adaptActivity(
 ): Promise<AdaptActivityResponse> {
   const response = await fetch(`${API_BASE_URL}/api/ai/adapt-activity`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    headers: {
+      ...getAuthHeaders(),
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await parseJSONSafely(response);
 
   if (response.status === 401) {
     clearAuthStorage();
