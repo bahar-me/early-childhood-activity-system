@@ -30,3 +30,24 @@ Age filtering logic will be added to the recommendation engine input.
 
 ### Status
 Planned
+
+## Bug ID: BR-04
+
+- Title: Activity adaptation draft not saved correctly
+- Reported In Sprint: Sprint 7
+- Module: AI Adaptation
+- Bug Type: Functional
+- Severity: Medium
+- Priority: Medium
+
+### Description
+AI-generated activity drafts were created successfully but were difficult to identify after saving.
+
+### Root Cause Analysis
+The adapted activity title was changed by the AI model and became difficult to locate in the activity list.
+
+### Resolution
+The system now appends a suffix to adapted activities to improve traceability.
+
+### Status
+Resolved
