@@ -369,7 +369,10 @@ Mevcut Etkinlik:
     gemini_client = get_gemini_client()
 
     response = gemini_client.models.generate_content(
-        model="gemini-2.5-flash-lite",
+        model=os.getenv(
+            "GEMINI_MODEL",
+            "gemini-2.5-flash-lite"
+        ),
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",

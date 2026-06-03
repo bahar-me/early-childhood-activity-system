@@ -74,7 +74,7 @@ def test_admin_can_create_school(client):
 
     assert response.status_code == 201
     data = response.get_json()
-    assert data["message"] == "School created successfully"
+    assert data["message"] == "Okul başarıyla oluşturuldu"
     assert data["school"]["name"] == "New School"
 
 
@@ -89,7 +89,7 @@ def test_teacher_cannot_create_school(client):
 
     assert response.status_code == 403
     data = response.get_json()
-    assert data["error"] == "Access forbidden"
+    assert data["error"] == "Bu işlemi yapma yetkiniz yok"
 
 
 def test_school_admin_cannot_create_school(client):
@@ -132,7 +132,7 @@ def test_admin_can_update_school(client):
 
     assert response.status_code == 200
     data = response.get_json()
-    assert data["message"] == "School updated successfully"
+    assert data["message"] == "Okul başarıyla güncellendi"
     assert data["school"]["name"] == "Updated School"
 
 
@@ -159,7 +159,7 @@ def test_teacher_cannot_update_school(client):
 
     assert response.status_code == 403
     data = response.get_json()
-    assert data["error"] == "Access forbidden"
+    assert data["error"] == "Bu işlemi yapma yetkiniz yok"
 
 
 def test_only_admin_can_delete_school(client):
@@ -185,7 +185,7 @@ def test_only_admin_can_delete_school(client):
     )
     assert admin_response.status_code == 200
     data = admin_response.get_json()
-    assert data["message"] == "School deleted successfully"
+    assert data["message"] == "Okul başarıyla silindi"
 
 
 def test_protected_route_without_token(client):

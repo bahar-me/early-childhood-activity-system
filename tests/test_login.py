@@ -61,7 +61,7 @@ def test_login_success(client):
     assert response.status_code == 200
 
     data = response.get_json()
-    assert data["message"] == "Login successful"
+    assert data["message"] == "Giriş başarılı"
     assert "access_token" in data
     assert "refresh_token" in data
     assert "user" in data
