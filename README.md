@@ -1,63 +1,199 @@
-# early-childhood-activity-system
-AI_based_activity_recommendation_system
-
 # AI-Supported Early Childhood Activity Management System
 
-This project is developed as part of an academic software engineering course.
+## Project Overview
 
-The system aims to support teachers in early childhood education by assisting them in:
-- Managing teacher and class profiles
-- Planning and selecting appropriate classroom activities
-- Receiving activity recommendations based on pedagogical rules and scoring logic
+This project was developed as a graduation project to support teachers in early childhood education.
 
-The project is designed in accordance with the system analysis and design report.
+The system helps teachers manage classroom information, plan activities, generate reports, and adapt activities using Artificial Intelligence (AI).
 
----
-
-## Project Scope
-
-This repository includes the implementation phase of the system described in the project report.
-
-The system follows a modular and teacher-centered design approach and includes:
-- User authentication (Teacher login)
-- Teacher profile management
-- Class profile management
-- Rule-based and score-based activity recommendation logic
-- Activity listing and reporting functionalities
+The application follows a modular architecture and provides both web and mobile-ready support.
 
 ---
 
-## Development Approach
+## Main Features
 
-The implementation process follows an incremental and sprint-based development model.
+### User Management
 
-- Each sprint targets a specific set of use cases defined in the report
-- Development, testing, and bug tracking activities are documented
-- Git is used for version control throughout the project lifecycle
+* JWT-based authentication
+* Role-based authorization
+* System Admin, School Admin, and Teacher roles
+
+### School Management
+
+* Create, update, list, and delete schools
+* Access control based on user roles
+
+### Teacher and Class Profiles
+
+* Teacher profile management
+* Class profile management
+* Learning focus and resource tracking
+
+### Activity Planning
+
+* Activity listing and management
+* Profile-based activity planning workflow
+
+### AI-Supported Activity Adaptation
+
+* Gemini API integration
+* Ollama Local LLM integration
+* Automatic fallback mechanism
+
+AI Flow:
+
+```text
+Gemini API
+↓
+Ollama Local LLM
+↓
+Mock AI
+```
+
+### Reporting
+
+* Activity report generation
+* Print-friendly layout
+* PDF export support
+
+### Mobile Support
+
+* Capacitor integration
+* Android project preparation
 
 ---
 
-## Sprint Plan
+## System Architecture
 
-### Sprint 1
-- Teacher login functionality
-- Teacher profile management
-- Initial project setup and repository structure
+```text
+Teacher/User
+     |
+     v
+React + TypeScript Frontend
+     |
+     v
+Flask REST API
+     |
+     v
+Service Layer
+     |
+     v
+SQLAlchemy ORM
+     |
+     v
+Database
+```
 
 ---
 
-## Technologies (Planned)
+## Technologies Used
 
-- Front-end: Web-based UI
-- Back-end: To be implemented
-- Database: Relational database model
-- Recommendation Engine: Rule-based + score-based logic
-- Version Control: Git & GitHub
+### Frontend
+
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+
+### Backend
+
+* Flask
+* SQLAlchemy
+* JWT Authentication
+* Alembic
+
+### Artificial Intelligence
+
+* Google Gemini API
+* Ollama
+* Llama 3.2
+
+### Testing
+
+* Pytest
+
+### Mobile
+
+* Capacitor
+* Android
 
 ---
 
-## Notes
+## Installation
 
-This project prioritizes clarity, pedagogical appropriateness, and explainability over complex machine learning models.
+### Backend
 
-Further features and improvements will be implemented in subsequent sprints.
+```bash
+pip install -r requirements.txt
+py -m backend.app
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Ollama
+
+```bash
+ollama run llama3.2
+```
+
+---
+
+## Environment Variables
+
+Example:
+
+```env
+SECRET_KEY=
+JWT_SECRET_KEY=
+
+GEMINI_API_KEY=
+
+OLLAMA_ENABLED=true
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.2
+```
+
+---
+
+## Running Tests
+
+```bash
+pytest
+```
+
+---
+
+## Project Status
+
+### Completed
+
+* Authentication
+* Authorization
+* School Management
+* Teacher and Class Profiles
+* Activity Planning
+* AI Integration
+* PDF Reporting
+* Backend Testing
+
+### In Progress
+
+* Final code cleanup
+* Mobile testing
+
+### Planned
+
+* Android deployment validation
+* Final presentation preparation
+
+---
+
+## License
+
+This project was developed for academic purposes.
