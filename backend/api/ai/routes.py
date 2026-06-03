@@ -6,7 +6,7 @@ from backend.services.ai_service import (
     generate_recommendation_explanation, 
     adapt_activity_mock, 
     adapt_activity_with_gemini,
-    #adapt_activity_with_ollama,  
+    adapt_activity_with_ollama,  
 )
 
 from backend.utils.auth_middleware import roles_required
@@ -61,12 +61,12 @@ def adapt_activity():
             except Exception as gemini_error:
                 print(f"Gemini adapt hatası, Ollama denenecek: {gemini_error}")
 
-        # if os.getenv("OLLAMA_ENABLED", "false").lower() == "true":
-        #     try:
-        #         result = adapt_activity_with_ollama(data)
-        #         return jsonify(result), 200
-        #     except Exception as ollama_error:
-        #         print(f"Ollama adapt hatası, mock fallback kullanılacak: {ollama_error}")
+        if os.getenv("OLLAMA_ENABLED", "false").lower() == "true":
+            try:
+                result = adapt_activity_with_ollama(data)
+                return jsonify(result), 200
+            except Exception as ollama_error:
+                print(f"Ollama adapt hatası, mock fallback kullanılacak: {ollama_error}")
 
         result = adapt_activity_mock(data)
         return jsonify(result), 200

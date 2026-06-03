@@ -1,6 +1,7 @@
 from typing import Dict, List, Any
 import os
 import json
+import requests
 
 def get_gemini_client():
     from google import genai
@@ -390,4 +391,116 @@ Mevcut Etkinlik:
     return {
         "activity_draft": draft,
         "source": "gemini",
+    }
+
+def adapt_activity_with_ollama(payload: dict) -> dict:
+    activity = payload.get("activity", {})
+    teacher_profile = payload.get("teacher_profile", {})
+    class_profile = payload.get("class_profile", {})
+    adaptation_prompt = (payload.get("adaptation_prompt") or "").strip()
+
+    if not activity:
+        raise ValueError("Etkinlik verisi eksik.")
+    if not adaptation_prompt:
+        raise ValueError("Uyarlama isteği boş olamaz.")
+
+    ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    ollama_model = os.getenv("OLLAMA_MODEL", "llama3.2")
+
+    prompt = f"""
+Sen okul öncesi eğitim alanında uzman bir yardımcı modelsin.
+
+Görev:
+Verilen etkinliği öğretmenin uyarlama isteğine göre yeniden düzenle.
+
+Sadece geçerli JSON üret. Markdown, açıklama, kod bloğu veya ekstra metin yazma.
+
+JSON şeması:
+{{
+  "title": "string",
+  "subject": "Math",
+  "duration": "15-30min",
+  "groupSize": "Small Group",
+  "description": "string",
+  "materials": ["string"],
+  "instructions": ["string"],
+  "learningGoals": ["string"],
+  "assessmentQuestions": ["string"],
+  "differentiationNotes": "string",
+  "familyCommunityNotes": "string",
+  "learningOutcomesSummary": "string"
+}}
+
+Geçerli subject değerleri:
+Math, Language, Art, Science, Music, Physical, Social-Emotional
+
+Geçerli duration değerleri:
+5-15min, 15-30min, 30-45min, 45-60min
+
+Geçerli groupSize değerleri:
+Individual, Small Group, Whole Class
+
+Kurallar:
+- Tüm içerik Türkçe olsun.
+- Etkinlik okul öncesi yaş grubuna uygun olsun.
+- Materyaller kolay bulunabilir olsun.
+- Uygulama adımları kısa ve net olsun.
+- 3 değerlendirme sorusu üret.
+- Farklılaştırma ve aile katılımı önerisi ekle.
+- Öğretmenin doğrudan kullanabileceği somut ifadeler yaz.
+
+Öğretmen Profili:
+{json.dumps(teacher_profile, ensure_ascii=False)}
+
+Sınıf Profili:
+{json.dumps(class_profile, ensure_ascii=False)}
+
+Mevcut Etkinlik:
+{json.dumps(activity, ensure_ascii=False)}
+
+Öğretmenin Uyarlama İsteği:
+{adaptation_prompt}
+""".strip()
+
+    response = requests.post(
+        f"{ollama_base_url}/api/generate",
+        json={
+            "model": ollama_model,
+            "prompt": prompt,
+            "stream": False,
+            "format": "json",
+        },
+        timeout=120,
+    )
+
+    response.raise_for_status()
+
+    result = response.json()
+    raw_text = result.get("response", "")
+
+    try:
+        draft = json.loads(raw_text)
+    except json.JSONDecodeError as error:
+        raise ValueError(f"Ollama JSON çıktısı çözümlenemedi: {error}")
+
+    draft["subject"] = draft.get("subject") if draft.get("subject") in [
+        "Math", "Language", "Art", "Science", "Music", "Physical", "Social-Emotional"
+    ] else activity.get("subject", "Science")
+
+    draft["duration"] = draft.get("duration") if draft.get("duration") in [
+        "5-15min", "15-30min", "30-45min", "45-60min"
+    ] else activity.get("duration", "15-30min")
+
+    draft["groupSize"] = draft.get("groupSize") if draft.get("groupSize") in [
+        "Individual", "Small Group", "Whole Class"
+    ] else activity.get("groupSize", "Small Group")
+
+    original_title = activity.get("title", "Etkinlik")
+
+    if "Uyarlanmış" not in draft.get("title", ""):
+        draft["title"] = f"{original_title} - Uyarlanmış Versiyon"
+
+    return {
+        "activity_draft": draft,
+        "source": "ollama_local",
     }

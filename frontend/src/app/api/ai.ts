@@ -1,6 +1,6 @@
 import { API_BASE_URL, getAuthHeaders } from './base';
 import { clearAuthStorage } from './authStorage';
-import { Subject, Duration, GroupSize } from '../types/activity'; 
+import { Subject, Duration, GroupSize, Activity } from '../types/activity'; 
 
 async function parseJSONSafely(response: Response) {
   const text = await response.text();
@@ -28,12 +28,12 @@ export interface AIRecommendationExplanationRequest {
       afternoon_activities?: number;
     };
   };
-  activities: unknown[]; // This should ideally be typed more specifically based on the expected structure of activities
-  recommendation_reasons?: unknown[]; // This can be further typed based on the expected structure of recommendation reasons
+  activities: Activity[]; // This should ideally be typed more specifically based on the expected structure of activities
+  recommendation_reasons?: string[]; // This can be further typed based on the expected structure of recommendation reasons
 }
 
 export interface AIActivityExplanation {
-  activity_id: string;
+  activity_id: string; 
   title: string;
   explanation: string;
   teacher_guidance: string;
@@ -44,7 +44,7 @@ export interface AIRecommendationExplanationResponse {
   success: boolean;
   summary: string;
   activity_explanations: AIActivityExplanation[];
-  recommendation_reasons?: unknown[];
+  recommendation_reasons?: string[];
   source: string;
 }
 

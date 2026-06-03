@@ -99,6 +99,9 @@ export function ActivityAdaptModal({
       toast.success('Etkinlik oluşturuldu.');
       onClose();
     } catch (error) {
+      console.error('Taslak kaydetme hatası:', error);
+      console.log('Kaydedilmeye çalışılan taslak:', draft);
+
       const message =
         error instanceof Error ? error.message : 'Taslak kaydedilemedi.';
       toast.error(message);
