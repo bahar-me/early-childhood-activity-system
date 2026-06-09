@@ -21,6 +21,13 @@ def create_app(config_name="development"):
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
 
+    CORS(
+         app, 
+         resources={r"/api/*": {"origins": "*"}},
+         methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+         allow_headers=["Content-Type", "Authorization"],
+    )
+
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
@@ -56,20 +63,6 @@ def create_app(config_name="development"):
     def internal_error(_e):
         return jsonify({"error": "Server hatası"}), 500
     
-    CORS(app, 
-         resources={
-            r"/api/*": {
-                "origins": [
-                    "http://localhost", 
-                    "http://127.0.0.1:5173", 
-                    "http://localhost:5173",
-                ],
-                "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-                "allow_headers": ["Content-Type", "Authorization"],
-            }
-        },
-    )
-
     return app
 
 app = create_app()

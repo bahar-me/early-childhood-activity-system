@@ -7,3 +7,9 @@ project(':capacitor-filesystem').projectDir = new File('../node_modules/@capacit
 
 include ':capacitor-share'
 project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/share/android')
+
+include ':capgo-capacitor-file-sharer'
+project(':capgo-capacitor-file-sharer').projectDir = new File('../node_modules/@capgo/capacitor-file-sharer/android')
+
+include ':capgo-capacitor-pdf-generator'
+project(':capgo-capacitor-pdf-generator').projectDir = new File('../node_modules/@capgo/capacitor-pdf-generator/android')

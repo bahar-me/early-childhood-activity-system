@@ -5,6 +5,10 @@ import { Badge } from './ui/badge';
 import { Printer, Clock, Users } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { toast } from 'sonner';
+import { useState } from 'react';
+import { PdfGenerator } from '@capgo/capacitor-pdf-generator';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import {Share} from '@capacitor/share';
 
 const getSubjectColor = (subject: string) => {
   const colors: Record<string, string> = {
@@ -46,7 +50,8 @@ export function ActivityReport({
   onClose,
   aiExplanation,
 }: ActivityReportProps) {
-  const handlePrint = () => {
+  const [nativeReportHtml, setNativeReportHtml] = useState<string | null>(null);
+  const handlePrint = async() => {
     if (!teacherProfile || !classProfile || activities.length === 0) {
       toast.error('Yazdırmak için yeterli bilgiler bulunamadı');
       return;
@@ -579,6 +584,50 @@ export function ActivityReport({
       </html>
     `;
 
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const pdf = await PdfGenerator.fromData({
+          data: html,
+          documentSize: 'A4',
+          orientation: 'portrait',
+          type: 'base64',
+          fileName: 'etkinlik-raporu.pdf',
+        });
+
+        const base64Data = 
+          (pdf as any).base64 ||
+          (pdf as any).base64Data ||
+          (pdf as any).data;
+
+        if (!base64Data) {
+          throw new Error('PDF verisi alınamadı.');
+        }
+        const filename = `etkinlik-raporu-${Date.now()}.pdf`;
+
+        const savedFile = await Filesystem.writeFile({
+          path: filename,
+          data: base64Data,
+          directory: Directory.Documents,
+          recursive: true,
+        });
+
+        toast.success('PDF oluşturuldu. Paylaşım ekranı açılıyor...');
+
+        await Share.share({
+            title: 'Etkinlik Raporu',
+            text: 'Etkinlik planı raporu',
+            url: savedFile.uri,
+            dialogTitle: 'PDF Raporu Paylaş',
+          });
+
+          return;
+        } catch (error) {
+          console.error('PDF paylaşım hata:', error);
+          toast.error('PDF paylaşımı başarısız. Lütfen tekrar deneyin.');
+          return;
+        }
+      }
+
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);  
     const printWindow = window.open(url, '_blank', 'width=1200,height=900');
@@ -680,6 +729,8 @@ export function ActivityReport({
 
   if (!open) return null;
 
+  
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-xl overflow-hidden">
@@ -698,7 +749,7 @@ export function ActivityReport({
             <div className="flex gap-2 self-start">
               <Button onClick={handlePrint}>
                 <Printer className="h-4 w-4 mr-2" />
-                {Capacitor.isNativePlatform() ? 'PDF Dışa Aktar' : 'Yazdır'}
+                {Capacitor.isNativePlatform() ? 'PDF Kaydet / Paylaş' : 'Yazdır'}
               </Button>
               <Button variant="outline" onClick={onClose}>
                 Kapat

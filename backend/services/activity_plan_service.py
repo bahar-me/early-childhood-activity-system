@@ -28,6 +28,13 @@ def create_activity_plan(user_id: int, payload: Dict[str, Any]) -> Dict[str, Any
         notes=notes,
     )
 
+    print(
+        f"PLAN CREATED -> "
+        f"teacher_id={teacher.id}, "
+        f"class_id={class_profile.id}, "
+        f"school_id={class_profile.school_id}"
+    )
+
     db.session.add(plan)
     db.session.commit()
 

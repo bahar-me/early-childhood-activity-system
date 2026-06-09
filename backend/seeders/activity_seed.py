@@ -2770,7 +2770,7 @@ def seed_activities():
             added_count += 1
 
         db.session.commit()
-        print(f"{added_count} activity added.")
+        print(f"{added_count} etkinlik eklendi.")
 
 
 if __name__ == "__main__":

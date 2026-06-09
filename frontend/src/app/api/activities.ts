@@ -13,8 +13,8 @@ export type CreateActivityPayload = Omit<Activity, 'id'> & {
   createdByUserId?: string | null;
 };
 
-export async function getActivities(): Promise<Activity[]> {
-  const response = await fetch(`${API_BASE_URL}/api/activities/`, {
+export async function getActivities(limit = 30, offset = 0): Promise<Activity[]> {
+  const response = await fetch(`${API_BASE_URL}/api/activities/?limit=${limit}&offset=${offset}`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -27,7 +27,7 @@ export async function getActivities(): Promise<Activity[]> {
   }
 
   if (!response.ok) {
-    throw new Error(data.error || 'Etkinlikler yüklenemedi.');
+    throw new Error(data.error || data.msg || 'Etkinlikler yüklenemedi.');
   }
 
   return data.activities;

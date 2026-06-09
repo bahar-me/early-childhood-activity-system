@@ -12,7 +12,23 @@ activity_bp = Blueprint("activity", __name__)
 @roles_required("teacher")
 def list_activities():
     activities = get_all_activities()
-    return jsonify({"activities": activities}), 200
+
+    limit = request.args.get("limit", type=int)
+    offset = request.args.get("offset", default=0, type=int)
+
+    total = len(activities)
+
+    if limit:
+        activities = activities[offset:offset + limit]
+
+    print(f"Activities count: {len(activities)} / total: {total}")  # Debug çıktısı
+    
+    return jsonify({
+        "activities": activities,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }), 200
 
 @activity_bp.route("/", methods=["POST"])
 @jwt_required()

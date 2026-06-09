@@ -34,6 +34,7 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [classProfile, setClassProfile] = useState<ClassProfile | null>(null);
   const [schools, setSchools] = useState<School[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [visibleCount, setVisibleCount] = useState(30);
   const [loadingActivities, setLoadingActivities] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -51,6 +52,88 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [isSavingPlan, setIsSavingPlan] = useState(false);
   const [aiExplanation, setAIExplanation] = useState<AIRecommendationExplanationResponse | null>(null);
   const [isGeneratingAIExplanation, setIsGeneratingAIExplanation] = useState(false);
+  const [hasMoreActivities, setHasMoreActivities] = useState(true);
+  const [isLoadingMoreActivities, setIsLoadingMoreActivities] = useState(false);
+
+  const normalizeSubject = (subject: string): Subject => {
+  const map: Record<string, Subject> = {
+    Math: 'Math',
+    Matematik: 'Math',
+
+    Language: 'Language',
+    'Dil Gelişimi': 'Language',
+    Dil: 'Language',
+
+    Art: 'Art',
+    Sanat: 'Art',
+
+    Science: 'Science',
+    Fen: 'Science',
+    'Fen ve Doğa': 'Science',
+
+    Music: 'Music',
+    Müzik: 'Music',
+
+    Physical: 'Physical',
+    'Fiziksel Gelişim': 'Physical',
+
+    'Social-Emotional': 'Social-Emotional',
+    'Sosyal-Duygusal Gelişim': 'Social-Emotional',
+  };
+
+  return map[subject] || 'Art';
+};
+
+const normalizeDuration = (duration: string): Duration => {
+  const map: Record<string, Duration> = {
+    '5-15min': '5-15min',
+    '5-15 dakika': '5-15min',
+
+    '15-30min': '15-30min',
+    '15-30 dakika': '15-30min',
+
+    '30-45min': '30-45min',
+    '30-45 dakika': '30-45min',
+
+    '45-60min': '45-60min',
+    '45-60 dakika': '45-60min',
+  };
+
+  return map[duration] || '15-30min';
+};
+
+const normalizeGroupSize = (groupSize: string): GroupSize => {
+  const map: Record<string, GroupSize> = {
+    Individual: 'Individual',
+    Bireysel: 'Individual',
+
+    'Small Group': 'Small Group',
+    'Küçük Grup': 'Small Group',
+
+    'Whole Class': 'Whole Class',
+    'Tüm Sınıf': 'Whole Class',
+  };
+
+  return map[groupSize] || 'Small Group';
+};
+
+const handleLoadMoreActivities = async () => {
+  try {
+    setIsLoadingMoreActivities(true);
+
+    const data = await getActivities(30, activities.length);
+
+    setActivities((prev) => [...prev, ...data]);
+    setHasMoreActivities(data.length === 30);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Daha fazla etkinlik yüklenemedi';
+
+    toast.error(message);
+  } finally {
+    setIsLoadingMoreActivities(false);
+  }
+};
 
   // Load profiles and favorites from localStorage
   useEffect(() => {
@@ -119,15 +202,21 @@ useEffect(() => {
   const loadActivities = async () => {
     try {
       setLoadingActivities(true);
-      const data = await getActivities();
+
+      const data = await getActivities(30, 0);
+
       setActivities(data);
+      setHasMoreActivities(data.length === 30);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Etkinlikler yüklenemedi';
 
       toast.error(message);
+      setActivities([]);
+      setHasMoreActivities(false);
 
       if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+        toast.error(message);
         onLogout();
       }
     } finally {
@@ -137,6 +226,10 @@ useEffect(() => {
 
   loadActivities();
 }, [user.id, onLogout]);
+
+useEffect(() => {
+  setVisibleCount(30);
+}, [selectedSubjects, selectedDurations, selectedGroupSizes, activeTab]);
 
 useEffect(() => {
   localStorage.setItem(`favorites-${user.id}`, JSON.stringify(favorites));
@@ -216,6 +309,9 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
     const enrichedPayload: CreateActivityPayload = {
       ...draft,
+      subject: normalizeSubject(draft.subject),
+      duration: normalizeDuration(draft.duration),
+      groupSize: normalizeGroupSize(draft.groupSize),
       sourceType: 'llm_generated',
       parentActivityId: adaptingActivity.id,
       createdByUserId: user.id,
@@ -747,6 +843,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
   };
 
   const filteredActivities = getFilteredActivities();
+  const visibleActivities = filteredActivities.slice(0, visibleCount);
   const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
 
   // Show setup steps if not complete
@@ -900,6 +997,10 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
               </TabsList>
 
               <TabsContent value="all" className="mt-0">
+                <p className="text-sm text-gray-500 mb-4">
+                  Gösterilen etkinlikler: {visibleActivities.length}
+                </p>
+
                 {filteredActivities.length === 0 ? (
                   <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed">
                     <p className="text-gray-500">
@@ -907,30 +1008,44 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredActivities.map((activity) => (
-                      <div key={activity.id} className="relative">
-                        <ActivityCard
-                          activity={activity}
-                          isFavorite={favorites.includes(activity.id)}
-                          onToggleFavorite={toggleFavorite}
-                          onClick={setSelectedActivity}
-                        />
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {visibleActivities.map((activity) => (
+                        <div key={activity.id} className="relative">
+                          <ActivityCard
+                            activity={activity}
+                            isFavorite={favorites.includes(activity.id)}
+                            onToggleFavorite={toggleFavorite}
+                            onClick={setSelectedActivity}
+                          />
+                          <Button
+                            variant={selectedForReport.includes(activity.id) ? "default" : "outline"}
+                            size="sm"
+                            className="absolute bottom-4 right-4"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleSelectedForReport(activity.id);
+                            }}
+                          >
+                            <CheckSquare className="h-4 w-4 mr-1" />
+                            {selectedForReport.includes(activity.id) ? 'Seçildi' : 'Seç'}
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {hasMoreActivities && (
+                      <div className="flex justify-center mt-6">
                         <Button
-                          variant={selectedForReport.includes(activity.id) ? "default" : "outline"}
-                          size="sm"
-                          className="absolute bottom-4 right-4"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleSelectedForReport(activity.id);
-                          }}
+                          variant="outline"
+                          onClick={handleLoadMoreActivities}
+                          disabled={isLoadingMoreActivities}
                         >
-                          <CheckSquare className="h-4 w-4 mr-1" />
-                          {selectedForReport.includes(activity.id) ? 'Seçildi' : 'Seç'}
+                          {isLoadingMoreActivities ? 'Yükleniyor...' : 'Daha fazla göster'}
                         </Button>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 )}  
               </TabsContent>
 
@@ -946,7 +1061,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredActivities.map((activity) => (
+                    {visibleActivities.map((activity) => (
                       <div key={activity.id} className="relative">
                         <ActivityCard
                           activity={activity}
@@ -984,7 +1099,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredActivities.map((activity) => (
+                    {visibleActivities.map((activity) => (
                       <div key={activity.id} className="relative">
                         <ActivityCard
                           activity={activity}

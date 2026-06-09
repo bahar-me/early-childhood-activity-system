@@ -41,28 +41,24 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
   const loadOverview = async () => {
     try {
-      console.log('1. loadOverview called');
       setLoading(true);
       setErrorMessage('');
 
       const data = await getSchoolAdminOverview();
-      console.log('2. Overview data received:', data);
 
       setOverview(data);
-      console.log('3. Overview state updated');
     } catch (error) {
-      console.error('Failed to load school admin overview:', error);
+      console.error('Okul yöneticisi genel bakış yüklenemedi:', error);
       const message =
-        error instanceof Error ? error.message : 'Failed to load school admin overview';
-      if (message === 'Your session has expired. Please log in again.' || message === 'Unauthorized. Please log in again.') {
-        toast.error('Your session has expired. Please log in again.');
+        error instanceof Error ? error.message : 'Okula genel bakış yüklenemedi.';
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yapın.' || message === 'Yetkiniz yok') {
+        toast.error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
         onLogout();
         return;
       }
       setErrorMessage(message);
     }
     finally {
-      console.log('4. loadOverview finished (success or error)');
       setLoading(false);
     }
   };
@@ -86,14 +82,14 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
   };
 
   const handleViewPlan = (plan: PlanOverview) => {
-    const teacher = getTeacherById(plan.teacher_id);
-    const classRecord = getClassById(plan.class_id);
+    // const teacher = getTeacherById(plan.teacher_id);
+    // const classRecord = getClassById(plan.class_id);
 
-    if (!teacher || !classRecord) {
-      toast.error('Teacher or class information for this activity plan is missing. Cannot generate report.');
-      console.error('Missing teacher or class information for selected plan:', plan);
-      return;
-    }
+    // if (!teacher || !classRecord) {
+    //   toast.error('Öğretmen veya sınıf bilgisi bu etkinlik planı için eksik. Rapor oluşturulamıyor.');
+    //   console.error('Seçilen plan için eksik öğretmen veya sınıf bilgisi:', plan);
+    //   return;
+    // }
 
     setSelectedPlan(plan);
     setShowReport(true);
@@ -103,7 +99,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="bg-white border rounded-lg shadow-sm px-6 py-4 text-gray-600">
-          Loading school admin dashboard...
+          Okul yöneticisi paneli yükleniyor...
         </div>
       </div>
     );
@@ -126,20 +122,20 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl text-purple-600">
-                School Administrator Dashboard
+                Okul Yöneticisi Paneli
               </h1>
               <p className="text-gray-600 mt-1">
-                Welcome, {displayName} • {school?.name || 'School Admin'}
+                Hosgeldiniz, {displayName} • {school?.name || 'School Admin'}
               </p>
             </div>
             <div className="flex items-center gap-2">
               <Button onClick={loadOverview} variant="outline">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                Yenile
               </Button>
               <Button onClick={onLogout} variant="outline">
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                Çıkış Yap
               </Button>
             </div>
           </div>
@@ -150,7 +146,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm">Total Teachers</CardTitle>
+              <CardTitle className="text-sm">Toplam Öğretmen</CardTitle>
               <GraduationCap className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -163,7 +159,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm">Total Classes</CardTitle>
+              <CardTitle className="text-sm">Toplam Sınıf</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -176,7 +172,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm">Activity Plans</CardTitle>
+              <CardTitle className="text-sm">Etkinlik Planları</CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -190,17 +186,17 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
         <Tabs defaultValue="teachers" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="teachers">Teachers</TabsTrigger>
-            <TabsTrigger value="classes">Classes</TabsTrigger>
-            <TabsTrigger value="plans">Activity Plans</TabsTrigger>
+            <TabsTrigger value="teachers">Öğretmenler</TabsTrigger>
+            <TabsTrigger value="classes">Sınıflar</TabsTrigger>
+            <TabsTrigger value="plans">Etkinlik Planları</TabsTrigger>
           </TabsList>
 
           <TabsContent value="teachers">
             <Card>
               <CardHeader>
-                <CardTitle>Teachers Overview</CardTitle>
+                <CardTitle>Öğretmenler Genel Bakış</CardTitle>
                 <CardDescription>
-                  View all teachers in your school
+                  Okulunuza ait tüm öğretmenleri görüntüleyin
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -541,26 +537,26 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
         </Tabs>
       </main>
 
-      {selectedPlan &&
-        showReport &&
-        getTeacherById(selectedPlan.teacher_id) &&
-        getClassById(selectedPlan.class_id) && (
+      {selectedPlan && showReport &&
+        (selectedPlan.teacher_id) &&
+        (selectedPlan.class_id) && (
           <ActivityReport
             activities={activities.filter((a) =>
-              (selectedPlan.activity_ids || []).includes(a.id)
+              (selectedPlan.activity_ids || []).map(String).includes(String(a.id))
             )}
             teacherProfile={{
-              name: getTeacherById(selectedPlan.teacher_id)!.name,
+              name: getTeacherById(selectedPlan.teacher_id)?.name || `Öğretmen #${selectedPlan.teacher_id}`,
+              schoolId: Number(school?.id ?? 0),
               schoolName: school?.name || '',
-              yearsExperience: String(getTeacherById(selectedPlan.teacher_id)!.years_experience || 0),
-              specializations: getTeacherById(selectedPlan.teacher_id)!.specializations || [],
-              teachingStyle: getTeacherById(selectedPlan.teacher_id)!.teaching_style || '',
+              yearsExperience: getTeacherById(selectedPlan.teacher_id)?.years_experience ?? 0,
+              specializations: getTeacherById(selectedPlan.teacher_id)?.specializations || [],
+              teachingStyle: getTeacherById(selectedPlan.teacher_id)?.teaching_style || '',
             }}
             classProfile={{
-              className: getClassById(selectedPlan.class_id)!.class_name,
-              ageGroup: getClassById(selectedPlan.class_id)!.age_group || '',
-              classSize: getClassById(selectedPlan.class_id)!.class_size || 0,
-              learningFocus: getClassById(selectedPlan.class_id)!.learning_focus || [],
+              className: getClassById(selectedPlan.class_id)?.class_name || `Sınıf #${selectedPlan.class_id}`,
+              ageGroup: getClassById(selectedPlan.class_id)?.age_group || '',
+              classSize: getClassById(selectedPlan.class_id)?.class_size || 0,
+              learningFocus: getClassById(selectedPlan.class_id)?.learning_focus || [],
               availableResources: [],
               specialNeeds: [],
               dailySchedule: {
