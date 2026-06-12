@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 
 import os
+
 from backend.services.ai_service import (
     generate_recommendation_explanation, 
     adapt_activity_mock, 
@@ -39,26 +40,6 @@ def adapt_activity():
                 result = adapt_activity_with_gemini(data)
                 return jsonify(result), 200
             except Exception as gemini_error:
-                print(f"Gemini adapt hatası, mock fallback kullanılacak: {gemini_error}")
-
-        result = adapt_activity_mock(data)
-        return jsonify(result), 200
-    
-    except ValueError as error:
-        return jsonify({"error": str(error)}), 400
-    except Exception as error:
-        print(f"Adapt activity error: {error}")
-        return jsonify({"error": "Etkinlik uyarlanamadı."}), 500
-    
-def adapt_activity():
-    data = request.get_json() or {}
-
-    try:
-        if os.getenv("GEMINI_API_KEY"):
-            try:
-                result = adapt_activity_with_gemini(data)
-                return jsonify(result), 200
-            except Exception as gemini_error:
                 print(f"Gemini adapt hatası, Ollama denenecek: {gemini_error}")
 
         if os.getenv("OLLAMA_ENABLED", "false").lower() == "true":
@@ -70,10 +51,10 @@ def adapt_activity():
 
         result = adapt_activity_mock(data)
         return jsonify(result), 200
-
+    
     except ValueError as error:
         return jsonify({"error": str(error)}), 400
     except Exception as error:
         print(f"Adapt activity error: {error}")
         return jsonify({"error": "Etkinlik uyarlanamadı."}), 500
-
+    

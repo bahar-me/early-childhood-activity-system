@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
+from backend.utils.auth_middleware import roles_required
 
 from backend.services.auth.auth_service import (
     login, 
@@ -10,6 +12,8 @@ from backend.services.auth.auth_service import (
 auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/register", methods=["POST"])
+@jwt_required()
+@roles_required("system_admin")
 def register_route():
     data = request.get_json() or {}
 
@@ -55,7 +59,7 @@ def refresh_route():
     
     if result["success"]:
         return jsonify({
-            "message": "Access token refreshed",
+            "message": "Access token yenilendi",
             "access_token": result["access_token"]
         }), 200
 
@@ -68,6 +72,6 @@ def logout_route():
     result = logout(data.get("refresh_token"))
 
     if result["success"]:
-        return jsonify({"message": "Logged out successfully"}), 200
+        return jsonify({"message": "Çıkış başarılı"}), 200
 
     return jsonify({"error": result["error"]}), 400

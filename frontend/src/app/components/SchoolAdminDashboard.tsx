@@ -36,6 +36,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
   const [selectedPlan, setSelectedPlan] = useState<PlanOverview | null>(null);
   const [showReport, setShowReport] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const displayName = user.name || user.email;
 
@@ -79,6 +80,18 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
   const getClassById = (id: string | number) => {
     return classes.find((c) => String(c.id) === String(id));
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await loadOverview();
+      toast.success('Panel güncellendi');
+    } catch (error) {
+      toast.error('Panel güncellenirken bir hata oluştu');
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const handleViewPlan = (plan: PlanOverview) => {
@@ -129,8 +142,10 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button onClick={loadOverview} variant="outline">
-                <RefreshCw className="h-4 w-4 mr-2" />
+              <Button onClick={handleRefresh} variant="outline">
+                <RefreshCw 
+                  className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} 
+                />
                 Yenile
               </Button>
               <Button onClick={onLogout} variant="outline">
@@ -218,7 +233,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                           <div>
                             <p className="text-xs text-gray-500">Deneyim</p>
                             <p className="text-sm text-gray-700">
-                              {teacher.years_experience ?? 0} years
+                              {teacher.years_experience ?? 0} yıl
                             </p>
                           </div>
 
@@ -307,7 +322,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
           <TabsContent value="classes">
             <Card>
               <CardHeader>
-                <CardTitle>Sınılar Genel Bakış</CardTitle>
+                <CardTitle>Sınıflar Genel Bakış</CardTitle>
                 <CardDescription>
                   Okulunuza ait tüm sınıfları görüntüleyin
                 </CardDescription>
@@ -331,7 +346,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                           <div>
                             <p className="text-xs text-gray-500">Yaş Grubu</p>
                             <p className="text-sm text-gray-700">
-                              {classRecord.age_group || '—'} years
+                              {classRecord.age_group || '—'} 
                             </p>
                           </div>
 
@@ -387,7 +402,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                       {classes.map((classRecord) => (
                         <TableRow key={classRecord.id}>
                           <TableCell>{classRecord.class_name}</TableCell>
-                          <TableCell>{classRecord.age_group || '—'} yıl</TableCell>
+                          <TableCell>{classRecord.age_group || '—'} yaş</TableCell>
                           <TableCell>{classRecord.class_size ?? 0} öğrenci</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
@@ -452,7 +467,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-xs text-gray-500">Etkinlik sayısı</p>
-                            <Badge>{(plan.activity_ids || []).length} etkinlik</Badge>
+                            <Badge>{(plan.activity_ids || []).length} Etkinlik</Badge>
                           </div>
 
                           <div className="text-right">
@@ -507,7 +522,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                             {getClassById(plan.class_id)?.class_name || `#${plan.class_id}`}
                           </TableCell>
                           <TableCell>
-                            <Badge>{(plan.activity_ids || []).length} etkinlik</Badge>
+                            <Badge>{(plan.activity_ids || []).length} Etkinlik</Badge>
                           </TableCell>
                           <TableCell className="text-sm text-gray-500">
                             {plan.created_at ? new Date(plan.created_at).toLocaleDateString() : '—'}

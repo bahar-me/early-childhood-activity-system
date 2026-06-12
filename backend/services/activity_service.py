@@ -40,10 +40,19 @@ def get_all_activities() -> list[dict]:
     return [serialize_activity(activity) for activity in activities]
 
 def create_activity(data: dict) -> dict:
-    required_fields = ["title", "subject", "duration", "groupSize", "description", "materials", "instructions", "learningGoals"]
+    required_fields = [
+        "title", 
+        "subject", 
+        "duration", 
+        "groupSize", 
+        "description", 
+        "materials", 
+        "instructions", 
+        "learningGoals"
+    ]
     for field in required_fields:
         if field not in data:
-            raise ValueError(f"Missing required field: {field}")
+            raise ValueError(f"Eksik zorunlu alan: {field}")
 
     activity = Activity(
         title=data["title"],
@@ -86,7 +95,7 @@ def update_activity(activity_id: int, data: dict) -> dict:
     ]
     for field in required_fields:
         if field not in data:
-            raise ValueError(f"Missing required field: {field}")
+            raise ValueError(f"Eksik zorunlu alan: {field}")
 
     activity.title = data["title"]
     activity.subject = data["subject"]
@@ -101,7 +110,6 @@ def update_activity(activity_id: int, data: dict) -> dict:
     activity.differentiation_notes = data.get("differentiationNotes")
     activity.family_community_notes = data.get("familyCommunityNotes")
     activity.learning_outcomes_summary = data.get("learningOutcomesSummary")
-
 
     db.session.commit()
 

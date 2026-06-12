@@ -8,7 +8,8 @@ This document describes the authentication-related API endpoints of the system.
 ## POST /login
 
 ### Description
-Authenticates a teacher using email and password credentials.
+Authenticates a registered user using email and password credentials.  
+The user can have one of the following roles: teacher, school_admin, or system_admin.
 
 ### Request Parameters
 - email (string)
@@ -19,11 +20,12 @@ Authenticates a teacher using email and password credentials.
 
 ### Success Response
 - Authentication successful
-- User session or token is generated
+- Access token and refresh token are generated
+- User information and role are returned
 
 ### Error Responses
 - Invalid credentials
 - Missing required fields
 
 ### Related Service
-- loginService
+- Authentication service

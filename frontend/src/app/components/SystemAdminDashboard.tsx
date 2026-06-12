@@ -61,13 +61,17 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
 
   const totalSchools = schools.length;
 
-  const loadSchools = async () => {
+  const loadSchools = async (showSuccessToast = false) => {
     try {
       setLoading(true);
       const data = await getSchools();
       setSchools(data);
+
+      if (showSuccessToast) {
+        toast.success('Okullar güncellendi');
+      }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to load schools';
+      const message = error instanceof Error ? error.message : 'Okullar yüklenemedi';
       toast.error(message);
     } finally {
       setLoading(false);
@@ -80,7 +84,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
 
   const handleAddSchool = async () => {
     if (!newSchoolName.trim()) {
-      toast.error('School name is required');
+      toast.error('Okul adı gereklidir');
       return;
     }
 
@@ -90,13 +94,13 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
         address: newSchoolAddress.trim(),
       });
 
-      toast.success('School added successfully');
+      toast.success('Okul başarıyla eklendi');
       setNewSchoolName('');
       setNewSchoolAddress('');
       setShowAddSchool(false);
-      await loadSchools();
+      await loadSchools(true);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to add school';
+      const message = error instanceof Error ? error.message : 'Okul eklenemedi';
       toast.error(message);
     }
   };
@@ -112,7 +116,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
     if (!editingSchool) return;
 
     if (!editSchoolName.trim()) {
-      toast.error('School name is required');
+      toast.error('Okul adı gereklidir');
       return;
     }
 
@@ -122,26 +126,28 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
         address: editSchoolAddress.trim(),
       });
 
-      toast.success('School updated successfully');
+      toast.success('Okul başarıyla güncellendi');
       setShowEditSchool(false);
       setEditingSchool(null);
       await loadSchools();
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to update school';
+      const message = error instanceof Error ? error.message : 'Okul güncellenemedi';
       toast.error(message);
     }
   };
 
-  const handleDeleteSchool = async (schoolId: number) => {
-    const confirmed = window.confirm('Are you sure you want to delete this school?');
+  const handleDeleteSchool = async (school: School) => {
+    const confirmed = window.confirm(
+      `Bu okulu silmek istediğinize emin misiniz?\n\nOkul: ${school.name}\n\nBu işlem geri alınamaz. Okula bağlı kullanıcılar da silinebilir.`
+    );
     if (!confirmed) return;
 
     try {
-      await deleteSchool(schoolId);
-      toast.success('School deleted successfully');
+      await deleteSchool(Number(school.id));
+      toast.success('Okul başarıyla silindi');
       await loadSchools();
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to delete school';
+      const message = error instanceof Error ? error.message : 'Okul silinemedi';
       toast.error(message);
     }
   };
@@ -170,8 +176,8 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
             </div>
 
             <div className="flex gap-2">
-              <Button onClick={loadSchools} variant="outline" disabled={loading}>
-                <RefreshCw className="h-4 w-4 mr-2" />
+              <Button onClick={() => loadSchools(true)} variant="outline" disabled={loading}>
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Yenile
               </Button>
               <Button onClick={onLogout} variant="outline">
@@ -245,16 +251,16 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
 
               <CardContent>
                 {loading ? (
-                  <p className="text-sm text-gray-500">Loading schools...</p>
+                  <p className="text-sm text-gray-500">Okullar yükleniyor...</p>
                 ) : schools.length === 0 ? (
-                  <p className="text-sm text-gray-500">No schools found.</p>
+                  <p className="text-sm text-gray-500">Kayıtlı okul bulunamadı.</p>
                 ) : (
                   <Table>
                     <TableHeader>
                       <TableRow>
                         <TableHead>ID</TableHead>
                         <TableHead>Okul Adı</TableHead>
-                        <TableHead>Adres</TableHead>
+                        <TableHead>Okul Adresi</TableHead>
                         <TableHead>Oluşturulma Tarihi</TableHead>
                         <TableHead>İşlemler</TableHead>
                       </TableRow>
@@ -285,7 +291,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleDeleteSchool(Number(school.id))}
+                                onClick={() => handleDeleteSchool(school)}
                               >
                                 <Trash2 className="h-4 w-4 mr-1" />
                                 Sil
@@ -361,7 +367,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="schoolAddress">Address</Label>
+              <Label htmlFor="schoolAddress">Okul Adresi</Label>
               <Input
                 id="schoolAddress"
                 value={newSchoolAddress}

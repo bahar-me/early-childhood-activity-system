@@ -34,7 +34,7 @@ class TeacherProfile(db.Model):
             "school_name": self.school.name if self.school else None,
             "name": self.name,
             "years_experience": self.years_experience,
-            "specializations": json.loads(self.specializations) if self.specializations else [],
+            "specializations": specializations,
             "teaching_style": self.teaching_style,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,

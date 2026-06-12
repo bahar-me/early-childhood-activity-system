@@ -9,6 +9,6 @@ class RefreshToken(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     token = db.Column(db.Text, nullable=False, unique=True)
     is_revoked = db.Column(db.Boolean, nullable=False, default=False)
-    created_at = db.Column(db.DateTime, default=lambda:datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     user = db.relationship("User", back_populates="refresh_tokens")

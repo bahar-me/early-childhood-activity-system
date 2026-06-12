@@ -19,8 +19,8 @@ class ClassProfile(db.Model):
     available_resources = db.Column(db.Text, nullable=True)  # JSON string
     special_needs = db.Column(db.Text, nullable=True)        # JSON string
 
-    morning_activities = db.Column(db.Integer, nullable=False, default=45)  # JSON string
-    afternoon_activities = db.Column(db.Integer, nullable=False, default=30)  # JSON string
+    morning_activities = db.Column(db.Integer, nullable=False, default=45)  # minutes
+    afternoon_activities = db.Column(db.Integer, nullable=False, default=30)  # minutes
 
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))

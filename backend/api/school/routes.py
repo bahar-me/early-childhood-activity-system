@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from backend.models import User
+from backend.extensions import db
 
 from backend.services.auth.school_service import (
     create_school,
@@ -40,6 +42,7 @@ def list_schools_route():
     return jsonify(result), 200
 
 @school_bp.route("/<int:school_id>", methods=["GET"])
+@jwt_required()
 @roles_required("system_admin", "school_admin", "teacher")
 def get_school_route(school_id):
     result = get_school_by_id(school_id)
@@ -50,8 +53,19 @@ def get_school_route(school_id):
     return jsonify({"error": result["error"]}), 404
 
 @school_bp.route("/<int:school_id>", methods=["PUT"])
+@jwt_required()
 @roles_required("system_admin", "school_admin") 
 def update_school_route(school_id):
+    claims = get_jwt()
+    user_role = claims.get("role")
+    user_id = int(get_jwt_identity())
+
+    if user_role == "school_admin":
+        user = db.session.get(User, user_id)
+
+        if not user or user.school_id != school_id:
+            return jsonify({"error": "Sadece kendi okulunuzu güncelleyebilirsiniz"}), 403
+
     data = request.get_json() or {}
 
     result = update_school(
@@ -69,6 +83,7 @@ def update_school_route(school_id):
     return jsonify({"error": result["error"]}), 404
 
 @school_bp.route("/<int:school_id>", methods=["DELETE"])
+@jwt_required()
 @roles_required("system_admin")
 def delete_school_route(school_id):
     result = delete_school(school_id)

@@ -5,10 +5,14 @@ from backend.models import School
 
 
 def create_school(name: str, address: Optional[str] = None) -> Dict[str, Any]:
-    if not name:
+    if not name or not name.strip():
         return {"success": False, "error": "Okul adı gereklidir"}
 
-    school = School(name=name, address=address)
+    school = School(
+        name=name.strip(), 
+        address=address.strip() if isinstance(address, str) and address.strip() else None
+    )
+    
     db.session.add(school)
     db.session.commit()
 

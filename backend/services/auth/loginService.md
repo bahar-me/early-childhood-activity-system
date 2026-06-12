@@ -1,12 +1,15 @@
 # Login Service
 
 ## Purpose
-Handles the authentication logic for user login.
+Handles user authentication and token generation.
 
 ## Responsibilities
 - Validate login input fields
 - Authenticate user credentials
-- Return authentication result
+- Generate access token
+- Generate refresh token
+- Store refresh token in the database
+- Return authenticated user information
 
 ## Input
 - Email
@@ -15,16 +18,25 @@ Handles the authentication logic for user login.
 ## Validation Rules
 - Email must not be empty
 - Password must not be empty
+- User must exist in the system
+- Password must match the stored password hash
 
 ## Authentication Logic
-- Check whether the provided credentials match a registered user
-- If credentials are valid, authentication is successful
-- If credentials are invalid, authentication fails
+- Find the user by email
+- Compare the provided password with the stored password hash
+- If credentials are valid, generate JWT access and refresh tokens
+- Add user role and school_id to access token claims
+- Store the refresh token as active in the database
 
 ## Output
-- Success: User is authenticated
-- Failure: Appropriate error message is returned
+- Success:
+  - access_token
+  - refresh_token
+  - user information
+- Failure:
+  - appropriate error message
 
 ## Error Handling
-- Validation error: missing or empty fields
-- Authentication error: incorrect email or password
+- Validation error: missing email or password
+- Authentication error: invalid credentials
+- Token error: refresh token could not be created or stored

@@ -14,6 +14,12 @@ from backend.api.school_admin.routes import school_admin_bp
 from backend.api.ai.routes import ai_bp 
 from backend.api.activity.routes import activity_bp 
 
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost",
+]
+
 def create_app(config_name="development"):
     if config_name is None:
         config_name = os.getenv("FLASK_ENV", "development")
@@ -23,7 +29,7 @@ def create_app(config_name="development"):
 
     CORS(
          app, 
-         resources={r"/api/*": {"origins": "*"}},
+         resources={r"/api/*": {"origins": allowed_origins}},
          methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
          allow_headers=["Content-Type", "Authorization"],
     )

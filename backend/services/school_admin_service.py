@@ -17,9 +17,6 @@ def get_school_admin_overview(user_id: int):
         .all()
     )
 
-    print(f"SCHOOL ADMIN -> user_id={user.id}, school_id={user.school_id}")
-    print(f"PLANS FOUND -> {len(plans)}")
-
     teachers = db.session.query(TeacherProfile).filter_by(school_id=user.school_id).all()
     classes = db.session.query(ClassProfile).filter_by(school_id=user.school_id).all()
 

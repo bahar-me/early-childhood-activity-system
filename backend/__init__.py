@@ -21,7 +21,7 @@ def seed_data():
         if not admin:
             admin = User(
                 email="admin@test.com",
-                password_hash=generate_password_hash("123456"),
+                password_hash=generate_password_hash("Test123!"),
                 role="system_admin",
                 school_id=None
             )
@@ -31,7 +31,7 @@ def seed_data():
         if not teacher:
             teacher = User(
                 email="teacher@test.com",
-                password_hash=generate_password_hash("123456"),
+                password_hash=generate_password_hash("Test123!"),
                 role="teacher",
                 school_id=school.id
             )
@@ -41,14 +41,14 @@ def seed_data():
         if not school_admin:
             school_admin = User(
                 email="schooladmin@test.com",
-                password_hash=generate_password_hash("123456"),
+                password_hash=generate_password_hash("Test123!"),
                 role="school_admin",
                 school_id=school.id
             )
             db.session.add(school_admin)
 
         db.session.commit()
-        print("Veri tabanı başarıyla dolduruldu.")
+        print("Veritabanı başarıyla dolduruldu.")
 
 
 if __name__ == "__main__":

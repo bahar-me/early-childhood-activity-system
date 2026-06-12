@@ -16,28 +16,31 @@ def _get_user_by_email(email: str) -> Optional[User]:
 
 def register(email: str, password: str, role: str = "teacher", school_id: Optional[int] = None) -> Dict[str, Any]:
     if not email or not password:
-        return {"success": False, "error": "Email and password are required"}
+        return {"success": False, "error": "Email ve şifre gereklidir"}
 
     if not _validate_email(email):
-        return {"success": False, "error": "Invalid email format"}
+        return {"success": False, "error": "Geçerli bir email adresi giriniz"}
+
+    if len(password) < 8:
+        return {"success": False, "error": "Şifre en az 8 karakter olmalıdır"}
 
     if role not in ALLOWED_ROLES:
-        return {"success": False, "error": "Invalid role"}
+        return {"success": False, "error": "Geçerli bir rol seçiniz"}
 
     if _get_user_by_email(email):
-        return {"success": False, "error": "User already exists"}
+        return {"success": False, "error": "Kullanıcı zaten mevcut"}
     
     if role in {"teacher", "school_admin"} and not school_id:
-        return {"success": False, "error": "School ID is required for this role"}
+        return {"success": False, "error": "Bu rol için school_id gereklidir"}
     
     if role == "system_admin":
         school_id = None
 
     school = None
     if school_id:
-        school = db.session.get(School,school_id)
+        school = db.session.get(School, school_id)
         if not school:
-            return {"success": False, "error": "School not found"}
+            return {"success": False, "error": "Okul bulunamadı"}
         
     user = User(
         email=email,
@@ -53,14 +56,14 @@ def register(email: str, password: str, role: str = "teacher", school_id: Option
 
 def login(email: str, password: str) -> Dict[str, Any]:
     if not email or not password:
-        return {"success": False, "error": "Email and password are required"}
+        return {"success": False, "error": "Email ve şifre gereklidir"}
 
     user = _get_user_by_email(email)
     if not user:
-        return {"success": False, "error": "Invalid credentials"}
+        return {"success": False, "error": "Geçersiz kimlik bilgileri"}
 
     if not check_password_hash(user.password_hash, password):
-        return {"success": False, "error": "Invalid credentials"}
+        return {"success": False, "error": "Geçersiz kimlik bilgileri"}
 
     additional_claims = {
         "role": user.role,
@@ -88,21 +91,21 @@ def login(email: str, password: str) -> Dict[str, Any]:
 
 def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
     if not refresh_token:
-        return {"success": False, "error": "Refresh token is required"}
+        return {"success": False, "error": "Refresh token gereklidir"}
 
     stored_token = db.session.query(RefreshToken).filter_by(token=refresh_token, is_revoked=False).first()
     if not stored_token:
-        return {"success": False, "error": "Invalid or revoked refresh token"}
-    
+        return {"success": False, "error": "Geçersiz veya iptal edilmiş refresh token"}
+
     try:
         payload = decode_token(refresh_token)
         user_id = int(payload["sub"])
     except Exception:
-        return {"success": False, "error": "Invalid or expired refresh token"}
+        return {"success": False, "error": "Geçersiz veya süresi dolmuş refresh token"}
 
     user = db.session.get(User, user_id)    
     if not user:
-        return {"success": False, "error": "User not found"}
+        return {"success": False, "error": "Kullanıcı bulunamadı"}
 
     new_access_token = create_access_token(
         identity=str(user.id), 
@@ -119,13 +122,13 @@ def refresh_access_token(refresh_token: str) -> Dict[str, Any]:
 
 def logout(refresh_token: str) -> Dict[str, Any]:
     if not refresh_token:
-        return {"success": False, "error": "Refresh token is required"}
+        return {"success": False, "error": "Refresh token gereklidir"}
 
     token_record = db.session.query(RefreshToken).filter_by(token=refresh_token, is_revoked=False).first()
     if not token_record:
-        return {"success": False, "error": "Invalid refresh token"}
+        return {"success": False, "error": "Geçersiz refresh token"}
 
     token_record.is_revoked = True
     db.session.commit()
 
-    return {"success": True, "message": "Logged out successfully"}
+    return {"success": True, "message": "Çıkış başarılı"}

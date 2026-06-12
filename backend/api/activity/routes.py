@@ -21,8 +21,6 @@ def list_activities():
     if limit:
         activities = activities[offset:offset + limit]
 
-    print(f"Activities count: {len(activities)} / total: {total}")  # Debug çıktısı
-    
     return jsonify({
         "activities": activities,
         "total": total,

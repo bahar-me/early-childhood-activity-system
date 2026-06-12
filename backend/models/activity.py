@@ -29,4 +29,4 @@ class Activity(db.Model):
     parent_activity_id = db.Column(db.Integer, db.ForeignKey("activities.id", name="fk_activities_parent_activity_id"), nullable=True)
     created_by_user_id = db.Column(db.Integer, db.ForeignKey("users.id", name="fk_activities_created_by_user_id"), nullable=True)
     parent_activity = db.relationship("Activity", remote_side=[id], backref="derived_activities")
-    created_by_user = db.relationship("User")
+    created_by_user = db.relationship("User", backref="created_activities")

@@ -184,9 +184,9 @@ def adapt_activity_mock(payload: dict) -> dict:
     adapted_duration = original_duration
     adapted_group_size = original_group_size
     adapted_assessment_questions = [
-        "Bu etkinlikte en çok hangi bölümü sevdin?",
-        "Hangi materyali ya da adımı hatırlıyorsun?",
-        "Bu etkinlikte neler öğrendin?"
+        "Etkinlik sırasında en çok ne hoşuna gitti?",
+        "Bugün yeni öğrendiğin bir şey var mı?",
+        "Bu etkinliği tekrar yapsak neyi farklı yapmak isterdin?"
     ]
     adapted_differentiation_notes = "Etkinlik, çocukların bireysel ihtiyaçlarına göre sadeleştirilebilir veya ek ipuçları ile desteklenebilir."
     adapted_family_community_notes = "Ailelere, etkinliğin evde benzer materyallerle kısa bir tekrarının yapılması önerilebilir."

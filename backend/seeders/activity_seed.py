@@ -302,14 +302,15 @@ ACTIVITIES = [
             "Betimleyici dil kullanımı"
         ],
         "assessment_questions": [
-            "Hangi şekilleri bulmayı en çok sevdin?",
-            "Bulduğun şekillerden hangisi senin için daha kolaydı, hangisi daha zordu?",
-            "Bu oyunu tekrar oynasak hangi şekli bulmak isterdin?",
-            "Sınıfta başka hangi nesnelerin bu şekle benzediğini fark ettin?"
+            "Oyun hamuruyla en çok ne yapmayı sevdin?",
+            "Hamuru şekillendirirken hangi hareketleri kullandın?",
+            "Yaptığın tasarımı bize nasıl anlatırsın?",
+            "Bir dahaki sefere oyun hamuruyla ne yapmak isterdin?",
+            "Hangi renkleri ve araçları kullanmayı tercih ettin?"
         ],
-        "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az şekil kartı ve basit şekiller kullanılabilir. Hazır olan çocuklar için şekillerin özelliklerini açıklama, farklı şekilleri eşleştirme veya şekillendirme fırsatı verilebilir.",
-        "family_community_notes": "Ailelere, evde çocuklarıyla birlikte sınıf içinde öğrendikleri şekilleri bulmaları ve tanımlamaları önerilebilir. Çocuklar evde konuştukları bir şekli sınıfta paylaşabilir.",
-        "learning_outcomes_summary": "Bu etkinlik, çocukların şekil tanıma, mekânsal farkındalık, gözlem becerileri ve sayma becerilerini destekler. Şekil avı etkinliği, çocukların görsel algılayışlarını ve problem çözme becerilerini geliştirmeye yardımcı olur."
+        "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha yumuşak hamur, büyük kalıplar ve basit şekillendirme araçları kullanılabilir. Hazır olan çocuklar için belirli bir tema seçme, daha ayrıntılı figürler oluşturma veya yaptığı tasarımı arkadaşlarına anlatma fırsatı verilebilir.",
+        "family_community_notes": "Ailelere, evde çocuklarıyla birlikte oyun hamuru, kil veya güvenli ev yapımı hamurla basit şekiller oluşturmaları önerilebilir. Çocuklardan evde yaptıkları bir tasarımı sınıfta anlatmaları istenebilir.",
+        "learning_outcomes_summary": "Bu etkinlik, çocukların ince motor becerilerini, el-göz koordinasyonunu, yaratıcı düşünmesini ve sözel ifade becerilerini destekler. Oyun hamuruyla çalışma, çocukların parmak kaslarını güçlendiririrken hayal güçlerini somut ürünlere dönüştürmelerine fırsat verir."
     },
     {
         "title": "Bitki Büyümesini Gözlemleme",
@@ -615,8 +616,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Denge becerinizi nasıl geliştirdiniz?",
             "En çok hangi denge görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte denge becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Etkinlik sırasında seni en çok ne şaşırttı?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte denge becerilerini geliştirmek için basit denge oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları denge etkinliklerini sınıfta paylaşabilir.",
@@ -645,7 +646,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Sayı sıralamasını nasıl öğrendiniz?",
             "En çok hangi sayı sıralama görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Etkinlik sırasında seni en çok ne şaşırttı?",
             "Evde ailenizle birlikte sayı sıralama becerilerinizi geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -675,8 +676,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Sayı dizisini nasıl öğrendiniz?",
             "En çok hangi eksik sayı bulma görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte sayı dizisi becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Etkinlik sırasında seni en çok ne şaşırttı?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte sayı dizisi becerilerini geliştirmek için basit sayı dizisi oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları sayı dizisi etkinliklerini sınıfta paylaşabilir.",
@@ -705,7 +706,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Büyük-küçük kavramını nasıl öğrendiniz?",
             "En çok hangi karşılaştırma görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Etkinlik sırasında seni en çok ne şaşırttı?",
             "Evde ailenizle birlikte büyük-küçük kavramını geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -735,8 +736,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Örüntü farkındalığını nasıl öğrendiniz?",
             "En çok hangi desen tamamlama görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte örüntü farkındalığını geliştirmek için ne yapabilirsiniz?"
+            "Etkinlik sırasında seni en çok ne şaşırttı?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte örüntü farkındalığını geliştirmek için basit örüntü oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları örüntü etkinliklerini sınıfta paylaşabilir.",
@@ -795,8 +796,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Şekil tanıma becerisini nasıl geliştirdiniz?",
             "En çok hangi şekil eşleştirme görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte şekil tanıma becerisini geliştirmek için ne yapabilirsiniz?"
+            "Hangi bölümü tekrar yapmak isterdin?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte şekil tanıma becerisini geliştirmek için basit şekil oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları şekil etkinliklerini sınıfta paylaşabilir.",
@@ -825,7 +826,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Sayı miktar ilişkisini nasıl öğrendiniz?",
             "En çok hangi kule oluşturma görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Hangi bölümü tekrar yapmak isterdin?",
             "Evde ailenizle birlikte sayı miktar ilişkisini geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -856,7 +857,7 @@ ACTIVITIES = [
             "Renk sınıflandırma becerisini nasıl geliştirdiniz?",
             "En çok hangi renk eşleştirme görevini sevdiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte renk sınıflandırma becerisini geliştirmek için ne yapabilirsiniz?"
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte renk sınıflandırma becerisini geliştirmek için basit renk oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları renk etkinliklerini sınıfta paylaşabilir.",
@@ -885,7 +886,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Sayı sıralamasını nasıl öğrendiniz?",
             "En çok hangi gün sıralama görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Hangi bölümü tekrar yapmak isterdin?",
             "Evde ailenizle birlikte gün ve tarih farkındalığını geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -915,8 +916,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Kaç adım uzaklık ölçme becerisini nasıl geliştirdiniz?",
             "En çok hangi hedefe adım sayma görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte standart olmayan ölçme becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Hangi bölümü tekrar yapmak isterdin?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha kısa mesafeler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha uzun mesafeler ve farklı hedefler ekleyerek zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte standart olmayan ölçme becerilerini geliştirmek için basit adım sayma oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları ölçme etkinliklerini sınıfta paylaşabilir.",
@@ -945,7 +946,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Kafiye kavramını nasıl öğrendiniz?",
             "En çok hangi kafiye eşleştirme görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Etkinlik sırasında seni en çok ne şaşırttı?",
             "Evde ailenizle birlikte kafiye farkındalığınızı geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -975,8 +976,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Hikaye kurma becerisini nasıl geliştirdiniz?",
             "En çok hangi hikaye kurma görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hikaye kurma becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hikaye kurma becerilerini geliştirmek için basit hikaye oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları hikaye etkinliklerini sınıfta paylaşabilir.",
@@ -1005,7 +1006,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Ses ayırt etme becerisini nasıl geliştirdiniz?",
             "En çok hangi ses ayırt etme görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
             "Evde ailenizle birlikte ses ayırt etme becerilerinizi geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1035,8 +1036,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Hikaye sıralama becerisini nasıl geliştirdiniz?",
             "En çok hangi hikaye sıralama görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hikaye sıralama becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hikaye sıralama becerilerini geliştirmek için basit hikaye oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları hikaye etkinliklerini sınıfta paylaşabilir.",
@@ -1065,8 +1066,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Kelime dağarcığınızı nasıl geliştirdiniz?",
             "En çok hangi kelime üretme görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte kelime dağarcığınızı geliştirmek için ne yapabilirsiniz?"
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte kelime dağarcığını geliştirmek için basit kelime oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları kelime etkinliklerini sınıfta paylaşabilir.",
@@ -1095,8 +1096,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Ses ayırt etme becerisini nasıl geliştirdiniz?",
             "En çok hangi ses ayırt etme görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte ses ayırt etme becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
+            "Yaptığın çalışmada en çok hangi ayrıntıyı sevdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte ses ayırt etme becerilerini geliştirmek için basit ses oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları ses etkinliklerini sınıfta paylaşabilir.",
@@ -1125,7 +1126,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Cümle kurma becerisini nasıl geliştirdiniz?",
             "En çok hangi cümle tamamlama görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
             "Evde ailenizle birlikte cümle kurma becerilerinizi geliştirmek için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1155,8 +1156,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Rol alma becerisini nasıl geliştirdiniz?",
             "En çok hangi karakterle konuşma görevini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte rol alma becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha basit karakterler ve daha fazla rehberlik sağlanabilir. Hazır olan çocuklar için daha karmaşık karakterler ve özgür canlandırmalar teşvik edilebilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte rol alma becerilerini geliştirmek için basit rol oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları rol etkinliklerini sınıfta paylaşabilir.",
@@ -1185,8 +1186,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Kelime tanıma becerisini nasıl geliştirdiniz?",
             "En çok hangi resim-kelime eşleştirmesini sevdiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte kelime tanıma becerilerinizi geliştirmek için ne yapabilirsiniz?"
+            "Bu çalışmada zorlandığın bir yer oldu mu?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte kelime tanıma becerilerini geliştirmek için basit kelime oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları kelime etkinliklerini sınıfta paylaşabilir.",
@@ -1215,8 +1216,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Yeni kelime öğrenme becerisini nasıl geliştirdiniz?",
             "En çok hangi cümlede kelimeyi kullandınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte yeni kelimeleri öğrenmek için ne yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte yeni kelimeleri öğrenmek için basit kelime oyunları oynamaları önerilebilir. Çocuklar evde yaptıkları kelime etkinliklerini sınıfta paylaşabilir.",
@@ -1245,8 +1246,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Yaratıcı ifade becerisini nasıl geliştirdiniz?",
             "En çok hangi resmi oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte resim yapmak için ne yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte yaratıcı ifade becerilerini geliştirmek için basit resim etkinlikleri yapmaları önerilebilir. Çocuklar evde yaptıkları resim etkinliklerini sınıfta paylaşabilir.",
@@ -1275,8 +1276,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Doğal materyallerle sanat çalışması yaparken ne öğrendiniz?",
             "En çok hangi deseni oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte doğadan nesneler kullanarak sanat çalışmalarında bulunabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte doğadan nesneler kullanarak sanat çalışmalarında bulunmaları önerilebilir. Çocuklar evde yaptıkları sanat etkinliklerini sınıfta paylaşabilir.",
@@ -1305,7 +1306,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Yaratıcı tasarım becerisini nasıl geliştirdiniz?",
             "En çok hangi maskeyi oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
             "Evde ailenizle birlikte maskeler yapmak için ne yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1335,8 +1336,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Doğal materyallerle sanat çalışması yaparken ne öğrendiniz?",
             "En çok hangi resmi oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte doğadan nesneler kullanarak sanat çalışmalarında bulunabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte doğadan nesneler kullanarak sanat çalışmalarında bulunmaları önerilebilir. Çocuklar evde yaptıkları sanat etkinliklerini sınıfta paylaşabilir.",
@@ -1365,7 +1366,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Geri dönüşüm malzemeleriyle sanat çalışması yaparken ne öğrendiniz?",
             "En çok hangi heykeli oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
             "Evde ailenizle birlikte atık malzemeler kullanarak sanat çalışmalarında bulunabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1395,8 +1396,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Sünger baskı tekniğiyle çalışırken ne öğrendiniz?",
             "En çok hangi deseni oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte sünger baskıları yapmak için ne yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte sünger baskıları yapmaları önerilebilir. Çocuklar evde yaptıkları baskıları sınıfta paylaşabilir.",
@@ -1425,7 +1426,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Duygularınızı renklerle nasıl ifade ettiniz?",
             "En çok hangi duyguyu hissettiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
             "Evde ailenizle birlikte duygularınızı renklerle ilişkilendirebilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1455,8 +1456,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Şehir manzarası oluşturma etkinliğinde ne öğrendiniz?",
             "En çok hangi bina ve yolu oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte şehir manzarası oluşturabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte şehir manzaraları oluşturmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1485,7 +1486,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Şapka tasarlama etkinliğinde ne öğrendiniz?",
             "En çok hangi süslemeyi oluşturdunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
             "Evde ailenizle birlikte şapka tasarlayabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1515,8 +1516,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Mozaik kağıt resmi etkinliğinde ne öğrendiniz?",
             "En çok hangi renkleri kullandınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte mozaik resimler oluşturabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte mozaik resimler oluşturmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1545,8 +1546,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Işık ve gölge ilişkisini keşfetme etkinliğinde ne öğrendiniz?",
             "En çok hangi nesnelerin gölgesini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte ışık ve gölge etkinlikleri yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Başlamadan önce ne tahmin etmiştin, sonuç nasıl oldu?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte ışık ve gölge etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1575,7 +1576,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Suyun yolculuğu etkinliğinde ne öğrendiniz?",
             "En çok hangi yüzeyde suyun hareketini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
             "Evde ailenizle birlikte su hareketi etkinlikleri yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -1605,8 +1606,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Hava dolu mu boş mu etkinliğinde ne öğrendiniz?",
             "En çok hangi nesnelerin havasını gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hava etkinlikleri yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hava etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1635,8 +1636,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Buzun erime yarışı etkinliğinde ne öğrendiniz?",
             "En çok hangi koşullarda buzun eridiğini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte buz erime etkinlikleri yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte buz erime etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1665,8 +1666,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Toprakta neler var etkinliğinde ne öğrendiniz?",
             "En çok hangi parçacıkları gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte toprak inceleme etkinlikleri yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte toprak inceleme etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1696,7 +1697,7 @@ ACTIVITIES = [
             "Ses titreşimi etkinliğinde ne öğrendiniz?",
             "En çok hangi nesnelerin titreşimini gözlemlediniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte ses titreşimi etkinlikleri yapabilirsiniz?"
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte ses titreşimi etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1725,8 +1726,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Yağmur bulutu kavanozu etkinliğinde ne öğrendiniz?",
             "En çok hangi koşullarda bulut oluştuğunu gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte yağmur bulutu etkinlikleri yapabilirsiniz?"
+            "Arkadaşına bu etkinliği nasıl anlatırsın?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte yağmur bulutu etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1755,8 +1756,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Meyve çekirdeği inceleme etkinliğinde ne öğrendiniz?",
             "En çok hangi meyvenin çekirdeklerini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte meyve çekirdeği etkinlikleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte meyve çekirdeği etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1785,8 +1786,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Renkli süt deneyi etkinliğinde ne öğrendiniz?",
             "En çok hangi renklerin hareketini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte renkli süt etkinlikleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte renkli süt etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1815,8 +1816,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Ağır mı hafif mi etkinliğinde ne öğrendiniz?",
             "En çok hangi nesnelerin ağırlığını gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte ağırlık karşılaştırma etkinlikleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte ağırlık karşılaştırma etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1845,8 +1846,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Hızlı mı Yavaş mı etkinliğinde ne öğrendiniz?",
             "En çok hangi müziklerin tempolarını gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hız ve yavaş müzik etkinlikleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hız ve yavaş müzik etkinlikleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1875,8 +1876,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Sesli Sessiz Oyunu etkinliğinde ne öğrendiniz?",
             "En çok hangi seslerin yüksek veya yumuşak olduğunu gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte sesli sessiz oyunları yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte sesli sessiz oyunları yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1905,8 +1906,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Hayvan Sesleri Orkestrası etkinliğinde ne öğrendiniz?",
             "En çok hangi hayvan seslerini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hayvan sesleri orkestrası yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hayvan sesleri orkestrası yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1935,8 +1936,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Davulunu Dinle etkinliğinde ne öğrendiniz?",
             "En çok hangi ritimleri gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte davul ritimleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte davul ritimleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1965,8 +1966,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Müzikle Duygu Yüzleri etkinliğinde ne öğrendiniz?",
             "En çok hangi duyguları hissettiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte müzikle duygu ifade etme aktiviteleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bu etkinlikte hangi malzeme en çok ilgini çekti?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte müzikle duygu ifade etme aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -1995,7 +1996,7 @@ ACTIVITIES = [
         "assessment_questions": [
             "Çıngırak Yapımı ve Çalma etkinliğinde ne öğrendiniz?",
             "En çok hangi ritimleri gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
             "Evde ailenizle birlikte çıngıraklar yapabilirsiniz?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
@@ -2025,8 +2026,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Şarkının Sonunu Tahmin Et etkinliğinde ne öğrendiniz?",
             "En çok hangi şarkıları hatırladınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte şarkı sözlerini tamamlayabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte şarkı sözlerini tamamlamak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2055,8 +2056,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Ritimle İsim Söyleme etkinliğinde ne öğrendiniz?",
             "En çok hangi isimleri hatırladınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte isimleri ritimle söyleyebilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte isimleri ritimle söylemek için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2085,8 +2086,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Müzikli Hikaye Yolculuğu etkinliğinde ne öğrendiniz?",
             "En çok hangi müzikal etkileri gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hikayeler anlatabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hikayeler anlatmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2115,8 +2116,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Melodi Takibi etkinliğinde ne öğrendiniz?",
             "En çok hangi ses sıralarını hatırladınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte melodi takibi yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte melodi takibi yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2145,8 +2146,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Renkli Halka Sıçraması etkinliğinde ne öğrendiniz?",
             "En çok hangi renkleri hatırladınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte renkli halka sıçraması yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte renkli halka sıçraması yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2175,8 +2176,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Yavaş Hızlı Yürü etkinliğinde ne öğrendiniz?",
             "En çok hangi yürüyüş türlerini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte yavaş hızlı yürüme aktiviteleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte yavaş hızlı yürüme aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2205,8 +2206,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Topu Hedefe Yuvarla etkinliğinde ne öğrendiniz?",
             "En çok hangi hedefleri başarıyla tamamladınız?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte topu hedefe yuvarlama aktiviteleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte topu hedefe yuvarlama aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2235,8 +2236,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Hayvan Yürüyüşleri etkinliğinde ne öğrendiniz?",
             "En çok hangi hayvan yürüyüşlerini gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte hayvan yürüyüşleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte hayvan yürüyüşleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2265,8 +2266,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Denge Yolu etkinliğinde ne öğrendiniz?",
             "En çok hangi dengeli yürüyüşleri gözlemlediniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte denge yolu aktiviteleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte denge yolu aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2295,8 +2296,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Yastık Adaları etkinliğinde ne öğrendiniz?",
             "En çok hangi adaları geçtiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte yastık adası aktiviteleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte yastık adası aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2325,8 +2326,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Kuyruk Yakalama Oyunu etkinliğinde ne öğrendiniz?",
             "En çok hangi kuyrukları korudunuz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte kuyruk yakalama oyunları yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte kuyruk yakalama oyunları yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2355,8 +2356,8 @@ ACTIVITIES = [
         "assessment_questions": [
             "Tünelden Geç etkinliğinde ne öğrendiniz?",
             "En çok hangi tünelleri geçtiniz?",
-            "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte tünelden geçme aktiviteleri yapabilirsiniz?"
+            "Bugün öğrendiğin şeyi günlük hayatta nerede kullanabilirsin?",
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte tünelden geçme aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2386,7 +2387,7 @@ ACTIVITIES = [
             "Balon Havada Kalsın etkinliğinde ne öğrendiniz?",
             "En çok hangi balonları havada tuttunuz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte balon havada kalsın aktiviteleri yapabilirsiniz?"
+            "Bir dahaki sefere neyi farklı yapmak isterdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte balon havada kalsın aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2416,7 +2417,7 @@ ACTIVITIES = [
             "Taklit ve Don Oyunu etkinliğinde ne öğrendiniz?",
             "En çok hangi hareketleri taklit ettiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte taklit ve don oyunları yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklerdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte taklit ve don oyunları yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2446,7 +2447,7 @@ ACTIVITIES = [
             "Duygu Termometresi etkinliğinde ne öğrendiniz?",
             "En çok hangi duyguları fark ettiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte duygularınızı ifade etme aktiviteleri yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklerdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte duygularını ifade etme aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2506,7 +2507,7 @@ ACTIVITIES = [
             "Sıra Bende Sıra Sende etkinliğinde ne öğrendiniz?",
             "En çok hangi sırayı beklediniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte sıra bekleme oyunları yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklerdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte sıra bekleme oyunları yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2536,7 +2537,7 @@ ACTIVITIES = [
             "Arkadaşına Yardım Et etkinliğinde ne öğrendiniz?",
             "En çok hangi yardımlaşma becerisini öğrendiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte yardımlaşma oyunları yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklerdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte yardımlaşma oyunları yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2566,7 +2567,7 @@ ACTIVITIES = [
             "Ayna Duyguları etkinliğinde ne öğrendiniz?",
             "En çok hangi duyguları tanıdınız?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte duygularınızı ifade etme aktiviteleri yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklerdin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte duygularını ifade etme aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2596,7 +2597,7 @@ ACTIVITIES = [
             "Sorun Çözme Kartları etkinliğinde ne öğrendiniz?",
             "En çok hangi sorun çözme stratejilerini öğrendiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte sorunlarla başa çıkma aktiviteleri yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklersin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte sorunlarla başa çıkma aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2626,7 +2627,7 @@ ACTIVITIES = [
             "Teşekkür Çiçeği etkinliğinde ne öğrendiniz?",
             "En çok kime veya neye teşekkür etmek istediğinizi öğrendiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte teşekkür etme aktiviteleri yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklersin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha az zorlukta görevler ve daha fazla tekrar yapılabilir. Hazır olan çocuklar için daha karmaşık görevler ve zorluk seviyeleri artırılabilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte teşekkür etme aktiviteleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2656,7 +2657,7 @@ ACTIVITIES = [
             "Birlikte Nefes Al etkinliğinde ne öğrendiniz?",
             "En çok hangi nefes egzersizlerini beğendiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte nefes egzersizleri yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklersin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha basit nefes egzersizleri ve daha fazla rehberlik sağlanabilir. Hazır olan çocuklar için daha uzun nefes tutma süreleri veya görselleştirme teknikleri eklenebilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte nefes egzersizleri yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2686,7 +2687,7 @@ ACTIVITIES = [
             "Arkadaşını Dinle etkinliğinde ne öğrendiniz?",
             "En çok hangi arkadaşınızın söylediklerini hatırladınız?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte dinleme oyunları yapabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklersin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha kısa paylaşımlar ve daha fazla rehberlik sağlanabilir. Hazır olan çocuklar için daha uzun paylaşımlar ve daha karmaşık sorular eklenebilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte dinleme oyunları yapmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",
@@ -2716,7 +2717,7 @@ ACTIVITIES = [
             "Mutlu Anılar Panosu etkinliğinde ne öğrendiniz?",
             "En çok hangi mutlu anınızı çizdiniz?",
             "Bu etkinlikte en çok neyi öğrendiniz?",
-            "Evde ailenizle birlikte mutlu anları paylaşabilirsiniz?"
+            "Bu etkinliği daha eğlenceli yapmak için ne eklersin?"
         ],
         "differentiation_notes": "Daha fazla desteğe ihtiyaç duyan çocuklar için daha kısa paylaşımlar ve daha fazla rehberlik sağlanabilir. Hazır olan çocuklar için daha uzun paylaşımlar ve daha karmaşık sorular eklenebilir.",
         "family_community_notes": "Ailelere, evde çocuklarıyla birlikte mutlu anları paylaşmak için malzemeler sağlayabilirsiniz. Çocuklar evde yaptıkları çalışmalarını sınıfta paylaşabilir.",

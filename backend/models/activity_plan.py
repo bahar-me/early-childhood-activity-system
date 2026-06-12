@@ -21,7 +21,6 @@ class ActivityPlan(db.Model):
 
         try:
             activity_ids = json.loads(self.activity_ids) if self.activity_ids else []   
-
         except (json.JSONDecodeError, TypeError):
             activity_ids = []
 
