@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Activity, Subject, Duration, GroupSize } from './types/activity';
 import { TeacherProfile, ClassProfile } from './types/profile';
 import { User } from './types/user';
@@ -54,6 +54,10 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [isGeneratingAIExplanation, setIsGeneratingAIExplanation] = useState(false);
   const [hasMoreActivities, setHasMoreActivities] = useState(true);
   const [isLoadingMoreActivities, setIsLoadingMoreActivities] = useState(false);
+  const [totalActivities, setTotalActivities] = useState(0);
+  const [activityOffset, setActivityOffset] = useState(0);
+  const activityOffsetRef = useRef(0);
+  const PAGE_SIZE = 20;
 
   const normalizeSubject = (subject: string): Subject => {
   const map: Record<string, Subject> = {
@@ -118,13 +122,21 @@ const normalizeGroupSize = (groupSize: string): GroupSize => {
 };
 
 const handleLoadMoreActivities = async () => {
+  if (isLoadingMoreActivities || !hasMoreActivities) return;
+
   try {
     setIsLoadingMoreActivities(true);
 
-    const data = await getActivities(30, activities.length);
+    const currentOffset = activityOffsetRef.current;
+    const page = await getActivities(PAGE_SIZE, currentOffset);
 
-    setActivities((prev) => [...prev, ...data]);
-    setHasMoreActivities(data.length === 30);
+    setActivities((prev) => [...prev, ...page.activities]);
+
+    const nextOffset = currentOffset + page.activities.length;
+    activityOffsetRef.current = nextOffset;
+    
+    setTotalActivities(page.total);
+    setHasMoreActivities(nextOffset < page.total);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : 'Daha fazla etkinlik yüklenemedi';
@@ -203,10 +215,14 @@ useEffect(() => {
     try {
       setLoadingActivities(true);
 
-      const data = await getActivities(30, 0);
+      const page = await getActivities(PAGE_SIZE, 0);
 
-      setActivities(data);
-      setHasMoreActivities(data.length === 30);
+      setActivities(page.activities);
+      setTotalActivities(page.total);
+
+      activityOffsetRef.current = page.activities.length;
+
+      setHasMoreActivities(page.activities.length < page.total);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Etkinlikler yüklenemedi';
@@ -215,7 +231,7 @@ useEffect(() => {
       setActivities([]);
       setHasMoreActivities(false);
 
-      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yapın.') {
         toast.error(message);
         onLogout();
       }
@@ -264,7 +280,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
     toast.error(message);
 
-    if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+    if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yapın.') {
       onLogout();
     }
   } finally {
@@ -331,7 +347,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
       toast.error(message);
 
-      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yapın.') {
         onLogout();
       }
     } finally {
@@ -805,7 +821,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
       toast.error(message);
 
-      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yap.') {
+      if (message === 'Oturum süresi doldu. Lütfen tekrar giriş yapın.') {
         onLogout();
       }
     } finally {
@@ -956,7 +972,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                 variant="outline"
               >
                 <LogOut className="h-5 w-5 mr-2" />
-                Çıkış Yap
+                Çıkış Yapın
               </Button>
             </div>
           </div>
@@ -984,7 +1000,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'all' | 'favorites' | 'selected')}>
               <TabsList className="mb-6">
                 <TabsTrigger value="all">
-                  Tüm Etkinlikler ({activities.length})
+                  Tüm Etkinlikler ({activities.length}/{totalActivities})
                 </TabsTrigger>
                 <TabsTrigger value="favorites" className="flex items-center gap-2">
                   <Heart className="h-4 w-4" />
@@ -998,7 +1014,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
               <TabsContent value="all" className="mt-0">
                 <p className="text-sm text-gray-500 mb-4">
-                  Gösterilen etkinlikler: {visibleActivities.length}
+                  Gösterilen etkinlikler: {activities.length} / {totalActivities} 
                 </p>
 
                 {filteredActivities.length === 0 ? (

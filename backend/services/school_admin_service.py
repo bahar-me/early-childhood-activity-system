@@ -10,7 +10,12 @@ def get_school_admin_overview(user_id: int):
     if not school:
         return {"success": False, "error": "Okul bulunamadı"}
 
-    plans = db.session.query(ActivityPlan).filter_by(school_id=user.school_id).all()
+    plans = (
+        db.session.query(ActivityPlan)
+        .filter_by(school_id=user.school_id)
+        .order_by(ActivityPlan.created_at.desc())
+        .all()
+    )
 
     print(f"SCHOOL ADMIN -> user_id={user.id}, school_id={user.school_id}")
     print(f"PLANS FOUND -> {len(plans)}")

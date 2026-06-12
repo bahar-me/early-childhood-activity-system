@@ -17,16 +17,25 @@ def upsert_teacher_profile(user_id: int, payload: Dict[str, Any]) -> Dict[str, A
         db.session.add(profile)
 
     years_experience = payload.get("years_experience")
-    school_id = payload.get("school_id")
+    school_id = payload.get("school_id") or user.school_id
 
     profile.name = payload.get("name", "")
     profile.years_experience = int(years_experience) if years_experience not in (None, "") else 0
     profile.specializations = json.dumps(payload.get("specializations", []))
     profile.teaching_style = payload.get("teaching_style")
     
-    if school_id  not in (None, ""):
-        profile.school_id = int(school_id)
-        user.school_id = int(school_id)
+    if school_id in (None, ""):
+        return {"success": False, "error": "Okul bilgisi eksik"}
+    
+    school_id = int(school_id)
+
+    profile.name = payload.get("name", "")
+    profile.years_experience = int(years_experience) if years_experience not in (None, "") else 0
+    profile.specializations = json.dumps(payload.get("specializations", []))
+    profile.teaching_style = payload.get("teaching_style")
+    
+    profile.school_id = school_id
+    user.school_id = school_id
 
     db.session.commit()
     return {"success": True, "profile": profile.to_dict()}

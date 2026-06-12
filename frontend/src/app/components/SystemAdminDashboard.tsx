@@ -162,21 +162,21 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
           <div className="flex items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl text-purple-600">
-                System Administrator Dashboard
+                Sistem Yöneticisi Paneli
               </h1>
               <p className="text-gray-600 mt-1">
-                Welcome, {displayName} • Full System Access
+                Hoş geldiniz, {displayName} • Tam Sistem Yetkisi
               </p>
             </div>
 
             <div className="flex gap-2">
               <Button onClick={loadSchools} variant="outline" disabled={loading}>
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                Yenile
               </Button>
               <Button onClick={onLogout} variant="outline">
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                Çıkış Yap
               </Button>
             </div>
           </div>
@@ -187,42 +187,42 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm">Total Schools</CardTitle>
+              <CardTitle className="text-sm">Toplam Okul</CardTitle>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalSchools}</div>
-              <p className="text-xs text-muted-foreground">Schools in database</p>
+              <p className="text-xs text-muted-foreground">Sistemde kayıtlı okullar</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm">Database Status</CardTitle>
+              <CardTitle className="text-sm">Veritabanı Durumu</CardTitle>
               <Database className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                Connected
+                Bağlı
               </Badge>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm">System Role</CardTitle>
+              <CardTitle className="text-sm">Sistem Rolü</CardTitle>
               <Shield className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <Badge className="bg-red-100 text-red-800">system_admin</Badge>
+              <Badge className="bg-red-100 text-red-800">Sistem Yöneticisi</Badge>
             </CardContent>
           </Card>
         </div>
 
         <Tabs defaultValue="schools" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="schools">Schools</TabsTrigger>
-            <TabsTrigger value="system">System</TabsTrigger>
+            <TabsTrigger value="schools">Okullar</TabsTrigger>
+            <TabsTrigger value="system">Sistem</TabsTrigger>
           </TabsList>
 
           <TabsContent value="schools">
@@ -230,15 +230,15 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
               <CardHeader>
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <CardTitle>Schools Management</CardTitle>
+                    <CardTitle>Okul Yönetimi</CardTitle>
                     <CardDescription>
-                      Manage all schools from the backend API
+                      Tüm okulları backend API'sinden yönetin
                     </CardDescription>
                   </div>
 
                   <Button onClick={() => setShowAddSchool(true)}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add School
+                    Okul Ekle
                   </Button>
                 </div>
               </CardHeader>
@@ -253,10 +253,10 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                     <TableHeader>
                       <TableRow>
                         <TableHead>ID</TableHead>
-                        <TableHead>School Name</TableHead>
-                        <TableHead>Address</TableHead>
-                        <TableHead>Created</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead>Okul Adı</TableHead>
+                        <TableHead>Adres</TableHead>
+                        <TableHead>Oluşturulma Tarihi</TableHead>
+                        <TableHead>İşlemler</TableHead>
                       </TableRow>
                     </TableHeader>
 
@@ -279,7 +279,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                                 onClick={() => handleOpenEdit(school)}
                               >
                                 <Pencil className="h-4 w-4 mr-1" />
-                                Edit
+                                Düzenle
                               </Button>
 
                               <Button
@@ -288,7 +288,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                                 onClick={() => handleDeleteSchool(Number(school.id))}
                               >
                                 <Trash2 className="h-4 w-4 mr-1" />
-                                Delete
+                                Sil
                               </Button>
                             </div>
                           </TableCell>
@@ -304,36 +304,36 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
           <TabsContent value="system">
             <Card>
               <CardHeader>
-                <CardTitle>System Information</CardTitle>
-                <CardDescription>Current frontend-backend integration status</CardDescription>
+                <CardTitle>Sistem Bilgileri</CardTitle>
+                <CardDescription>Mevcut frontend-backend entegrasyon durumu</CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-3">
                 <div className="flex justify-between py-2 border-b">
                   <span className="text-sm text-gray-600">Frontend</span>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                    Running
+                    Çalışıyor
                   </Badge>
                 </div>
 
                 <div className="flex justify-between py-2 border-b">
                   <span className="text-sm text-gray-600">Backend API</span>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                    Connected
+                    Bağlı
                   </Badge>
                 </div>
 
                 <div className="flex justify-between py-2 border-b">
                   <span className="text-sm text-gray-600">JWT Auth</span>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                    Active
+                    Aktif
                   </Badge>
                 </div>
 
                 <div className="flex justify-between py-2">
-                  <span className="text-sm text-gray-600">School CRUD</span>
+                  <span className="text-sm text-gray-600">Okul CRUD</span>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                    Enabled
+                    Yetkilendirildi
                   </Badge>
                 </div>
               </CardContent>
@@ -345,18 +345,18 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
       <Dialog open={showAddSchool} onOpenChange={setShowAddSchool}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New School</DialogTitle>
-            <DialogDescription>Create a new school in the system</DialogDescription>
+            <DialogTitle>Yeni Okul Ekle</DialogTitle>
+            <DialogDescription>Sistemde yeni bir okul oluştur</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="schoolName">School Name</Label>
+              <Label htmlFor="schoolName">Okul Adı</Label>
               <Input
                 id="schoolName"
                 value={newSchoolName}
                 onChange={(e) => setNewSchoolName(e.target.value)}
-                placeholder="Enter school name"
+                placeholder="Okul adını girin"
               />
             </div>
 
@@ -366,15 +366,15 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                 id="schoolAddress"
                 value={newSchoolAddress}
                 onChange={(e) => setNewSchoolAddress(e.target.value)}
-                placeholder="Enter school address"
+                placeholder="Okul adresini girin"
               />
             </div>
 
             <div className="flex gap-2 justify-end">
               <Button variant="outline" onClick={() => setShowAddSchool(false)}>
-                Cancel
+                İptal
               </Button>
-              <Button onClick={handleAddSchool}>Add School</Button>
+              <Button onClick={handleAddSchool}>Okul Ekle</Button>
             </div>
           </div>
         </DialogContent>
@@ -383,28 +383,28 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
       <Dialog open={showEditSchool} onOpenChange={setShowEditSchool}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit School</DialogTitle>
-            <DialogDescription>Update school information</DialogDescription>
+            <DialogTitle>Okul Düzenle</DialogTitle>
+            <DialogDescription>Okul bilgilerini güncelle</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="editSchoolName">School Name</Label>
+              <Label htmlFor="editSchoolName">Okul Adı</Label>
               <Input
                 id="editSchoolName"
                 value={editSchoolName}
                 onChange={(e) => setEditSchoolName(e.target.value)}
-                placeholder="Enter school name"
+                placeholder="Okul adını girin"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="editSchoolAddress">Address</Label>
+              <Label htmlFor="editSchoolAddress">Okul Adresi</Label>
               <Input
                 id="editSchoolAddress"
                 value={editSchoolAddress}
                 onChange={(e) => setEditSchoolAddress(e.target.value)}
-                placeholder="Enter school address"
+                placeholder="Okul adresini girin"
               />
             </div>
 
@@ -416,9 +416,9 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                   setEditingSchool(null);
                 }}
               >
-                Cancel
+                İptal
               </Button>
-              <Button onClick={handleUpdateSchool}>Save Changes</Button>
+              <Button onClick={handleUpdateSchool}>Değişiklikleri Kaydet</Button>
             </div>
           </div>
         </DialogContent>

@@ -7,13 +7,20 @@ async function parseJsonSafely(response: Response) {
   return text ? JSON.parse(text) : {};
 }
 
+export type ActivitiesPage = {
+  activities: Activity[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 export type CreateActivityPayload = Omit<Activity, 'id'> & {
   sourceType?: 'seed' | 'manual_edit' | 'llm_generated';
   parentActivityId?: string | null;
   createdByUserId?: string | null;
 };
 
-export async function getActivities(limit = 30, offset = 0): Promise<Activity[]> {
+export async function getActivities(limit = 30, offset = 0): Promise<ActivitiesPage> {
   const response = await fetch(`${API_BASE_URL}/api/activities/?limit=${limit}&offset=${offset}`, {
     method: 'GET',
     headers: getAuthHeaders(),
@@ -30,7 +37,12 @@ export async function getActivities(limit = 30, offset = 0): Promise<Activity[]>
     throw new Error(data.error || data.msg || 'Etkinlikler yüklenemedi.');
   }
 
-  return data.activities;
+  return {
+    activities: data.activities || [],
+    total: data.total ?? data.activities?.length ?? 0,
+    limit: data.limit ?? limit,
+    offset: data.offset ?? offset,
+  };
 }
 
 export async function createActivity(payload: CreateActivityPayload): Promise<Activity> {

@@ -125,7 +125,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 Okul Yöneticisi Paneli
               </h1>
               <p className="text-gray-600 mt-1">
-                Hosgeldiniz, {displayName} • {school?.name || 'School Admin'}
+                Hoş geldiniz, {displayName} • {school?.name || 'School Admin'}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
             <CardContent>
               <div className="text-2xl font-bold">{stats?.teachers || 0}</div>
               <p className="text-xs text-muted-foreground">
-                Active in the system
+                Sistemde aktif
               </p>
             </CardContent>
           </Card>
@@ -165,7 +165,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
             <CardContent>
               <div className="text-2xl font-bold">{stats?.classes || 0}</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.students || 0} total students
+                {stats?.students || 0} toplam öğrenci
               </p>
             </CardContent>
           </Card>
@@ -178,7 +178,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
             <CardContent>
               <div className="text-2xl font-bold">{stats?.activity_plans || 0}</div>
               <p className="text-xs text-muted-foreground">
-                Created in the system
+                Sistemde oluşturuldu
               </p>
             </CardContent>
           </Card>
@@ -204,26 +204,26 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 <div className="md:hidden space-y-4">
                   {teachers.length === 0 ? (
                     <p className="text-sm text-gray-500">
-                      No teacher data available for this school yet.
+                      Bu okul için henüz öğretmen verisi mevcut değil.
                     </p>
                   ) : (
                     teachers.map((teacher) => (
                       <div key={teacher.id} className="bg-white border rounded-lg p-4 space-y-3">
                         <div>
-                          <p className="text-xs text-gray-500">Name</p>
+                          <p className="text-xs text-gray-500">Ad Soyad</p>
                           <p className="font-medium">{teacher.name}</p>
                         </div>
 
                         <div className="flex items-center justify-between gap-4">
                           <div>
-                            <p className="text-xs text-gray-500">Experience</p>
+                            <p className="text-xs text-gray-500">Deneyim</p>
                             <p className="text-sm text-gray-700">
                               {teacher.years_experience ?? 0} years
                             </p>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-xs text-gray-500">Created</p>
+                            <p className="text-xs text-gray-500">Oluşturulma Tarihi</p>
                             <p className="text-sm text-gray-700">
                               {teacher.created_at
                                 ? new Date(teacher.created_at).toLocaleDateString()
@@ -233,14 +233,14 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500">Teaching Style</p>
+                          <p className="text-xs text-gray-500">Öğretim Stili</p>
                           <p className="text-sm text-gray-700">
                             {teacher.teaching_style || '—'}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Specializations</p>
+                          <p className="text-xs text-gray-500 mb-1">Uzmanlık Alanları</p>
                           <div className="flex flex-wrap gap-1">
                             {(teacher.specializations || []).length > 0 ? (
                               (teacher.specializations || []).map((spec) => (
@@ -263,18 +263,18 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   <Table className="min-w-[900px]">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Experience</TableHead>
-                        <TableHead>Specializations</TableHead>
-                        <TableHead>Teaching Style</TableHead>
-                        <TableHead>Created</TableHead>
+                        <TableHead>Ad Soyad</TableHead>
+                        <TableHead>Deneyim</TableHead>
+                        <TableHead>Uzmanlık Alanları</TableHead>
+                        <TableHead>Öğretim Stili</TableHead>
+                        <TableHead>Oluşturulma Tarihi</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {teachers.map((teacher) => (
                         <TableRow key={teacher.id}>
                           <TableCell>{teacher.name}</TableCell>
-                          <TableCell>{teacher.years_experience ?? 0} years</TableCell>
+                          <TableCell>{teacher.years_experience ?? 0} yıl</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
                               {(teacher.specializations || []).slice(0, 2).map((spec) => (
@@ -307,9 +307,9 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
           <TabsContent value="classes">
             <Card>
               <CardHeader>
-                <CardTitle>Classes Overview</CardTitle>
+                <CardTitle>Sınılar Genel Bakış</CardTitle>
                 <CardDescription>
-                  View all classes in your school
+                  Okulunuza ait tüm sınıfları görüntüleyin
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -317,34 +317,34 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 <div className="md:hidden space-y-4">
                   {classes.length === 0 ? (
                     <p className="text-sm text-gray-500">
-                      No class data available for this school yet.
+                      Bu okul için henüz sınıf verisi mevcut değil.
                     </p>
                   ) : (
                     classes.map((classRecord) => (
                       <div key={classRecord.id} className="bg-white border rounded-lg p-4 space-y-3">
                         <div>
-                          <p className="text-xs text-gray-500">Class Name</p>
+                          <p className="text-xs text-gray-500">Sınıf Adı</p>
                           <p className="font-medium">{classRecord.class_name}</p>
                         </div>
 
                         <div className="flex items-center justify-between gap-4">
                           <div>
-                            <p className="text-xs text-gray-500">Age Group</p>
+                            <p className="text-xs text-gray-500">Yaş Grubu</p>
                             <p className="text-sm text-gray-700">
                               {classRecord.age_group || '—'} years
                             </p>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-xs text-gray-500">Class Size</p>
+                            <p className="text-xs text-gray-500">Sınıf Mevcudu</p>
                             <p className="text-sm text-gray-700">
-                              {classRecord.class_size ?? 0} students
+                              {classRecord.class_size ?? 0} öğrenci
                             </p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500">Updated</p>
+                          <p className="text-xs text-gray-500">Güncelleme Tarihi</p>
                           <p className="text-sm text-gray-700">
                             {classRecord.updated_at
                               ? new Date(classRecord.updated_at).toLocaleDateString()
@@ -353,7 +353,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Learning Focus</p>
+                          <p className="text-xs text-gray-500 mb-1">Öğrenme Odakları</p>
                           <div className="flex flex-wrap gap-1">
                             {(classRecord.learning_focus || []).length > 0 ? (
                               (classRecord.learning_focus || []).map((focus) => (
@@ -376,19 +376,19 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   <Table className="min-w-[900px]">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Class Name</TableHead>
-                        <TableHead>Age Group</TableHead>
-                        <TableHead>Class Size</TableHead>
-                        <TableHead>Learning Focus</TableHead>
-                        <TableHead>Updated</TableHead>
+                        <TableHead>Sınıf Adı</TableHead>
+                        <TableHead>Yaş Grubu</TableHead>
+                        <TableHead>Sınıf Mevcudu</TableHead>
+                        <TableHead>Öğrenme Odakları</TableHead>
+                        <TableHead>Güncelleme Tarihi</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {classes.map((classRecord) => (
                         <TableRow key={classRecord.id}>
                           <TableCell>{classRecord.class_name}</TableCell>
-                          <TableCell>{classRecord.age_group || '—'} years</TableCell>
-                          <TableCell>{classRecord.class_size ?? 0} students</TableCell>
+                          <TableCell>{classRecord.age_group || '—'} yıl</TableCell>
+                          <TableCell>{classRecord.class_size ?? 0} öğrenci</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
                               {(classRecord.learning_focus || []).slice(0, 2).map((focus) => (
@@ -420,9 +420,9 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
           <TabsContent value="plans">
             <Card>
               <CardHeader>
-                <CardTitle>Activity Plans</CardTitle>
+                <CardTitle>Etkinlik Planları</CardTitle>
                 <CardDescription>
-                  View and review activity plans created by teachers
+                  Öğretmenler tarafından oluşturulan etkinlik planlarını görüntüle ve incele
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -430,20 +430,20 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                 <div className="md:hidden space-y-4">
                   {plans.length === 0 ? (
                     <p className="text-sm text-gray-500">
-                      No activity plans created for this school yet.
+                      Bu okul için henüz etkinlik planı oluşturulmadı.
                     </p>
                   ) : (
                     plans.map((plan) => (
                       <div key={plan.id} className="bg-white border rounded-lg p-4 space-y-3">
                         <div>
-                          <p className="text-xs uppercase tracking-wide text-gray-500">Teacher</p>
+                          <p className="text-xs uppercase tracking-wide text-gray-500">Öğretmen</p>
                           <p className="font-medium">
                             {getTeacherById(plan.teacher_id)?.name || `#${plan.teacher_id}`}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-xs uppercase tracking-wide text-gray-500">Class</p>
+                          <p className="text-xs uppercase tracking-wide text-gray-500">Sınıf</p>
                           <p className="font-medium">
                             {getClassById(plan.class_id)?.class_name || `#${plan.class_id}`}
                           </p>
@@ -451,12 +451,12 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs text-gray-500">Activities</p>
-                            <Badge>{(plan.activity_ids || []).length} activities</Badge>
+                            <p className="text-xs text-gray-500">Etkinlik sayısı</p>
+                            <Badge>{(plan.activity_ids || []).length} etkinlik</Badge>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-xs text-gray-500">Created</p>
+                            <p className="text-xs text-gray-500">Oluşturulma Tarihi</p>
                             <p className="text-sm text-gray-700">
                               {plan.created_at ? new Date(plan.created_at).toLocaleDateString() : '—'}
                             </p>
@@ -464,7 +464,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-500">Notes</p>
+                          <p className="text-xs text-gray-500">Notlar</p>
                           <p className="text-sm text-gray-700 break-words">
                             {plan.notes || '—'}
                           </p>
@@ -477,7 +477,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                           onClick={() => handleViewPlan(plan)}
                         >
                           <Eye className="h-4 w-4 mr-2" />
-                          View Report
+                          Raporu Görüntüle
                         </Button>
                       </div>
                     ))
@@ -489,12 +489,12 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   <Table className="min-w-[900px]">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Teacher</TableHead>
-                        <TableHead>Class</TableHead>
-                        <TableHead>Activities</TableHead>
-                        <TableHead>Created</TableHead>
-                        <TableHead>Notes</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead>Öğretmen</TableHead>
+                        <TableHead>Sınıf</TableHead>
+                        <TableHead>Etkinlik sayısı</TableHead>
+                        <TableHead>Oluşturulma Tarihi</TableHead>
+                        <TableHead>Notlar</TableHead>
+                        <TableHead>İşlemler</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -507,7 +507,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                             {getClassById(plan.class_id)?.class_name || `#${plan.class_id}`}
                           </TableCell>
                           <TableCell>
-                            <Badge>{(plan.activity_ids || []).length} activities</Badge>
+                            <Badge>{(plan.activity_ids || []).length} etkinlik</Badge>
                           </TableCell>
                           <TableCell className="text-sm text-gray-500">
                             {plan.created_at ? new Date(plan.created_at).toLocaleDateString() : '—'}
@@ -523,7 +523,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                               onClick={() => handleViewPlan(plan)}
                             >
                               <Eye className="h-4 w-4 mr-1" />
-                              View Report
+                              Raporu Görüntüle
                             </Button>
                           </TableCell>
                         </TableRow>
