@@ -32,11 +32,13 @@ class ProductionConfig(Config):
     SECRET_KEY = os.getenv("SECRET_KEY")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
-    if not SECRET_KEY:
-        raise RuntimeError("Production ortamında SECRET_KEY zorunludur")
+    @classmethod
+    def validate(cls):
+        if not cls.SECRET_KEY:
+            raise RuntimeError("Production ortamında SECRET_KEY zorunludur")
 
-    if not JWT_SECRET_KEY:
-        raise RuntimeError("Production ortamında JWT_SECRET_KEY zorunludur")
+        if not cls.JWT_SECRET_KEY:
+            raise RuntimeError("Production ortamında JWT_SECRET_KEY zorunludur")
 
 config_by_name = {
     "development": DevelopmentConfig,

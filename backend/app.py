@@ -25,7 +25,12 @@ def create_app(config_name="development"):
         config_name = os.getenv("FLASK_ENV", "development")
 
     app = Flask(__name__)
-    app.config.from_object(config_by_name[config_name])
+    
+    config_object = config_by_name[config_name]
+    app.config.from_object(config_object)
+
+    if config_name == "production" and hasattr(config_object, "validate"):
+        config_object.validate()
 
     CORS(
          app, 
