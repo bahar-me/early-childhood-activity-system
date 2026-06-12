@@ -60,7 +60,7 @@ def test_refresh_token_success(client):
 
     assert response.status_code == 200
     data = response.get_json()
-    assert data["message"] == "Access token refreshed"
+    assert data["message"] == "Access token yenilendi"
     assert "access_token" in data
 
 
@@ -74,7 +74,7 @@ def test_logout_success(client):
 
     assert response.status_code == 200
     data = response.get_json()
-    assert data["message"] == "Logged out successfully"
+    assert data["message"] == "Çıkış başarılı"
 
 
 def test_refresh_fails_after_logout(client):

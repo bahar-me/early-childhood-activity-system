@@ -24,9 +24,19 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    JWT_SECRET_KEY = "test_jwt_secret_key_for_pytest_2026_project_very_long"
 
 class ProductionConfig(Config):
     DEBUG = False
+
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+
+    if not SECRET_KEY:
+        raise RuntimeError("Production ortamında SECRET_KEY zorunludur")
+
+    if not JWT_SECRET_KEY:
+        raise RuntimeError("Production ortamında JWT_SECRET_KEY zorunludur")
 
 config_by_name = {
     "development": DevelopmentConfig,
