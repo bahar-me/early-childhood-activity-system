@@ -3,7 +3,14 @@ import { API_BASE_URL } from './base';
 
 async function parseJSONSafely(response: Response) {
   const text = await response.text();
-  return text ? JSON.parse(text) : {};
+  
+  if (!text) return {};
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
 }
 
 export async function loginRequest(credentials: LoginCredentials): Promise<LoginResponse> {

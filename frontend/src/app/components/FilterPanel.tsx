@@ -76,7 +76,7 @@ export function FilterPanel({
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <Label className="mb-3 block">Alanlar</Label>
+          <Label className="mb-3 block">Gelişim Alanları</Label>
           <div className="space-y-2">
             {subjects.map((subject) => (
               <div key={subject} className="flex items-center gap-2">

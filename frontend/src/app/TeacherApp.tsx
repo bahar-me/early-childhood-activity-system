@@ -34,7 +34,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [classProfile, setClassProfile] = useState<ClassProfile | null>(null);
   const [schools, setSchools] = useState<School[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [visibleCount, setVisibleCount] = useState(30);
   const [loadingActivities, setLoadingActivities] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -55,7 +54,6 @@ export function TeacherApp({ user, onLogout }: TeacherAppProps) {
   const [hasMoreActivities, setHasMoreActivities] = useState(true);
   const [isLoadingMoreActivities, setIsLoadingMoreActivities] = useState(false);
   const [totalActivities, setTotalActivities] = useState(0);
-  const [activityOffset, setActivityOffset] = useState(0);
   const activityOffsetRef = useRef(0);
   const PAGE_SIZE = 20;
 
@@ -242,10 +240,6 @@ useEffect(() => {
 
   loadActivities();
 }, [user.id, onLogout]);
-
-useEffect(() => {
-  setVisibleCount(30);
-}, [selectedSubjects, selectedDurations, selectedGroupSizes, activeTab]);
 
 useEffect(() => {
   localStorage.setItem(`favorites-${user.id}`, JSON.stringify(favorites));
@@ -585,7 +579,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
       // 1. Learning focus match
       if (
-        classProfile.learningFocus.includes('Okuryazarlık Gelişimi') &&
+        classProfile.learningFocus.includes('Okuma yazmaya hazırlık') &&
         activity.subject === 'Language'
       ) {
         score += 4;
@@ -593,7 +587,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       }
 
       if (
-        classProfile.learningFocus.includes('Matematik Temelleri') &&
+        classProfile.learningFocus.includes('Matematik temelleri') &&
         activity.subject === 'Math'
       ) {
         score += 4;
@@ -601,7 +595,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       }
 
       if (
-        classProfile.learningFocus.includes('Yaratıcı İfade') &&
+        classProfile.learningFocus.includes('Yaratıcı ifade') &&
         activity.subject === 'Art'
       ) {
         score += 4;
@@ -609,7 +603,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       }
 
       if (
-        classProfile.learningFocus.includes('Bilimsel Keşif') &&
+        classProfile.learningFocus.includes('Fen ve doğa keşfi') &&
         activity.subject === 'Science'
       ) {
         score += 4;
@@ -617,7 +611,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       }
 
       if (
-        classProfile.learningFocus.includes('Fiziksel Gelişim') &&
+        classProfile.learningFocus.includes('Fiziksel gelişim') &&
         activity.subject === 'Physical'
       ) {
         score += 4;
@@ -625,7 +619,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       }
 
       if (
-        classProfile.learningFocus.includes('Sosyal Beceriler') &&
+        classProfile.learningFocus.includes('Sosyal beceriler') &&
         activity.subject === 'Social-Emotional'
       ) {
         score += 4;
@@ -665,36 +659,36 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       const materialsText = activity.materials.join(' ').toLowerCase();
 
       if (
-        classProfile.availableResources.includes('Tablets/Technology') &&
-        (materialsText.includes('tablet') || materialsText.includes('computer') || materialsText.includes('digital'))
+        classProfile.availableResources.includes('Tablet/Teknoloji') &&
+        (materialsText.includes('tablet') || materialsText.includes('bilgisayar') || materialsText.includes('dijital'))
       ) {
         score += 2;
         reasons.push('Mevcut teknoloji kaynaklarıyla uyumlu');
       }
 
       if (
-        classProfile.availableResources.includes('Art Supplies') &&
-        (materialsText.includes('paint') ||
+        classProfile.availableResources.includes('Sanat malzemeleri') &&
+        (materialsText.includes('boya') ||
           materialsText.includes('marker') ||
-          materialsText.includes('crayon') ||
-          materialsText.includes('paper') ||
-          materialsText.includes('art'))
+          materialsText.includes('pastel boya') ||
+          materialsText.includes('kağıt') ||
+          materialsText.includes('sanat'))
       ) {
         score += 2;
         reasons.push('Mevcut sanat materyalleriyle uyumlu');
       }
 
       if (
-        classProfile.availableResources.includes('Musical Instruments') &&
-        (materialsText.includes('music') || materialsText.includes('instrument') || materialsText.includes('rhythm'))
+        classProfile.availableResources.includes('Müzik aletleri') &&
+        (materialsText.includes('müzik') || materialsText.includes('alet') || materialsText.includes('ritim'))
       ) {
         score += 2;
         reasons.push('Mevcut müzik materyalleriyle uyumlu');
       }
 
       if (
-        classProfile.availableResources.includes('Outdoor Space') &&
-        (activity.subject === 'Physical' || materialsText.includes('outdoor'))
+        classProfile.availableResources.includes('Açık alan') &&
+        (activity.subject === 'Physical' || materialsText.includes('açık alan'))
       ) {
         score += 2;
         reasons.push('Açık alan kullanımı için uygun');
@@ -859,7 +853,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
   };
 
   const filteredActivities = getFilteredActivities();
-  const visibleActivities = filteredActivities.slice(0, visibleCount);
+  const visibleActivities = filteredActivities;
   const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
 
   // Show setup steps if not complete
@@ -972,7 +966,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                 variant="outline"
               >
                 <LogOut className="h-5 w-5 mr-2" />
-                Çıkış Yapın
+                Çıkış Yap
               </Button>
             </div>
           </div>

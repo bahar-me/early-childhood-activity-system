@@ -59,24 +59,26 @@ export default function App() {
 
       {currentUser.role === 'teacher' && (
         <TeacherApp 
-        key={`teacher-${currentUser.id}`} 
-        user={currentUser} 
-        onLogout={handleLogout} 
+          key={`teacher-${currentUser.id}`} 
+          user={currentUser} 
+          onLogout={handleLogout} 
         />
       )}
 
       {currentUser.role === 'school_admin' && (
         <SchoolAdminDashboard 
-        key={`school-admin-${currentUser.id}`} 
-        user={currentUser} 
-        onLogout={handleLogout} />
+          key={`school-admin-${currentUser.id}`} 
+          user={currentUser} 
+          onLogout={handleLogout} 
+        />
       )}
 
       {currentUser.role === 'system_admin' && (
         <SystemAdminDashboard 
-        key={`system-admin-${currentUser.id}`} 
-        user={currentUser} 
-        onLogout={handleLogout} />
+          key={`system-admin-${currentUser.id}`} 
+          user={currentUser} 
+          onLogout={handleLogout} 
+        />
       )}
     </>
   );

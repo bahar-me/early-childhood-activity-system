@@ -38,17 +38,17 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const quickFill = (userType: 'teacher' | 'school_admin' | 'system_admin') => {
     if (userType === 'teacher') {
       setEmail('teacher@test.com');
-      setPassword('123456');
+      setPassword('Test123!');
     }
 
     if (userType === 'school_admin') {
       setEmail('schooladmin@test.com');
-      setPassword('123456');
+      setPassword('Test123!');
     }
 
     if (userType === 'system_admin') {
       setEmail('admin@test.com');
-      setPassword('123456');
+      setPassword('Test123!');
     }
   };
 
@@ -81,13 +81,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your.email@school.com"
+                  placeholder="örnek@okul.com"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Şifre</Label>
                 <Input
                   id="password"
                   type="password"
@@ -157,7 +157,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         </Card>
 
         <div className="text-center text-xs text-gray-500">
-          <p>Backend demo password: 123456</p>
+          <p>Backend demo şifresi: Test123!</p>
         </div>
       </div>
     </div>

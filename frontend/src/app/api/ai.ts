@@ -4,7 +4,14 @@ import { Subject, Duration, GroupSize, Activity } from '../types/activity';
 
 async function parseJSONSafely(response: Response) {
   const text = await response.text();
-  return text ? JSON.parse(text) : {};
+  
+  if (!text) return {};
+
+  try{
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
 }
 
 export interface AIRecommendationExplanationRequest {
@@ -28,8 +35,8 @@ export interface AIRecommendationExplanationRequest {
       afternoon_activities?: number;
     };
   };
-  activities: Activity[]; // This should ideally be typed more specifically based on the expected structure of activities
-  recommendation_reasons?: string[]; // This can be further typed based on the expected structure of recommendation reasons
+  activities: Activity[]; 
+  recommendation_reasons?: string[]; 
 }
 
 export interface AIActivityExplanation {
@@ -118,7 +125,7 @@ export async function explainRecommendations(
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yap.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {
@@ -144,7 +151,7 @@ export async function adaptActivity(
 
   if (response.status === 401) {
     clearAuthStorage();
-    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yap.');
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 
   if (!response.ok) {

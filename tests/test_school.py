@@ -11,6 +11,8 @@ from backend.app import create_app
 from backend.extensions import db
 from backend.models import School, User
 
+TEST_PASSWORD = "Test123!"
+
 
 @pytest.fixture
 def client():
@@ -25,21 +27,21 @@ def client():
 
         admin = User(
             email="admin@test.com",
-            password_hash=generate_password_hash("123456"),
+            password_hash=generate_password_hash(TEST_PASSWORD),
             role="system_admin",
             school_id=None
         )
 
         school_admin = User(
             email="schooladmin@test.com",
-            password_hash=generate_password_hash("123456"),
+            password_hash=generate_password_hash(TEST_PASSWORD),
             role="school_admin",
             school_id=seed_school.id
         )
 
         teacher = User(
             email="teacher@test.com",
-            password_hash=generate_password_hash("123456"),
+            password_hash=generate_password_hash(TEST_PASSWORD),
             role="teacher",
             school_id=seed_school.id
         )
@@ -64,7 +66,7 @@ def get_token(client, email, password):
 
 
 def test_admin_can_create_school(client):
-    token = get_token(client, "admin@test.com", "123456")
+    token = get_token(client, "admin@test.com", TEST_PASSWORD)
 
     response = client.post(
         "/api/schools/",
@@ -79,7 +81,7 @@ def test_admin_can_create_school(client):
 
 
 def test_teacher_cannot_create_school(client):
-    token = get_token(client, "teacher@test.com", "123456")
+    token = get_token(client, "teacher@test.com", TEST_PASSWORD)
 
     response = client.post(
         "/api/schools/",
@@ -93,7 +95,7 @@ def test_teacher_cannot_create_school(client):
 
 
 def test_school_admin_cannot_create_school(client):
-    token = get_token(client, "schooladmin@test.com", "123456")
+    token = get_token(client, "schooladmin@test.com", TEST_PASSWORD)
 
     response = client.post(
         "/api/schools/",
@@ -105,9 +107,9 @@ def test_school_admin_cannot_create_school(client):
 
 
 def test_all_roles_can_list_schools(client):
-    admin_token = get_token(client, "admin@test.com", "123456")
-    school_admin_token = get_token(client, "schooladmin@test.com", "123456")
-    teacher_token = get_token(client, "teacher@test.com", "123456")
+    admin_token = get_token(client, "admin@test.com", TEST_PASSWORD)
+    school_admin_token = get_token(client, "schooladmin@test.com", TEST_PASSWORD)
+    teacher_token = get_token(client, "teacher@test.com", TEST_PASSWORD)
 
     for token in [admin_token, school_admin_token, teacher_token]:
         response = client.get(
@@ -122,7 +124,7 @@ def test_all_roles_can_list_schools(client):
 
 
 def test_admin_can_update_school(client):
-    token = get_token(client, "admin@test.com", "123456")
+    token = get_token(client, "admin@test.com", TEST_PASSWORD)
 
     response = client.put(
         "/api/schools/1",
@@ -137,7 +139,7 @@ def test_admin_can_update_school(client):
 
 
 def test_school_admin_can_update_school(client):
-    token = get_token(client, "schooladmin@test.com", "123456")
+    token = get_token(client, "schooladmin@test.com", TEST_PASSWORD)
 
     response = client.put(
         "/api/schools/1",
@@ -149,7 +151,7 @@ def test_school_admin_can_update_school(client):
 
 
 def test_teacher_cannot_update_school(client):
-    token = get_token(client, "teacher@test.com", "123456")
+    token = get_token(client, "teacher@test.com", TEST_PASSWORD)
 
     response = client.put(
         "/api/schools/1",
@@ -163,9 +165,9 @@ def test_teacher_cannot_update_school(client):
 
 
 def test_only_admin_can_delete_school(client):
-    teacher_token = get_token(client, "teacher@test.com", "123456")
-    school_admin_token = get_token(client, "schooladmin@test.com", "123456")
-    admin_token = get_token(client, "admin@test.com", "123456")
+    teacher_token = get_token(client, "teacher@test.com", TEST_PASSWORD)
+    school_admin_token = get_token(client, "schooladmin@test.com", TEST_PASSWORD)
+    admin_token = get_token(client, "admin@test.com", TEST_PASSWORD)
 
     teacher_response = client.delete(
         "/api/schools/1",

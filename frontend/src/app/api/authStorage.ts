@@ -3,3 +3,4 @@ export function clearAuthStorage() {
   localStorage.removeItem('access-token');
   localStorage.removeItem('refresh-token');
 }
+

@@ -3,7 +3,14 @@ import { clearAuthStorage } from './authStorage';
 
 async function parseJsonSafely(response: Response) {
   const text = await response.text();
-  return text ? JSON.parse(text) : {};
+
+  if (!text) return {};
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
 }
 
 export async function createActivityPlan(payload: {

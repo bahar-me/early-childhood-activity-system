@@ -32,31 +32,31 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
   );
 
   const specialNeedsOptions = [
-    'English Language Learners',
-    'ADHD Support',
-    'Autism Spectrum',
-    'Gifted & Talented',
-    'Motor Skill Challenges',
-    'Speech & Language Support',
+    'Dil desteği ihtiyacı',
+    'Dikkat ve odaklanma desteği',
+    'Otizm spektrum desteği',
+    'Üstün yetenekli çocuklar',
+    'Motor beceri desteği',
+    'Konuşma ve dil desteği',
   ];
 
   const learningFocusOptions = [
-    'Literacy Development',
-    'Math Foundations',
-    'Social Skills',
-    'Creative Expression',
-    'Physical Development',
-    'Science Exploration',
+    'Okuma yazmaya hazırlık',
+    'Matematik temelleri',
+    'Sosyal beceriler',
+    'Yaratıcı ifade',
+    'Fiziksel gelişim',
+    'Fen ve doğa keşfi',
   ];
 
   const resourceOptions = [
-    'Tablets/Technology',
-    'Art Supplies',
-    'Musical Instruments',
-    'Outdoor Space',
-    'Library/Books',
-    'Manipulatives',
-    'Science Materials',
+    'Tablet/Teknoloji',
+    'Sanat malzemeleri',
+    'Müzik aletleri',
+    'Açık alan',
+    'Kitaplık / kitaplar',
+    'Eğitici manipülatif materyaller',
+    'Fen materyalleri',
   ];
 
   const handleArrayChange = (
@@ -90,12 +90,12 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="className">Class Name *</Label>
+            <Label htmlFor="className">Sınıf Adı *</Label>
             <Input
               id="className"
               value={formData.className}
               onChange={(e) => setFormData({ ...formData, className: e.target.value })}
-              placeholder="Morning Kindergarten Class A"
+              placeholder="Güneş Anaokulu Sınıf A"
               required
             />
           </div>
@@ -109,21 +109,21 @@ export function ClassProfileForm({ onSubmit, onBack, initialData }: ClassProfile
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="4-5" id="age1" />
-                <Label htmlFor="age1">4-5 yıl (Okul Öncesi)</Label>
+                <Label htmlFor="age1">4-5 yaş (Okul Öncesi)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5-6" id="age2" />
-                <Label htmlFor="age2">5-6 yıl (Anaokulu)</Label>
+                <Label htmlFor="age2">5-6 yaş (Anaokulu)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="6-7" id="age3" />
-                <Label htmlFor="age3">6-7 yıl (Geçiş K/1. Sınıf)</Label>
+                <Label htmlFor="age3">6-7 yaş (Geçiş K/1. Sınıf)</Label>
               </div>
             </RadioGroup>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="classSize">Sınıf Boyutu: {formData.classSize} öğrenci</Label>
+            <Label htmlFor="classSize">Sınıf Mevcudu: {formData.classSize} öğrenci</Label>
             <Slider
               id="classSize"
               min={5}

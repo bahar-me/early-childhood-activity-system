@@ -1,53 +1,87 @@
 # Yapay Zeka ve LLM Entegrasyonu
 
-Bu projede yapay zeka modülü, öğretmenlerin etkinlikleri sınıf profiline ve pedagojik ihtiyaçlara göre uyarlayabilmesini desteklemek amacıyla geliştirilmiştir.
+Bu projede yapay zeka modülü, okul öncesi öğretmenlerinin etkinlikleri sınıf profiline, öğrenme hedeflerine ve pedagojik ihtiyaçlara göre uyarlayabilmesini desteklemek amacıyla geliştirilmiştir.
 
-## Kullanılan Yaklaşım
+## Yapay Zeka Mimarisi
 
-Sistemde üç aşamalı bir yapay zeka akışı kullanılmaktadır:
+Sistem, çok katmanlı bir yapay zeka mimarisi kullanmaktadır. Bu mimari sayesinde farklı yapay zeka kaynakları arasında geçiş yapılabilmekte ve sistem sürekliliği sağlanmaktadır.
 
-1. **Gemini API**
-2. **Ollama Local LLM**
-3. **Mock AI Fallback**
+Kullanılan yapay zeka katmanları şunlardır:
 
-Bu yapı sayesinde sistem hem dış API tabanlı LLM servislerini hem de local çalışan bir LLM modelini desteklemektedir.
+1. Gemini API
+2. Ollama Local LLM
+3. Mock AI Fallback
 
-## Gemini API Kullanımı
+Bu yaklaşım sayesinde sistem hem bulut tabanlı büyük dil modellerini hem de yerel olarak çalışan yapay zeka modellerini desteklemektedir.
 
-Gemini API, öğretmenin yazdığı uyarlama isteğine göre mevcut etkinliği yeniden düzenlemek için kullanılmaktadır. Modelden dönen cevap JSON formatında alınır ve etkinlik taslağı olarak frontend tarafına gönderilir.
+## Gemini API Entegrasyonu
 
-Üretilen alanlar:
+Gemini API, öğretmenin etkinlik uyarlama isteğini işlemek için kullanılan birincil yapay zeka servisidir. Öğretmenin girdiği uyarlama talebi ve mevcut etkinlik bilgileri modele gönderilir.
 
-* Başlık
-* Açıklama
-* Materyaller
+Model tarafından üretilen cevap yapılandırılmış JSON formatında alınır ve frontend tarafına aktarılır.
+
+Yapay zeka tarafından oluşturulan içerikler şunlardır:
+
+* Etkinlik başlığı
+* Etkinlik açıklaması
+* Gerekli materyaller
 * Uygulama adımları
 * Öğrenme hedefleri
 * Değerlendirme soruları
-* Farklılaştırma önerisi
-* Aile / toplum katılımı önerisi
+* Farklılaştırma önerileri
+* Aile ve toplum katılımı önerileri
 * Öğrenme çıktısı özeti
 
-## Local LLM / Ollama Kullanımı
+Bu yapı sayesinde öğretmenler mevcut etkinlikleri farklı yaş gruplarına, öğrenme ihtiyaçlarına ve sınıf koşullarına göre hızlı bir şekilde uyarlayabilmektedir.
 
-Dış API servisinin kullanılamadığı durumlarda sistem, Ollama üzerinden local çalışan LLM modeline geçer. Bu projede local model olarak `llama3.2` kullanılmıştır.
+## Ollama Local LLM Entegrasyonu
 
-Local LLM desteği sayesinde sistem internet bağlantısına veya dış servis erişimine tamamen bağımlı olmadan da yapay zeka destekli etkinlik uyarlama işlemi gerçekleştirebilir.
+Gemini API servisinin kullanılamadığı durumlarda sistem otomatik olarak Ollama üzerinden çalışan yerel büyük dil modeline geçiş yapmaktadır.
 
-## Fallback Yapısı
+Bu projede yerel model olarak:
 
-Sistemin yapay zeka akışı şu şekildedir:
+```text
+llama3.2
+```
+
+kullanılmıştır.
+
+Yerel model desteği sayesinde sistem internet bağlantısına veya harici yapay zeka servislerine tamamen bağımlı olmadan çalışabilmektedir.
+
+Bu yaklaşım aynı zamanda veri gizliliği ve sistem sürekliliği açısından da avantaj sağlamaktadır.
+
+## Fallback Mekanizması
+
+Sistemin yapay zeka akışı aşağıdaki şekilde tasarlanmıştır:
 
 ```text
 Gemini API
-↓ hata olursa
+      |
+      v
+Başarısız olursa
+      |
+      v
 Ollama Local LLM
-↓ hata olursa
-Mock AI
+      |
+      v
+Başarısız olursa
+      |
+      v
+Mock AI Fallback
 ```
 
-Bu yapı uygulamanın dayanıklılığını artırır. Yapay zeka servisi çalışmasa bile sistem mock cevap üreterek temel işlevini sürdürebilir.
+Bu yapı sayesinde herhangi bir yapay zeka servisinde hata oluşması durumunda sistem tamamen durmamakta ve alternatif katmana geçerek hizmet vermeye devam etmektedir.
+
+## Kullanılan Teknolojiler
+
+* Google Gemini API
+* Ollama
+* Llama 3.2
+* Flask REST API
+* JSON Tabanlı Veri Aktarımı
 
 ## Sonuç
 
-Bu yapı sayesinde proje hem hazır LLM API kullanımını hem de local LLM kullanımını destekleyen esnek bir yapay zeka mimarisine sahiptir.
+Geliştirilen yapay zeka mimarisi, bulut tabanlı ve yerel büyük dil modellerini birlikte kullanabilen esnek bir yapı sunmaktadır. Çok katmanlı fallback mekanizması sayesinde sistem dayanıklılığı artırılmış ve yapay zeka servislerinde oluşabilecek kesintilerin kullanıcı deneyimini olumsuz etkilemesi engellenmiştir.
+
+Bu yapı, okul öncesi eğitim alanında etkinlik uyarlama süreçlerini hızlandırmakta ve öğretmenlere yapay zeka destekli karar desteği sağlamaktadır.

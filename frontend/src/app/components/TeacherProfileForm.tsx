@@ -27,14 +27,14 @@ export function TeacherProfileForm({ onSubmit, initialData, schools }: TeacherPr
   );
 
   const specializationOptions = [
-    'Early Literacy',
-    'Math & Numeracy',
-    'Art & Creativity',
-    'STEM Education',
-    'Music & Movement',
-    'Social-Emotional Learning',
-    'Special Education',
-    'Bilingual Education',
+    'Erken okuryazarlık',
+    'Matematik ve sayı farkındalığı',
+    'Sanat ve yaratıcılık',
+    'STEM eğitimi',
+    'Müzik ve hareket',
+    'Sosyal-duygusal öğrenme',
+    'Özel eğitim',
+    'Çift dilli eğitim',
   ];
 
   const handleSpecializationChange = (specialization: string) => {
@@ -56,21 +56,21 @@ export function TeacherProfileForm({ onSubmit, initialData, schools }: TeacherPr
       <CardHeader>
         <div className="flex items-center gap-2">
           <User className="h-6 w-6 text-purple-600" />
-          <CardTitle>Teacher Profile</CardTitle>
+          <CardTitle>Öğretmen Profili</CardTitle>
         </div>
         <CardDescription>
-          Tell us about yourself to get personalized activity recommendations
+          Kişiselleştirilmiş etkinlik önerileri sunabilmemiz için öğretmen bilgilerinizi girin
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6 pb-16">
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name *</Label>
+            <Label htmlFor="name">Ad Soyad *</Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Ms. Ayşe Yılmaz"
+              placeholder="Ayşe Yılmaz"
               required
             />
           </div>
@@ -131,7 +131,7 @@ export function TeacherProfileForm({ onSubmit, initialData, schools }: TeacherPr
           </div>
 
           <div className="space-y-2">
-            <Label>Alanları *</Label>
+            <Label>Uzmanlık Alanları *</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {specializationOptions.map((spec) => (
                 <div key={spec} className="flex items-center gap-2">

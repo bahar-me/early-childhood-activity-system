@@ -4,7 +4,14 @@ import { Activity } from '../types/activity';
 
 async function parseJsonSafely(response: Response) {
   const text = await response.text();
-  return text ? JSON.parse(text) : {};
+
+  if (!text) return {};
+
+  try {
+    return JSON.parse(text);
+  } catch{
+    return {};
+  }
 }
 
 export type ActivitiesPage = {
@@ -46,27 +53,27 @@ export async function getActivities(limit = 30, offset = 0): Promise<ActivitiesP
 }
 
 export async function createActivity(payload: CreateActivityPayload): Promise<Activity> {
-    const response = await fetch(`${API_BASE_URL}/api/activities/`, {
-        method: 'POST',
-        headers: {
-            ...getAuthHeaders(),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
+  const response = await fetch(`${API_BASE_URL}/api/activities/`, {
+      method: 'POST',
+      headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+  });
 
-    const data = await parseJsonSafely(response);
+  const data = await parseJsonSafely(response);
 
-    if (response.status === 401) {
-        clearAuthStorage();
-        throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
-    }
+  if (response.status === 401) {
+      clearAuthStorage();
+      throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
+  }
 
-    if (!response.ok) {
-        throw new Error(data.error || 'Etkinlik oluşturulamadı');
-    }
+  if (!response.ok) {
+      throw new Error(data.error || 'Etkinlik oluşturulamadı');
+  }
 
-    return data.activity;
+  return data.activity;
 }
 
 export async function updateActivity(

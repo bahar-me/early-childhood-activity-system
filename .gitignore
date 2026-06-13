@@ -8,7 +8,6 @@ __pycache__/
 
 # Database
 *.db
-instance/
 
 # Environment
 .env
@@ -21,7 +20,6 @@ venv/
 instance/
 
 .mypy_cache/
-.vscode/
 
 # Frontend
 frontend/node_modules/

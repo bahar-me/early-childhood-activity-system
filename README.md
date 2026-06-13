@@ -1,4 +1,4 @@
-# AI-Supported Early Childhood Activity Management System
+# AI-Supported Early Childhood Activity Management and Recommendation System
 
 ## Project Overview
 
@@ -36,9 +36,11 @@ The application follows a modular architecture and provides both web and mobile-
 
 ### AI-Supported Activity Adaptation
 
+* Activity adaptation based on teacher prompts
 * Gemini API integration
-* Ollama Local LLM integration
+* Ollama local LLM integration
 * Automatic fallback mechanism
+* AI-generated activity drafts
 
 AI Flow:
 
@@ -105,12 +107,16 @@ Database
 ### Artificial Intelligence
 
 * Google Gemini API
-* Ollama
+* Ollama Local LLM
 * Llama 3.2
+* Multi-provider AI fallback architecture
 
 ### Testing
 
 * Pytest
+* Authentication testing
+* Authorization testing
+* API Endpoint testing
 
 ### Mobile
 
@@ -123,10 +129,11 @@ Database
 
 ### Backend
 
-```bash
-pip install -r requirements.txt
-py -m backend.app
-```
+* Flask
+* Flask-SQLAlchemy
+* Flask-JWT-Extended
+* Flask-Migrate (Alembic)
+* REST API Architecture
 
 ### Frontend
 
@@ -184,12 +191,11 @@ pytest
 
 ### In Progress
 
-* Final code cleanup
-* Mobile testing
+* Final documentation review
+* Android deployment validation
 
 ### Planned
 
-* Android deployment validation
 * Final presentation preparation
 
 ---
@@ -197,3 +203,7 @@ pytest
 ## License
 
 This project was developed for academic purposes.
+
+## Academic Context
+
+This project was developed as a Computer Engineering graduation project and demonstrates the integration of web technologies, artificial intelligence services, database management, authentication mechanisms, reporting systems, and mobile deployment preparation within a single educational platform.

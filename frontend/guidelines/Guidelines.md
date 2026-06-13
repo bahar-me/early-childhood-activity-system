@@ -1,61 +1,95 @@
-**Add your own guidelines here**
-<!--
+# General Guidelines
 
-System Guidelines
+* Follow Flask + Service Layer architecture.
+* Keep route files thin; business logic must stay in service files.
+* Use SQLAlchemy ORM for all database operations.
+* Avoid duplicated code and refactor repeated logic into helper functions.
+* Keep functions focused on a single responsibility.
+* Use type hints whenever possible.
+* Write clean and readable code.
+* Prefer Turkish error messages returned to the frontend.
+* Use English for code, class names, function names, and comments.
+* Use JWT authentication for protected endpoints.
+* Use role-based authorization for all sensitive operations.
+* Do not store passwords in plain text.
+* Store secrets and API keys only in environment variables.
 
-Use this file to provide the AI with rules and guidelines you want it to follow.
-This template outlines a few examples of things you can add. You can add your own sections and format it to suit your needs
+# Backend Guidelines
 
-TIP: More context isn't always better. It can confuse the LLM. Try and add the most important rules you need
+## API Routes
 
-# General guidelines
+* Routes should only handle requests and responses.
+* Validation and business logic must be placed in service files.
+* Return consistent JSON responses.
+* Use proper HTTP status codes.
 
-Any general rules you want the AI to follow.
-For example:
+## Database
 
-* Only use absolute positioning when necessary. Opt for responsive and well structured layouts that use flexbox and grid by default
-* Refactor code as you go to keep code clean
-* Keep file sizes small and put helper functions and components in their own files.
+* Use SQLAlchemy models.
+* Use Alembic migrations for schema changes.
+* Prefer relationships over manual joins when appropriate.
+* Avoid unnecessary database queries.
 
---------------
+## Security
 
-# Design system guidelines
-Rules for how the AI should make generations look like your company's design system
+* Use JWT authentication.
+* Protect sensitive endpoints with role checks.
+* System Admin has full access.
+* School Admin can only manage data belonging to their own school.
+* Teachers can only access teacher-level functionality.
+* Validate all incoming user data.
+* Never expose sensitive information in API responses.
 
-Additionally, if you select a design system to use in the prompt box, you can reference
-your design system's components, tokens, variables and components.
-For example:
+# Frontend Guidelines
 
-* Use a base font-size of 14px
-* Date formats should always be in the format “Jun 10”
-* The bottom toolbar should only ever have a maximum of 4 items
-* Never use the floating action button with the bottom toolbar
-* Chips should always come in sets of 3 or more
-* Don't use a dropdown if there are 2 or fewer options
+* Use React functional components.
+* Use TypeScript for all new code.
+* Keep components small and reusable.
+* Extract repeated UI into reusable components.
+* Use async/await for API requests.
+* Handle loading and error states properly.
+* Display user-friendly Turkish messages.
 
-You can also create sub sections and add more specific details
-For example:
+# AI Integration Guidelines
 
+* Primary AI provider: Gemini API.
+* Secondary AI provider: Ollama Local LLM.
+* Fallback provider: Mock AI service.
+* Always validate AI responses before using them.
+* Expect structured JSON responses.
+* Handle malformed responses gracefully.
 
-## Button
-The Button component is a fundamental interactive element in our design system, designed to trigger actions or navigate
-users through the application. It provides visual feedback and clear affordances to enhance user experience.
+# Testing Guidelines
 
-### Usage
-Buttons should be used for important actions that users need to take, such as form submissions, confirming choices,
-or initiating processes. They communicate interactivity and should have clear, action-oriented labels.
+* Add or update tests when changing backend behavior.
+* Run pytest before committing changes.
+* Maintain passing authentication and authorization tests.
+* Keep test coverage focused on business-critical features.
 
-### Variants
-* Primary Button
-  * Purpose : Used for the main action in a section or page
-  * Visual Style : Bold, filled with the primary brand color
-  * Usage : One primary button per section to guide users toward the most important action
-* Secondary Button
-  * Purpose : Used for alternative or supporting actions
-  * Visual Style : Outlined with the primary color, transparent background
-  * Usage : Can appear alongside a primary button for less important actions
-* Tertiary Button
-  * Purpose : Used for the least important actions
-  * Visual Style : Text-only with no border, using primary color
-  * Usage : For actions that should be available but not emphasized
--->
+# Project Context
+
+Project Name: Early Childhood Activity Recommendation and Planning System
+
+Main Features:
+
+* Authentication and authorization
+* Teacher profiles
+* Class profiles
+* Activity management
+* Activity planning
+* AI-supported activity adaptation
+* PDF report generation
+* School administrator dashboard
+* Android support with Capacitor
+
+Technology Stack:
+
+* React
+* TypeScript
+* Flask
+* SQLAlchemy
+* JWT
+* SQLite
+* Gemini API
+* Ollama
+* Capacitor

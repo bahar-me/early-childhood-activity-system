@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'com.bahar.earlychildhood',
   appName: 'Early Childhood Activity System',
   webDir: 'dist',
-  server:{
+  server: {
     androidScheme: 'http',
     cleartext: true,
   },

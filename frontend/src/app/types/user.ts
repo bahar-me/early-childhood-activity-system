@@ -11,7 +11,7 @@ export interface User {
 
   // frontend alanları
   name?: string;
-  schoolId?: string;
+  schoolId?: number | string | null;
   createdAt?: string;
 }
 

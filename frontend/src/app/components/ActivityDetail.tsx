@@ -162,7 +162,10 @@ export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: Act
           {onEdit && (
             <Button
               variant="outline"
-              onClick={() => onEdit(activity)}
+              onClick={() => {
+                onClose();
+                onEdit(activity)
+              }}
             >
               Düzenle
             </Button>
@@ -170,7 +173,10 @@ export function ActivityDetail({ activity, open, onClose, onEdit, onAdapt }: Act
           {onAdapt && (
             <Button
               variant="outline"
-              onClick={() => onAdapt(activity)}
+              onClick={() => {
+                onClose();
+                onAdapt(activity)
+              }}
             >
               YZ ile Uyarlat
             </Button>

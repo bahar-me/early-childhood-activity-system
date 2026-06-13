@@ -84,7 +84,9 @@ export function ActivityCard({ activity, isFavorite, onToggleFavorite, onClick }
         </CardHeader>
 
         <CardContent>
-          <p className="text-gray-600 mb-4">{activity.description}</p>
+          <p className="text-gray-600 mb-4">
+            {activity.description}
+          </p>
           
           <div className="flex flex-wrap gap-4 text-sm text-gray-500">
             <div className="flex items-center gap-1">

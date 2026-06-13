@@ -11,6 +11,7 @@ from backend.app import create_app
 from backend.extensions import db
 from backend.models import School, User
 
+TEST_PASSWORD = "Test123!"
 
 @pytest.fixture
 def client():
@@ -25,7 +26,7 @@ def client():
 
         teacher = User(
             email="teacher@test.com",
-            password_hash=generate_password_hash("123456"),
+            password_hash=generate_password_hash(TEST_PASSWORD),
             role="teacher",
             school_id=school.id
         )
@@ -42,7 +43,7 @@ def client():
 def login_and_get_tokens(client):
     response = client.post(
         "/api/auth/login",
-        json={"email": "teacher@test.com", "password": "123456"}
+        json={"email": "teacher@test.com", "password": TEST_PASSWORD}
     )
     assert response.status_code == 200
 

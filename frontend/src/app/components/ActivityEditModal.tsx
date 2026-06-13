@@ -2,6 +2,7 @@ import { CreateActivityPayload } from '../api/activities';
 import { useEffect, useState } from 'react';
 import { Activity, Subject, Duration, GroupSize } from '../types/activity';
 import { Button } from './ui/button';
+import { toast } from 'sonner';
 
 interface ActivityEditModalProps {
   open: boolean;
@@ -67,6 +68,16 @@ export function ActivityEditModal({
 
   if (!open || !activity) return null;
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
   const translateSubject = (subject: string) => {
     const map: Record<string, string> = {
         Math: 'Matematik',
@@ -100,6 +111,16 @@ export function ActivityEditModal({
   };
 
   const buildPayload = () => {
+    if (!title.trim()) {
+      toast.error('Başlık zorunludur.');
+      return null;
+    }
+
+    if (!description.trim()) {
+      toast.error('Açıklama zorunludur.');
+      return null;
+    }
+    
     const payload: Omit<CreateActivityPayload, 'sourceType' | 'parentActivityId' | 'createdByUserId'> = {
       title: title.trim(),
       subject,
@@ -130,14 +151,18 @@ export function ActivityEditModal({
     return payload;
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     const payload = buildPayload();
-    onUpdate(payload);
+    if (!payload) return;
+
+    await onUpdate(payload);
   };
 
-  const handleSaveAsNew = () => {
+  const handleSaveAsNew = async () => {
     const payload = buildPayload();
-    onSaveAsNew(payload);
+    if (!payload) return;
+
+    await onSaveAsNew(payload);
   };
 
   return (

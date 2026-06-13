@@ -11,6 +11,7 @@ from backend.app import create_app
 from backend.extensions import db
 from backend.models import School, User
 
+TEST_PASSWORD = "Test123!"
 
 @pytest.fixture
 def client():
@@ -26,14 +27,14 @@ def client():
 
         teacher = User(
             email="teacher@test.com",
-            password_hash=generate_password_hash("123456"),
+            password_hash=generate_password_hash(TEST_PASSWORD),
             role="teacher",
             school_id=school.id
         )
 
         admin = User(
             email="admin@test.com",
-            password_hash=generate_password_hash("123456"),
+            password_hash=generate_password_hash(TEST_PASSWORD),
             role="system_admin",
             school_id=None
         )
@@ -54,7 +55,7 @@ def test_login_success(client):
         "/api/auth/login",
         json={
             "email": "teacher@test.com",
-            "password": "123456"
+            "password": TEST_PASSWORD
         }
     )
 
@@ -74,7 +75,7 @@ def test_admin_login_success(client):
         "/api/auth/login",
         json={
             "email": "admin@test.com",
-            "password": "123456"
+            "password": TEST_PASSWORD
         }
     )
 
@@ -105,7 +106,7 @@ def test_login_nonexistent_user(client):
         "/api/auth/login",
         json={
             "email": "nouser@test.com",
-            "password": "123456"
+            "password": TEST_PASSWORD
         }
     )
 
@@ -132,7 +133,7 @@ def test_login_empty_email(client):
         "/api/auth/login",
         json={
             "email": "",
-            "password": "123456"
+            "password": TEST_PASSWORD
         }
     )
 

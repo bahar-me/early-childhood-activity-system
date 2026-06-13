@@ -5,10 +5,9 @@ import { Badge } from './ui/badge';
 import { Printer, Clock, Users } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { toast } from 'sonner';
-import { useState } from 'react';
 import { PdfGenerator } from '@capgo/capacitor-pdf-generator';
 import { Filesystem, Directory } from '@capacitor/filesystem';
-import {Share} from '@capacitor/share';
+import { Share } from '@capacitor/share';
 
 const getSubjectColor = (subject: string) => {
   const colors: Record<string, string> = {
@@ -50,22 +49,26 @@ export function ActivityReport({
   onClose,
   aiExplanation,
 }: ActivityReportProps) {
-  const [nativeReportHtml, setNativeReportHtml] = useState<string | null>(null);
+
+  const calculateTotalDuration = (activities: Activity[]) => {
+    const durationMap: Record<string, number> = {
+      '5-15min': 15,
+      '15-30min': 30,
+      '30-45min': 45,
+      '45-60min': 60,
+    };
+
+    return activities.reduce(
+      (acc, activity) => acc + (durationMap[activity.duration] || 0),
+      0
+    );
+  };
+
   const handlePrint = async() => {
     if (!teacherProfile || !classProfile || activities.length === 0) {
       toast.error('Yazdırmak için yeterli bilgiler bulunamadı');
       return;
     }
-
-    const totalDuration = activities.reduce((total, activity) => {
-      const durationMap: Record<string, number> = {
-        '5-15min': 15,
-        '15-30min': 30,
-        '30-45min': 45,
-        '45-60min': 60,
-      };
-      return total + (durationMap[activity.duration] || 0);
-    }, 0);
 
     const escapeHtml = (text: string) => {
       return text
@@ -531,7 +534,7 @@ export function ActivityReport({
                     <div class="meta-value">${classProfile.classSize} öğrenci</div>
 
                     <div class="meta-label">Tahmini Süre</div>
-                    <div class="meta-value">${totalDuration} dakika</div>
+                    <div class="meta-value">${calculateTotalDuration(activities)} dakika</div>
                   </div>
                 </div>
               </div>
@@ -541,7 +544,7 @@ export function ActivityReport({
               <h2 class="section-title">Plan Özeti</h2>
               <p class="muted">
                 Bu rapor toplam ${activities.length} etkinlikten oluşmaktadır.
-                Tahmini uygulama süresi ${totalDuration} dakikadır.
+                Tahmini uygulama süresi ${calculateTotalDuration(activities)} dakikadır.
               </p>
 
               <div class="summary-grid">
@@ -552,7 +555,7 @@ export function ActivityReport({
 
                 <div class="summary-item">
                   <div class="summary-label">Toplam Süre</div>
-                  <div class="summary-value">${totalDuration} dk</div>
+                  <div class="summary-value">${calculateTotalDuration(activities)} dk</div>
                 </div>
 
                 <div class="summary-item">
@@ -717,20 +720,6 @@ export function ActivityReport({
     return map[duration] || duration;
   };
 
-  const totalDuration = activities.reduce((acc, activity) => {
-    const durationMap: Record<string, number> = {
-      '5-15min': 15,
-      '15-30min': 30,
-      '30-45min': 45,
-      '45-60min': 60,
-    };
-    return acc + (durationMap[activity.duration] || 0);
-  }, 0);
-
-  if (!open) return null;
-
-  
-
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-4xl max-h-[90vh] rounded-lg shadow-xl overflow-hidden">
@@ -806,7 +795,7 @@ export function ActivityReport({
                   </div>
                   <div className="grid grid-cols-[140px_1fr] gap-3 border-b pb-2 items-start report-row">
                     <span className="text-gray-500">Tahmini Süre</span>
-                    <span className="font-medium text-gray-900">{totalDuration ?? '-'} dakika</span>
+                    <span className="font-medium text-gray-900">{calculateTotalDuration(activities) ?? '-'} dakika</span>
                   </div>
                 </div>
               </div>
@@ -840,7 +829,7 @@ export function ActivityReport({
 
                 <div className="rounded-lg border p-3 bg-green-50">
                   <p className="text-sm text-gray-500">Toplam Süre</p>
-                  <p className="text-2xl font-bold">{totalDuration} dk</p>
+                  <p className="text-2xl font-bold">{calculateTotalDuration(activities)} dk</p>
                 </div>
 
                 <div className="rounded-lg border p-3 bg-purple-50">
@@ -884,7 +873,7 @@ export function ActivityReport({
               <h3 className="text-xl font-semibold">📚 Planlanan Etkinlikler</h3>
               <p className="text-sm text-gray-500">
                 Bu plan toplam {activities.length} etkinlik ve
-                yaklaşık {totalDuration} dakika sürmektedir.
+                yaklaşık {calculateTotalDuration(activities)} dakika sürmektedir.
               </p>
               {activities.map((activity, index) => (
                 <div key={activity.id} className="activity-card rounded-2xl border bg-white p-5 shadow-sm">

@@ -3,25 +3,52 @@
 This document summarizes the main user interface screens of the project.
 
 ## Login Screen
-Allows users to log in with email and password.
+
+Allows users to log in using email and password credentials. Authentication is performed using JWT-based security.
 
 ## Dashboard
-Provides access to teacher profile, class profile, activity planning, and reports.
+
+Provides quick access to teacher profile management, class profile management, activity planning, reports, and AI-supported features.
 
 ## Teacher Profile Screen
-Allows teacher information such as name, school, experience, specialization, and teaching style to be managed.
+
+Allows teacher information such as name, school, years of experience, specializations, and teaching style to be managed.
 
 ## Class Profile Screen
-Allows class name, age group, class size, learning focus, available resources, and special needs to be entered.
+
+Allows class information including class name, age group, class size, learning focus areas, available resources, special needs, and daily activity durations to be entered and updated.
+
+## Activity Library Screen
+
+Displays available educational activities. Teachers can browse, review, and select activities for planning purposes.
 
 ## Activity Planning Screen
-Displays suitable activities and allows teachers to select activities for the plan.
+
+Allows teachers to select activities and create activity plans based on classroom needs and learning objectives.
 
 ## AI Adaptation Modal
-Allows the teacher to enter an adaptation prompt and generate an AI-supported activity draft.
+
+Allows teachers to enter an adaptation request and generate AI-supported activity adaptations using Gemini, Ollama, or the fallback AI service.
 
 ## Activity Report Screen
-Displays selected activities, teacher information, class information, plan summary, and detailed activity content.
+
+Displays teacher information, class information, selected activities, plan notes, and detailed activity content in a structured report format.
 
 ## PDF Report Output
-Provides a professional printable report with cover page, activity summary, and detailed activity sections.
+
+Generates a printable PDF report including cover information, activity summaries, and detailed activity sections.
+
+## School Administrator Dashboard
+
+Provides school-level statistics including:
+
+* Number of teachers
+* Number of classes
+* Number of students
+* Number of activity plans
+
+The dashboard also allows school administrators to review teacher profiles, class profiles, and activity plans belonging to their school.
+
+## Mobile Interface
+
+The system supports Android devices through Capacitor integration, enabling teachers to access planning and reporting features from mobile devices.

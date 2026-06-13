@@ -1,51 +1,89 @@
 # Sprint 2 Plan
 
 ## Sprint Goal
-To implement the core authentication flow and teacher profile management as the first functional components of the system.
+
+To implement the core authentication system and teacher profile management functionality as the first operational components of the Early Childhood Activity Recommendation System.
 
 ## Sprint Duration
+
 2 weeks
 
 ## Scope
-This sprint includes backend-focused development of:
-- User login functionality
-- Teacher profile creation and update
 
-Frontend implementation is limited to basic interaction planning and is not fully developed in this sprint.
+This sprint focuses on developing user authentication, authorization, and teacher profile management features. The backend implementation is prioritized, while frontend support is limited to basic forms and interaction validation.
 
 ## Planned Features
-- Login validation logic
-- Teacher profile data model
-- Profile creation and update services
+
+* User authentication (login/logout)
+* JWT-based authorization
+* Teacher profile creation
+* Teacher profile update functionality
+* User role management foundations
 
 ## Out of Scope
-- Class profile management
-- Activity recommendation
-- Reporting features
+
+* Class profile management
+* Activity recommendation engine
+* AI integration
+* Reporting functionality
+* Mobile application support
 
 ## Planned Tasks
 
-### Task 1: Login Module
-- Define login use case logic
-- Validate user credentials
-- Handle invalid login attempts
+### Task 1: Authentication Module
 
-### Task 2: Teacher Profile Module
-- Define teacher profile data model
-- Implement profile create/update logic
-- Validate required fields
+* Design authentication workflow
+* Implement login functionality
+* Validate user credentials
+* Handle authentication errors
+* Configure JWT token generation
+* Implement logout functionality
+
+### Task 2: User Role Management
+
+* Define user roles
+* Implement role-based access control foundations
+* Restrict unauthorized access to protected endpoints
+
+### Task 3: Teacher Profile Module
+
+* Design teacher profile data model
+* Implement profile creation service
+* Implement profile update service
+* Validate required profile fields
+* Store profile information in the database
+
+### Task 4: API Development
+
+* Create authentication endpoints
+* Create teacher profile endpoints
+* Validate request and response formats
 
 ## Test Planning
-- Unit tests for login validation
-- Unit tests for profile field validation
-- Manual test scenarios based on defined use cases
+
+* Unit tests for authentication logic
+* Unit tests for JWT validation
+* Unit tests for profile creation and update
+* Validation tests for required fields
+* Manual testing based on use-case scenarios
 
 ## Expected Outputs
-- Backend logic for login
-- Teacher profile management functionality
-- Test cases related to Sprint 2 features
+
+* Working authentication system
+* JWT-based authorization mechanism
+* Teacher profile management functionality
+* Authentication API endpoints
+* Sprint-specific test cases and results
 
 ## Acceptance Criteria
-- User can log in with valid credentials
-- Invalid login attempts are handled correctly
-- Teacher profile information can be saved and updated
+
+* Users can log in using valid credentials
+* Invalid login attempts are handled correctly
+* JWT tokens are generated successfully
+* Teacher profiles can be created and updated
+* Unauthorized users cannot access protected resources
+* All Sprint 2 test cases pass successfully
+
+## Sprint Outcome
+
+Sprint 2 successfully delivered the project's authentication infrastructure and teacher profile management module. The implemented functionality established the foundation for subsequent modules, including class management, activity planning, and AI-assisted recommendations.

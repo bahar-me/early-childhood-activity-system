@@ -12,11 +12,13 @@ export interface School {
 export interface TeacherRecord extends TeacherProfile {
   id: string | number;
   email?: string;
-  schoolId?: string;
+
   school_id?: number | string;
+
   createdAt?: string;
   created_at?: string;
   lastActive?: string;
+
   years_experience?: number;
   teaching_style?: string;
 }
@@ -41,7 +43,7 @@ export interface ClassRecord extends ClassProfile {
 export interface ActivityPlan {
   id: string | number;
 
-  // eski mock alanları
+  // frontend alanları
   teacherId?: string;
   teacherName?: string;
   classId?: string;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getSchoolAdminOverview } from '../api/schoolAdmin';
 import { User } from '../types/user';
 import {
@@ -40,7 +40,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
 
   const displayName = user.name || user.email;
 
-  const loadOverview = async () => {
+  const loadOverview = useCallback (async () => {
     try {
       setLoading(true);
       setErrorMessage('');
@@ -62,11 +62,11 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
     finally {
       setLoading(false);
     }
-  };
+  }, [onLogout]);
 
   useEffect(() => {
     loadOverview();
-  }, [user.id]);
+  }, [loadOverview]);
 
   const teachers: TeacherOverview[] = overview?.teachers_list || [];
   const classes: ClassOverview[] = overview?.classes_list || [];
@@ -74,36 +74,47 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
   const school = overview?.school;
   const stats = overview?.stats;
 
-  const getTeacherById = (id: string | number) => {
-    return teachers.find((t) => String(t.id) === String(id));
-  };
+  const teachersMap = useMemo(
+    () => Object.fromEntries(teachers.map(t => [String(t.id), t])),
+    [teachers]
+  );
 
-  const getClassById = (id: string | number) => {
-    return classes.find((c) => String(c.id) === String(id));
-  };
+  const classesMap = useMemo(
+    () => Object.fromEntries(classes.map(c => [String(c.id), c])),
+    [classes]
+  );
+
+  const getTeacherById = (id?: string | number | null) =>
+    id != null ? teachersMap[String(id)] : undefined;
+
+  const getClassById = (id?: string | number | null) =>
+    id != null ? classesMap[String(id)] : undefined;
+
+  const teacher = selectedPlan
+    ? getTeacherById(selectedPlan.teacher_id)
+    : null;
+
+  const classRecord = selectedPlan
+    ? getClassById(selectedPlan.class_id)
+    : null;
+
+  const activityIds = new Set(
+    (selectedPlan?.activity_ids || []).map(String)
+  );
 
   const handleRefresh = async () => {
     try {
       setRefreshing(true);
+      
       await loadOverview();
+      
       toast.success('Panel güncellendi');
-    } catch (error) {
-      toast.error('Panel güncellenirken bir hata oluştu');
-    } finally {
-      setRefreshing(false);
+    } finally {  
+    setRefreshing(false);
     }
   };
 
   const handleViewPlan = (plan: PlanOverview) => {
-    // const teacher = getTeacherById(plan.teacher_id);
-    // const classRecord = getClassById(plan.class_id);
-
-    // if (!teacher || !classRecord) {
-    //   toast.error('Öğretmen veya sınıf bilgisi bu etkinlik planı için eksik. Rapor oluşturulamıyor.');
-    //   console.error('Seçilen plan için eksik öğretmen veya sınıf bilgisi:', plan);
-    //   return;
-    // }
-
     setSelectedPlan(plan);
     setShowReport(true);
   };
@@ -553,25 +564,24 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
       </main>
 
       {selectedPlan && showReport &&
-        (selectedPlan.teacher_id) &&
-        (selectedPlan.class_id) && (
+        (
           <ActivityReport
             activities={activities.filter((a) =>
-              (selectedPlan.activity_ids || []).map(String).includes(String(a.id))
+              activityIds.has(String(a.id))
             )}
             teacherProfile={{
               name: getTeacherById(selectedPlan.teacher_id)?.name || `Öğretmen #${selectedPlan.teacher_id}`,
               schoolId: Number(school?.id ?? 0),
               schoolName: school?.name || '',
-              yearsExperience: getTeacherById(selectedPlan.teacher_id)?.years_experience ?? 0,
-              specializations: getTeacherById(selectedPlan.teacher_id)?.specializations || [],
-              teachingStyle: getTeacherById(selectedPlan.teacher_id)?.teaching_style || '',
+              yearsExperience: teacher?.years_experience ?? 0,
+              specializations: teacher?.specializations || [],
+              teachingStyle: teacher?.teaching_style || '',
             }}
             classProfile={{
-              className: getClassById(selectedPlan.class_id)?.class_name || `Sınıf #${selectedPlan.class_id}`,
-              ageGroup: getClassById(selectedPlan.class_id)?.age_group || '',
-              classSize: getClassById(selectedPlan.class_id)?.class_size || 0,
-              learningFocus: getClassById(selectedPlan.class_id)?.learning_focus || [],
+              className: classRecord?.class_name || `Sınıf #${selectedPlan.class_id}`,
+              ageGroup: classRecord?.age_group || '',
+              classSize: classRecord?.class_size || 0,
+              learningFocus: classRecord?.learning_focus || [],
               availableResources: [],
               specialNeeds: [],
               dailySchedule: {

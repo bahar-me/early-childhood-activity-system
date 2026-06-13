@@ -30,8 +30,8 @@ export function ActivityAdaptModal({
 
   useEffect(() => {
     if (!open) {
-        setAdaptationPrompt('');
-        setDraft(null);
+      setAdaptationPrompt('');
+      setDraft(null);
     }
   }, [open]);  
 
@@ -75,6 +75,10 @@ export function ActivityAdaptModal({
               learning_focus: classProfile.learningFocus,
               available_resources: classProfile.availableResources,
               special_needs: classProfile.specialNeeds,
+              daily_schedule: {
+                morning_activities: classProfile.dailySchedule?.morningActivities,
+                afternoon_activities: classProfile.dailySchedule?.afternoonActivities,
+              },
             }
           : undefined,
         adaptation_prompt: adaptationPrompt,
@@ -98,10 +102,7 @@ export function ActivityAdaptModal({
       await onSaveDraft(draft);
       toast.success('Etkinlik oluşturuldu.');
       onClose();
-    } catch (error) {
-      console.error('Taslak kaydetme hatası:', error);
-      console.log('Kaydedilmeye çalışılan taslak:', draft);
-
+    } catch (error) {      
       const message =
         error instanceof Error ? error.message : 'Taslak kaydedilemedi.';
       toast.error(message);
@@ -144,7 +145,10 @@ export function ActivityAdaptModal({
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={handleAdapt} disabled={isAdapting || isSaving || !adaptationPrompt.trim()}>
+            <Button 
+              onClick={handleAdapt} 
+              disabled={isAdapting || isSaving || !adaptationPrompt.trim()}
+            >
               {isAdapting ? 'YZ Uyarlıyor...' : 'YZ ile Uyarlat'}
             </Button>
           </div>

@@ -4,7 +4,21 @@ import { API_BASE_URL, getAuthHeaders } from './base';
 
 async function parseJSONSafely(response: Response) {
   const text = await response.text();
-  return text ? JSON.parse(text) : {};
+  
+  if (!text) return {};
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
+}
+
+function handleUnauthorized(response: Response) {
+  if (response.status === 401) {
+    clearAuthStorage();
+    throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
+  }
 }
 
 export async function getSchools(): Promise<School[]> {
@@ -14,6 +28,8 @@ export async function getSchools(): Promise<School[]> {
   });
 
   const data = await parseJSONSafely(response);
+
+  handleUnauthorized(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Okullar yüklenemedi.');
@@ -34,6 +50,8 @@ export async function createSchool(payload: {
 
   const data = await parseJSONSafely(response);
 
+  handleUnauthorized(response);
+
   if (!response.ok) {
     throw new Error(data.error || 'Okul oluşturulamadı.');
   }
@@ -53,6 +71,8 @@ export async function updateSchool(
 
   const data = await parseJSONSafely(response);
 
+  handleUnauthorized(response);
+
   if (!response.ok) {
     throw new Error(data.error || 'Okul güncellenemedi.');
   }
@@ -68,10 +88,7 @@ export async function deleteSchool(schoolId: number): Promise<void> {
 
   const data = await parseJSONSafely(response);
 
-  if (response.status === 401) {
-      clearAuthStorage();
-      throw new Error('Oturum süresi doldu. Lütfen tekrar giriş yapın.');
-    }
+  handleUnauthorized(response);
 
   if (!response.ok) {
     throw new Error(data.error || 'Okul silinemedi.');

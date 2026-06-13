@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { User } from '../types/user';
 import { School } from '../types/school';
 import { getSchools, createSchool, updateSchool, deleteSchool } from '../api/schools';
@@ -36,7 +36,6 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Toaster } from './ui/sonner';
 
 interface SystemAdminDashboardProps {
   user: User;
@@ -61,7 +60,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
 
   const totalSchools = schools.length;
 
-  const loadSchools = async (showSuccessToast = false) => {
+  const loadSchools = useCallback(async (showSuccessToast = false) => {
     try {
       setLoading(true);
       const data = await getSchools();
@@ -76,7 +75,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadSchools();
@@ -161,8 +160,6 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <Toaster />
-
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between gap-4">
@@ -291,6 +288,7 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                               <Button
                                 variant="outline"
                                 size="sm"
+                                disabled={loading}
                                 onClick={() => handleDeleteSchool(school)}
                               >
                                 <Trash2 className="h-4 w-4 mr-1" />
@@ -420,6 +418,8 @@ export function SystemAdminDashboard({ user, onLogout }: SystemAdminDashboardPro
                 onClick={() => {
                   setShowEditSchool(false);
                   setEditingSchool(null);
+                  setEditSchoolName('');
+                  setEditSchoolAddress('');
                 }}
               >
                 İptal

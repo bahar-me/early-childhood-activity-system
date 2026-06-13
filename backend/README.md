@@ -1,10 +1,25 @@
 # Backend Module
 
-This module will handle business logic, data processing, and recommendation services.
+This module handles the core backend logic of the system, including authentication, authorization, school management, teacher and class profiles, activity management, AI-supported activity adaptation, and reporting services.
 
-Planned components:
-- Teacher and Class profile management
-- Activity recommendation logic
-- Reporting services
+## Main Components
+- JWT-based authentication
+- Role-based authorization
+- School management
+- Teacher profile management
+- Class profile management
+- Activity management
+- Activity plan and report creation
+- AI-supported activity adaptation
+- School administrator overview services
 
-Implementation will be carried out incrementally starting from Sprint 2.
+## Technologies
+- Flask
+- SQLAlchemy
+- Flask-Migrate
+- Flask-JWT-Extended
+- SQLite
+- Pytest
+
+## Current Status
+The backend module has been implemented and tested. It supports teacher, school administrator, and system administrator roles.

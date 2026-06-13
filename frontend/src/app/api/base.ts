@@ -8,7 +8,7 @@ export function getAuthHeaders() {
   const token = localStorage.getItem('access-token');
 
   if (!token) {
-    throw new Error('Erişim tokenı bulunamadı. Lütfen giriş yapın.');
+    throw new Error('Access token bulunamadı. Lütfen tekrar giriş yapın.');
   }
 
   return {
