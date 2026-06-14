@@ -18,6 +18,7 @@ allowed_origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost",
+    "https://early-childhood-activity-system.vercel.app",
 ]
 
 def create_app(config_name="development"):
