@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash
 from backend.app import create_app
 from backend.extensions import db
 from backend.models import School, User
+from backend.seeders.activity_seed import seed_activities
 
 
 def seed_data():
@@ -60,6 +61,9 @@ def seed_data():
             school_admin.school_id = school.id
 
         db.session.commit()
+
+        seed_activities()
+        
         print("Veritabanı dolduruldu.")
 
 
