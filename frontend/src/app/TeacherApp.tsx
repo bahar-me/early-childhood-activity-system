@@ -385,6 +385,8 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
     });
 
     setClassProfile(profile);
+    setSelectedForReport([]);
+    setShowReport(false);
     setSetupStep('complete');
     toast.success('Sınıf profili kaydedildi! Hoş geldin!');
   } catch (error) {
@@ -1181,7 +1183,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       />
       
       {/* Report Modal */}
-      {teacherProfile && classProfile && (
+      {showReport && teacherProfile && classProfile && reportActivities.length > 0 && (
         <ActivityReport
           activities={reportActivities}
           teacherProfile={teacherProfile}
