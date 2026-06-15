@@ -49,8 +49,10 @@ export function ActivityReport({
   onClose,
   aiExplanation,
 }: ActivityReportProps) {
-  if (!open) return null;
-
+  if (!open || activities.length === 0) {
+    return null;
+  }
+  
   const calculateTotalDuration = (activities: Activity[]) => {
     const durationMap: Record<string, number> = {
       '5-15min': 15,
