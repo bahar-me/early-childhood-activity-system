@@ -412,14 +412,16 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
   };
 
   const toggleSelectedForReport = (id: string) => {
+    const normalizedId = String(id);
+
     setSelectedForReport((prev) => {
-      if (prev.includes(id)) {
+      if (prev.includes(normalizedId)) {
         toast.success('Rapordan kaldırıldı');
-        return prev.filter((item) => item !== id);
+        return prev.filter((item) => item !== normalizedId);
       } 
       
       toast.success('Rapora eklendi');
-      return [...prev, id];
+      return [...prev, normalizedId];
     });
   };
 
@@ -744,9 +746,9 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
     }
 
     if (activeTab === 'favorites') {
-      filtered = filtered.filter((activity) => favorites.includes(activity.id));
+      filtered = filtered.filter((activity) => favorites.includes(String(activity.id)));
     } else if (activeTab === 'selected') {
-      filtered = filtered.filter((activity) => selectedForReport.includes(activity.id));
+      filtered = filtered.filter((activity) => selectedForReport.includes(String(activity.id)));
     }
 
     return filtered;
@@ -776,7 +778,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
       setIsGeneratingAIExplanation(true);
 
       const selectedActivities = activities.filter((activity) =>
-        selectedForReport.includes(activity.id)
+        selectedForReport.includes(String(activity.id))
       );
 
       if (selectedActivities.length === 0) {
@@ -856,7 +858,11 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
 
   const filteredActivities = getFilteredActivities();
   const visibleActivities = filteredActivities;
-  const reportActivities = activities.filter(a => selectedForReport.includes(a.id));
+  const selectedReportIds = selectedForReport.map(String);
+
+  const reportActivities = activities.filter((activity) => 
+    selectedReportIds.includes(String(activity.id))
+  );
 
   // Show setup steps if not complete
   if (setupStep === 'teacher') {
@@ -1026,12 +1032,12 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                         <div key={activity.id} className="relative">
                           <ActivityCard
                             activity={activity}
-                            isFavorite={favorites.includes(activity.id)}
+                            isFavorite={favorites.includes(String(activity.id))}
                             onToggleFavorite={toggleFavorite}
                             onClick={setSelectedActivity}
                           />
                           <Button
-                            variant={selectedForReport.includes(activity.id) ? "default" : "outline"}
+                            variant={selectedForReport.includes(String(activity.id)) ? "default" : "outline"}
                             size="sm"
                             className="absolute bottom-4 right-4"
                             onClick={(e) => {
@@ -1040,7 +1046,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                             }}
                           >
                             <CheckSquare className="h-4 w-4 mr-1" />
-                            {selectedForReport.includes(activity.id) ? 'Seçildi' : 'Seç'}
+                            {selectedForReport.includes(String(activity.id)) ? 'Seçildi' : 'Seç'}
                           </Button>
                         </div>
                       ))}
@@ -1082,7 +1088,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                           onClick={setSelectedActivity}
                         />
                         <Button
-                          variant={selectedForReport.includes(activity.id) ? "default" : "outline"}
+                          variant={selectedForReport.includes(String(activity.id)) ? "default" : "outline"}
                           size="sm"
                           className="absolute bottom-4 right-4"
                           onClick={(e) => {
@@ -1091,7 +1097,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                           }}
                         >
                           <CheckSquare className="h-4 w-4 mr-1" />
-                          {selectedForReport.includes(activity.id) ? 'Seçildi' : 'Seç'}
+                          {selectedForReport.includes(String(activity.id)) ? 'Seçildi' : 'Seç'}
                         </Button>
                       </div>
                     ))}
@@ -1120,7 +1126,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                           onClick={setSelectedActivity}
                         />
                         <Button
-                          variant={selectedForReport.includes(activity.id) ? "default" : "outline"}
+                          variant={selectedForReport.includes(String(activity.id)) ? "default" : "outline"}
                           size="sm"
                           className="absolute bottom-4 right-4"
                           onClick={(e) => {
@@ -1129,7 +1135,7 @@ const handleCreateEditedActivity = async (payload: Omit<Activity, 'id'>) => {
                           }}
                         >
                           <CheckSquare className="h-4 w-4 mr-1" />
-                          {selectedForReport.includes(activity.id) ? 'Seçildi' : 'Seç'}
+                          {selectedForReport.includes(String(activity.id)) ? 'Seçildi' : 'Seç'}
                         </Button>
                       </div>
                     ))}
