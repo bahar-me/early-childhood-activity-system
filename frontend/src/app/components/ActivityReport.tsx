@@ -49,6 +49,7 @@ export function ActivityReport({
   onClose,
   aiExplanation,
 }: ActivityReportProps) {
+  if (!open) return null;
 
   const calculateTotalDuration = (activities: Activity[]) => {
     const durationMap: Record<string, number> = {
