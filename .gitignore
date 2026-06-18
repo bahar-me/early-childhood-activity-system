@@ -31,6 +31,10 @@ frontend/.yarn-debug.log*
 frontend/.yarn-error.log*
 frontend/pnpm-debug.log*
 frontend/.env
+frontend/android/app/src/main/assets/public/
+frontend/android/app/src/main/res/xml/config.xml
+frontend/android/capacitor-cordova-android-plugins/
+
 backend/.env
 
 # Logs / temp
