@@ -26,6 +26,7 @@ def create_app(config_name="development"):
         config_name = os.getenv("FLASK_ENV", "development")
 
     app = Flask(__name__)
+    app.json.ensure_ascii = False
     
     config_object = config_by_name[config_name]
     app.config.from_object(config_object)
