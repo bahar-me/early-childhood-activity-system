@@ -66,8 +66,6 @@ export function ActivityEditModal({
     }
   }, [open, activity]);
 
-  if (!open || !activity) return null;
-
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -77,6 +75,8 @@ export function ActivityEditModal({
       document.body.style.overflow = '';
     };
   }, [open]);
+
+  if (!open || !activity) return null;
 
   const translateSubject = (subject: string) => {
     const map: Record<string, string> = {
