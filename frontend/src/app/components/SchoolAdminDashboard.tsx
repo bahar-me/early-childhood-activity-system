@@ -29,6 +29,72 @@ interface SchoolAdminDashboardProps {
   onLogout: () => void;
 }
 
+const specializationLabels: Record<string, string> = {
+  art: 'Sanat',
+  arts: 'Sanat',
+  music: 'Müzik',
+  science: 'Fen ve Doğa',
+  math: 'Matematik',
+  mathematics: 'Matematik',
+  language: 'Dil Gelişimi',
+  physical: 'Fiziksel Gelişim',
+  physical_development: 'Fiziksel Gelişim',
+  social_emotional: 'Sosyal-Duygusal Gelişim',
+  early_literacy: 'Okuma Yazmaya Hazırlık',
+};
+
+const teachingStyleLabels: Record<string, string> = {
+  structured: 'Yapılandırılmış',
+  balanced: 'Dengeli',
+  exploratory: 'Keşfetmeye Dayalı',
+  play_based: 'Oyun Temelli',
+  child_led: 'Çocuk Merkezli',
+  interactive: 'Etkileşimli',
+  creative: 'Yaratıcı',
+};
+
+const learningFocusLabels: Record<string, string> = {
+  early_literacy: 'Okuma Yazmaya Hazırlık',
+  okuma_yazmaya_hazirlik: 'Okuma Yazmaya Hazırlık',
+  'Literacy Development': 'Okuma Yazmaya Hazırlık',
+  literacy_development: 'Okuma Yazmaya Hazırlık',
+
+  math_foundations: 'Matematik Temelleri',
+  mathematics: 'Matematik Temelleri',
+  math: 'Matematik Temelleri',
+  matematik_temelleri: 'Matematik Temelleri',
+
+  creative_expression: 'Yaratıcı İfade',
+  yaratici_ifade: 'Yaratıcı İfade',
+
+  science_nature: 'Fen ve Doğa Keşfi',
+  fen_ve_doga_kesfi: 'Fen ve Doğa Keşfi',
+
+  physical_development: 'Fiziksel Gelişim',
+  fiziksel_gelisim: 'Fiziksel Gelişim',
+
+  social_skills: 'Sosyal Beceriler',
+  sosyal_beceriler: 'Sosyal Beceriler',
+
+  cognitive_development: 'Bilişsel Gelişim',
+  bilissel_gelisim: 'Bilişsel Gelişim',
+
+  language_development: 'Dil Gelişimi',
+  dil_gelisimi: 'Dil Gelişimi',
+};
+
+const labelOf = (map: Record<string, string>, value?: string) => {
+  if (!value) return '—';
+
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/-/g, '_')
+    .replace(/\s+/g, '_');
+
+  return map[value] || map[normalized] || value;
+};
+
 export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardProps) {
   const [overview, setOverview] = useState<SchoolOverviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -261,7 +327,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         <div>
                           <p className="text-xs text-gray-500">Öğretim Stili</p>
                           <p className="text-sm text-gray-700">
-                            {teacher.teaching_style || '—'}
+                            {labelOf(teachingStyleLabels, teacher.teaching_style)} 
                           </p>
                         </div>
 
@@ -271,7 +337,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                             {(teacher.specializations || []).length > 0 ? (
                               (teacher.specializations || []).map((spec) => (
                                 <Badge key={spec} variant="secondary" className="text-xs">
-                                  {spec}
+                                  {labelOf(specializationLabels, spec)}
                                 </Badge>
                               ))
                             ) : (
@@ -305,7 +371,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                             <div className="flex flex-wrap gap-1">
                               {(teacher.specializations || []).slice(0, 2).map((spec) => (
                                 <Badge key={spec} variant="secondary" className="text-xs">
-                                  {spec}
+                                  {labelOf(specializationLabels, spec)}
                                 </Badge>
                               ))}
                               {(teacher.specializations || []).length > 2 && (
@@ -315,7 +381,10 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                               )}
                             </div>
                           </TableCell>
-                          <TableCell>{teacher.teaching_style || '—'}</TableCell>
+
+                          <TableCell>
+                            {labelOf(teachingStyleLabels, teacher.teaching_style )}
+                          </TableCell>
                           <TableCell className="text-sm text-gray-500">
                             {teacher.created_at
                               ? new Date(teacher.created_at).toLocaleDateString()
@@ -338,6 +407,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                   Okulunuza ait tüm sınıfları görüntüleyin
                 </CardDescription>
               </CardHeader>
+
               <CardContent className="space-y-3">
                 {/* Mobile cards */}
                 <div className="md:hidden space-y-4">
@@ -357,7 +427,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                           <div>
                             <p className="text-xs text-gray-500">Yaş Grubu</p>
                             <p className="text-sm text-gray-700">
-                              {classRecord.age_group || '—'} 
+                              {classRecord.age_group || '—'}
                             </p>
                           </div>
 
@@ -384,7 +454,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                             {(classRecord.learning_focus || []).length > 0 ? (
                               (classRecord.learning_focus || []).map((focus) => (
                                 <Badge key={focus} variant="outline" className="text-xs">
-                                  {focus}
+                                  {labelOf(learningFocusLabels, focus)}
                                 </Badge>
                               ))
                             ) : (
@@ -409,19 +479,22 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                         <TableHead>Güncelleme Tarihi</TableHead>
                       </TableRow>
                     </TableHeader>
+
                     <TableBody>
                       {classes.map((classRecord) => (
                         <TableRow key={classRecord.id}>
                           <TableCell>{classRecord.class_name}</TableCell>
                           <TableCell>{classRecord.age_group || '—'} yaş</TableCell>
                           <TableCell>{classRecord.class_size ?? 0} öğrenci</TableCell>
+
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
                               {(classRecord.learning_focus || []).slice(0, 2).map((focus) => (
                                 <Badge key={focus} variant="outline" className="text-xs">
-                                  {focus}
+                                  {labelOf(learningFocusLabels, focus)}
                                 </Badge>
                               ))}
+
                               {(classRecord.learning_focus || []).length > 2 && (
                                 <Badge variant="outline" className="text-xs">
                                   +{(classRecord.learning_focus || []).length - 2}
@@ -429,6 +502,7 @@ export function SchoolAdminDashboard({ user, onLogout }: SchoolAdminDashboardPro
                               )}
                             </div>
                           </TableCell>
+
                           <TableCell className="text-sm text-gray-500">
                             {classRecord.updated_at
                               ? new Date(classRecord.updated_at).toLocaleDateString()
